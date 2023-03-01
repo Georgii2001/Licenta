@@ -1,12 +1,12 @@
 package backend.hobbiebackend.model.entities;
 
-import backend.hobbiebackend.model.entities.enums.CategoryNameEnum;
-import backend.hobbiebackend.model.entities.enums.LocationEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Data
 @NoArgsConstructor

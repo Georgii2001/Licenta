@@ -2,10 +2,12 @@ package backend.hobbiebackend.controller;
 
 import backend.hobbiebackend.model.dto.HobbyInfoDto;
 import backend.hobbiebackend.model.dto.HobbyInfoUpdateDto;
-import backend.hobbiebackend.model.entities.*;
+import backend.hobbiebackend.model.entities.AppClient;
+import backend.hobbiebackend.model.entities.BusinessOwner;
+import backend.hobbiebackend.model.entities.Category;
+import backend.hobbiebackend.model.entities.Hobby;
 import backend.hobbiebackend.service.CategoryService;
 import backend.hobbiebackend.service.HobbyService;
-import backend.hobbiebackend.service.LocationService;
 import backend.hobbiebackend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -15,10 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Set;
 
@@ -28,15 +26,13 @@ import java.util.Set;
 public class HobbyController {
     private final HobbyService hobbyService;
     private final CategoryService categoryService;
-    private final LocationService locationService;
     private final UserService userService;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public HobbyController(HobbyService hobbyService, CategoryService categoryService, LocationService locationService, UserService userService, ModelMapper modelMapper) {
+    public HobbyController(HobbyService hobbyService, CategoryService categoryService, UserService userService, ModelMapper modelMapper) {
         this.hobbyService = hobbyService;
         this.categoryService = categoryService;
-        this.locationService = locationService;
         this.userService = userService;
         this.modelMapper = modelMapper;
     }
@@ -46,8 +42,6 @@ public class HobbyController {
     public ResponseEntity<HttpStatus> saveHobby(@RequestBody HobbyInfoDto info) {
         Hobby offer = this.modelMapper.map(info, Hobby.class);
         Category category = this.categoryService.findByName(info.getCategory());
-        Location location = this.locationService.getLocationByName(info.getLocation());
-        offer.setLocation(location);
         offer.setCategory(category);
         BusinessOwner business = this.userService.findBusinessByUsername(info.getCreator());
         Set<Hobby> hobby_offers = business.getHobby_offers();
@@ -99,8 +93,6 @@ public class HobbyController {
     public ResponseEntity<?> updateHobby(@RequestBody HobbyInfoUpdateDto info) throws Exception {
         Hobby offer = this.modelMapper.map(info, Hobby.class);
         Category category = this.categoryService.findByName(info.getCategory());
-        Location location = this.locationService.getLocationByName(info.getLocation());
-        offer.setLocation(location);
         offer.setCategory(category);
         this.hobbyService.saveUpdatedHobby(offer);
         return new ResponseEntity<Hobby>(offer, HttpStatus.CREATED);

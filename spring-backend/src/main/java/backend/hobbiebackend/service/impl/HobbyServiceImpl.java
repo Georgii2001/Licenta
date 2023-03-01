@@ -1,13 +1,12 @@
 package backend.hobbiebackend.service.impl;
 
 import backend.hobbiebackend.handler.NotFoundException;
-import backend.hobbiebackend.model.entities.*;
-import backend.hobbiebackend.model.entities.enums.CategoryNameEnum;
-import backend.hobbiebackend.model.entities.enums.LocationEnum;
+import backend.hobbiebackend.model.entities.AppClient;
+import backend.hobbiebackend.model.entities.BusinessOwner;
+import backend.hobbiebackend.model.entities.Hobby;
 import backend.hobbiebackend.model.repostiory.HobbyRepository;
 import backend.hobbiebackend.service.CategoryService;
 import backend.hobbiebackend.service.HobbyService;
-import backend.hobbiebackend.service.LocationService;
 import backend.hobbiebackend.service.UserService;
 import com.cloudinary.Cloudinary;
 import lombok.SneakyThrows;
@@ -15,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -24,15 +22,13 @@ public class HobbyServiceImpl implements HobbyService {
     private final HobbyRepository hobbyRepository;
     private final CategoryService categoryService;
     private final UserService userService;
-    private final LocationService locationService;
     private final Cloudinary cloudinary;
 
     @Autowired
-    public HobbyServiceImpl(HobbyRepository hobbyRepository, CategoryService categoryService, UserService userService, LocationService locationService, Cloudinary cloudinary) {
+    public HobbyServiceImpl(HobbyRepository hobbyRepository, CategoryService categoryService, UserService userService, Cloudinary cloudinary) {
         this.hobbyRepository = hobbyRepository;
         this.categoryService = categoryService;
         this.userService = userService;
-        this.locationService = locationService;
         this.cloudinary = cloudinary;
     }
 

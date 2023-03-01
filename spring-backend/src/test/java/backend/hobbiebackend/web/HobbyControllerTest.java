@@ -3,7 +3,9 @@ package backend.hobbiebackend.web;
 import backend.hobbiebackend.controller.HobbyController;
 import backend.hobbiebackend.model.dto.HobbyInfoDto;
 import backend.hobbiebackend.model.dto.HobbyInfoUpdateDto;
-import backend.hobbiebackend.model.entities.*;
+import backend.hobbiebackend.model.entities.AppClient;
+import backend.hobbiebackend.model.entities.Category;
+import backend.hobbiebackend.model.entities.Hobby;
 import backend.hobbiebackend.model.entities.enums.CategoryNameEnum;
 import backend.hobbiebackend.model.entities.enums.LocationEnum;
 import backend.hobbiebackend.service.HobbyService;
@@ -21,15 +23,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -112,10 +110,8 @@ public class HobbyControllerTest extends AbstractTest {
 
         ModelMapper modelMapper = new ModelMapper();
         Category category = new Category(CategoryNameEnum.ACTIVE);
-        Location location = new Location(LocationEnum.ZURICH);
         hobby = modelMapper.map(hobbyInfoDto, Hobby.class);
         hobby.setCategory(category);
-        hobby.setLocation(location);
         AppClient client = new AppClient();
         client.setUsername("user");
         String username = "user";
