@@ -9,11 +9,10 @@ import backend.hobbiebackend.model.entities.enums.UserRoleEnum;
 import backend.hobbiebackend.model.repostiory.AppClientRepository;
 import backend.hobbiebackend.model.repostiory.BusinessOwnerRepository;
 import backend.hobbiebackend.model.repostiory.UserRepository;
-import backend.hobbiebackend.model.repostiory.UserRoleRepository;
 import backend.hobbiebackend.service.UserRoleService;
 import backend.hobbiebackend.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +23,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
@@ -31,19 +31,6 @@ public class UserServiceImpl implements UserService {
     private final BusinessOwnerRepository businessOwnerRepository;
     private final UserRoleService userRoleService;
     private final PasswordEncoder passwordEncoder;
-
-    @Autowired
-    public UserServiceImpl(ModelMapper modelMapper, UserRepository userRepository,
-                           AppClientRepository appClientRepository,
-                           BusinessOwnerRepository businessOwnerRepository, UserRoleService userRoleService, PasswordEncoder passwordEncoder) {
-        this.modelMapper = modelMapper;
-        this.userRepository = userRepository;
-        this.appClientRepository = appClientRepository;
-        this.businessOwnerRepository = businessOwnerRepository;
-        this.userRoleService = userRoleService;
-        this.passwordEncoder = passwordEncoder;
-
-    }
 
     @Override
     public List<UserEntity> seedUsersAndUserRoles() {

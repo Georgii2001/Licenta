@@ -11,8 +11,8 @@ import backend.hobbiebackend.service.HobbyService;
 import backend.hobbiebackend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,20 +22,13 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/hobbies")
+@RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:4200")
 public class HobbyController {
     private final HobbyService hobbyService;
     private final CategoryService categoryService;
     private final UserService userService;
     private final ModelMapper modelMapper;
-
-    @Autowired
-    public HobbyController(HobbyService hobbyService, CategoryService categoryService, UserService userService, ModelMapper modelMapper) {
-        this.hobbyService = hobbyService;
-        this.categoryService = categoryService;
-        this.userService = userService;
-        this.modelMapper = modelMapper;
-    }
 
     @PostMapping
     @Operation(summary = "Create new hobby", security = @SecurityRequirement(name = "bearerAuth"))

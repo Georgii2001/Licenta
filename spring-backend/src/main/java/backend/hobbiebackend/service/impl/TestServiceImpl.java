@@ -7,6 +7,7 @@ import backend.hobbiebackend.model.repostiory.TestRepository;
 import backend.hobbiebackend.service.HobbyService;
 import backend.hobbiebackend.service.TestService;
 import backend.hobbiebackend.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,18 +18,11 @@ import java.util.Set;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class TestServiceImpl implements TestService {
     private final TestRepository testRepository;
     private final UserService userService;
     private final HobbyService hobbyService;
-
-
-    @Autowired
-    public TestServiceImpl(TestRepository testRepository, UserService userService, HobbyService hobbyService) {
-        this.testRepository = testRepository;
-        this.userService = userService;
-        this.hobbyService = hobbyService;
-    }
 
     @Override
     public void saveTestResults(Test results) {

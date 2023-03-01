@@ -5,19 +5,15 @@ import backend.hobbiebackend.model.entities.UserRoleEntity;
 import backend.hobbiebackend.model.entities.enums.UserRoleEnum;
 import backend.hobbiebackend.model.repostiory.UserRoleRepository;
 import backend.hobbiebackend.service.UserRoleService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserRoleServiceImpl implements UserRoleService {
     private final UserRoleRepository userRoleRepository;
-
-    @Autowired
-    public UserRoleServiceImpl(UserRoleRepository userRoleRepository) {
-        this.userRoleRepository = userRoleRepository;
-    }
 
     @Override
     public UserRoleEntity getUserRoleByEnumName(UserRoleEnum userRoleEnum) {

@@ -1,30 +1,22 @@
 package backend.hobbiebackend.controller;
 
 import backend.hobbiebackend.model.entities.Hobby;
-import backend.hobbiebackend.model.entities.UserEntity;
-import backend.hobbiebackend.model.entities.enums.UserRoleEnum;
 import backend.hobbiebackend.service.HobbyService;
-import backend.hobbiebackend.service.UserRoleService;
-import backend.hobbiebackend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.Set;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
+@RequiredArgsConstructor
 public class HomeController {
     private final HobbyService hobbyService;
-
-    @Autowired
-    public HomeController(HobbyService hobbyService) {
-        this.hobbyService = hobbyService;
-    }
 
     @GetMapping("/home")
     @Operation(summary = "Show client/business homepage", security = @SecurityRequirement(name = "bearerAuth"))

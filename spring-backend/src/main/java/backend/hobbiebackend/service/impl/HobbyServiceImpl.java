@@ -9,6 +9,7 @@ import backend.hobbiebackend.service.CategoryService;
 import backend.hobbiebackend.service.HobbyService;
 import backend.hobbiebackend.service.UserService;
 import com.cloudinary.Cloudinary;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,19 +19,12 @@ import java.util.*;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class HobbyServiceImpl implements HobbyService {
     private final HobbyRepository hobbyRepository;
     private final CategoryService categoryService;
     private final UserService userService;
     private final Cloudinary cloudinary;
-
-    @Autowired
-    public HobbyServiceImpl(HobbyRepository hobbyRepository, CategoryService categoryService, UserService userService, Cloudinary cloudinary) {
-        this.hobbyRepository = hobbyRepository;
-        this.categoryService = categoryService;
-        this.userService = userService;
-        this.cloudinary = cloudinary;
-    }
 
     @Override
     public Hobby findHobbieById(Long id) {
