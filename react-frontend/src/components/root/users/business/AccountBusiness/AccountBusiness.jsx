@@ -3,8 +3,6 @@ import BackgroundHome from "../../../fragments/background/BackgroundHome";
 import dancingImg from "../../../../../img/2.jpg";
 import styles from "../../../../../css/Account.module.css";
 import layout from "../../../../../css/UserHome.module.css";
-import Footer from "../../../fragments/footer/Footer";
-import style from "../../../../../css/Footer.module.css";
 import BusinessDataService from "../../../../../api/users/BusinessDataService";
 import { useState, useLayoutEffect } from "react";
 import { Link } from "react-router-dom";
@@ -109,7 +107,6 @@ const AccountBusiness = () => {
           <BackgroundHome />
         </section>
       </main>
-      <Footer class={style.footer_hobbie_details} />
     </>
   );
 };

@@ -1,5 +1,4 @@
 import React from "react";
-import Footer from "../../fragments/footer/Footer";
 import Background from "../../fragments/background/Background";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
