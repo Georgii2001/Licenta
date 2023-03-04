@@ -17,7 +17,7 @@ import backend.hobbiebackend.service.UserService;
 import backend.hobbiebackend.utility.JWTUtility;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,6 +28,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
     private final UserService userService;
@@ -36,16 +37,6 @@ public class UserController {
     private final JWTUtility jwtUtility;
     private final AuthenticationManager authenticationManager;
     private final HobbieUserDetailsService hobbieUserDetailsService;
-
-    @Autowired
-    public UserController(UserService userService, PasswordEncoder passwordEncoder, NotificationService notificationService, JWTUtility jwtUtility, AuthenticationManager authenticationManager, HobbieUserDetailsService hobbieUserDetailsService) {
-        this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
-        this.notificationService = notificationService;
-        this.jwtUtility = jwtUtility;
-        this.authenticationManager = authenticationManager;
-        this.hobbieUserDetailsService = hobbieUserDetailsService;
-    }
 
     @PostMapping("/signup")
     @CrossOrigin(origins = "http://localhost:4200")

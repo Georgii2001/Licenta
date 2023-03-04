@@ -9,8 +9,8 @@ import backend.hobbiebackend.service.CategoryService;
 import backend.hobbiebackend.service.HobbyService;
 import backend.hobbiebackend.service.UserService;
 import com.cloudinary.Cloudinary;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,19 +18,12 @@ import java.util.*;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class HobbyServiceImpl implements HobbyService {
     private final HobbyRepository hobbyRepository;
     private final CategoryService categoryService;
     private final UserService userService;
     private final Cloudinary cloudinary;
-
-    @Autowired
-    public HobbyServiceImpl(HobbyRepository hobbyRepository, CategoryService categoryService, UserService userService, Cloudinary cloudinary) {
-        this.hobbyRepository = hobbyRepository;
-        this.categoryService = categoryService;
-        this.userService = userService;
-        this.cloudinary = cloudinary;
-    }
 
     @Override
     public Hobby findHobbieById(Long id) {
@@ -85,8 +78,8 @@ public class HobbyServiceImpl implements HobbyService {
 //            boolean isAdded = false;
 //            Random rand = new Random();
 //            String location = currentUserAppClient.getTestResults().getLocation();
-//            Location locationByName = this.locationService.getLocationByName(location);
-//            List<Hobby> allByLocation = this.hobbyRepository.findAllByLocation(locationByName);
+////            Location locationByName = this.locationService.getLocationByName(location);
+////            List<Hobby> allByLocation = this.hobbyRepository.findAllByLocation(locationByName);
 //            List<CategoryNameEnum> testCategoryResults = new ArrayList<>();
 //
 //            testCategoryResults.add(currentUserAppClient.getTestResults().getCategoryOne());
@@ -96,11 +89,11 @@ public class HobbyServiceImpl implements HobbyService {
 //            testCategoryResults.add(currentUserAppClient.getTestResults().getCategoryFive());
 //            testCategoryResults.add(currentUserAppClient.getTestResults().getCategorySix());
 //
-//            if (allByLocation.size() > 0) {
+////            if (allByLocation.size() > 0) {
 //
 //                for (int i = 0; i < 10; i++) {
-//                    int randomIndex = rand.nextInt(allByLocation.size());
-//                    Hobby randomHobby = allByLocation.get(randomIndex);
+////                    int randomIndex = rand.nextInt(allByLocation.size());
+////                    Hobby randomHobby = allByLocation.get(randomIndex);
 //                    if (hobby_matches.contains(randomHobby)) {
 //                        continue;
 //                    }
@@ -116,15 +109,15 @@ public class HobbyServiceImpl implements HobbyService {
 //                    }
 //                }
 //            }
-//        }
+////        }
 //        return hobby_matches;
-        return null;
+        return new HashSet<>(hobbyRepository.findAll());
     }
 
     @Override
     public boolean saveHobbyForClient(Hobby hobby, String username) {
         AppClient currentUserAppClient = this.userService.findAppClientByUsername(username);
-        Optional<Hobby> hobbyById = this.hobbyRepository.findById(hobby.getId());
+        Optional<Hobby> hobbyById = hobbyRepository.findById(hobby.getId());
         List<Hobby> saved_hobbies = currentUserAppClient.getSaved_hobbies();
         if (hobbyById.isPresent() && !(saved_hobbies.contains(hobbyById.get()))) {
             saved_hobbies.add(hobbyById.get());
@@ -166,7 +159,7 @@ public class HobbyServiceImpl implements HobbyService {
 
     @Override
     public Set<Hobby> getAllHobbieMatchesForClient(String username) {
-        AppClient currentUserAppClient = this.userService.findAppClientByUsername(username);
+        AppClient currentUserAppClient = userService.findAppClientByUsername(username);
         return currentUserAppClient.getHobby_matches();
     }
 

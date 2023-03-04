@@ -5,7 +5,7 @@ import backend.hobbiebackend.model.entities.Category;
 import backend.hobbiebackend.model.entities.enums.CategoryNameEnum;
 import backend.hobbiebackend.model.repostiory.CategoryRepository;
 import backend.hobbiebackend.service.CategoryService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,13 +14,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
-
-    @Autowired
-    public CategoryServiceImpl(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
-    }
 
     @Override
     public Category findByName(CategoryNameEnum category) {
