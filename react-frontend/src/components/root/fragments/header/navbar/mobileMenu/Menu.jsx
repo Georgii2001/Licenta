@@ -37,7 +37,7 @@ const Menu = () => {
             </li>
             <li className={styles.nav_link}>
               <NavLink to="/my-hobbies" className="nav-link">
-                MyHobbies
+                MyMatches
               </NavLink>
             </li>
             <li className={styles.nav_link}>
