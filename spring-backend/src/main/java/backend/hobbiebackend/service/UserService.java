@@ -12,7 +12,7 @@ import java.util.List;
 public interface UserService {
     List<UserEntity> seedUsersAndUserRoles();
 
-    AppClient register(AppClientSignUpDto user);
+    UserEntity register(AppClientSignUpDto userDTO);
 
     BusinessOwner registerBusiness(BusinessRegisterDto business);
 

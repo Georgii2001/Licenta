@@ -19,21 +19,16 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
@@ -69,7 +64,7 @@ class UserControllerTest extends AbstractTest {
         UserRoleEntity roleAdmin = new UserRoleEntity();
         roleAdmin.setRole(UserRoleEnum.ADMIN);
         appClient = modelMapper.map(appClientSignUpDto, AppClient.class);
-        appClient.setRoles(List.of(roleUser, roleAdmin));
+        appClient.setRole(UserRoleEnum.ADMIN);
 
         //update client
         updateAppClientDto = new UpdateAppClientDto();
@@ -87,7 +82,7 @@ class UserControllerTest extends AbstractTest {
         businessRegisterDto.setBusinessName("business name");
         businessRegisterDto.setAddress("Business address");
         businessOwner = modelMapper.map(businessRegisterDto, BusinessOwner.class);
-        businessOwner.setRoles(List.of(roleUser, roleAdmin));
+        businessOwner.setRole(UserRoleEnum.ADMIN);
 
 
         //update business
@@ -99,7 +94,7 @@ class UserControllerTest extends AbstractTest {
 
         //prepare data user
         UserEntity user = new UserEntity();
-        user.setRoles(List.of(roleUser, roleAdmin));
+        user.setRole(UserRoleEnum.ADMIN);
 
     }
 

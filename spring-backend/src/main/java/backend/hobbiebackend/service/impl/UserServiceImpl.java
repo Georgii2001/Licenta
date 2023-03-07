@@ -39,19 +39,18 @@ public class UserServiceImpl implements UserService {
         if (appClientRepository.count() == 0) {
             UserRoleEntity userRoleEntity = new UserRoleEntity();
             userRoleEntity.setRole(UserRoleEnum.USER);
-            UserRoleEntity userRole = this.userRoleService.saveRole(userRoleEntity);
+            userRoleService.saveRole(userRoleEntity);
             UserRoleEntity userRoleEntity2 = new UserRoleEntity();
             userRoleEntity2.setRole(UserRoleEnum.ADMIN);
-            UserRoleEntity adminRole = this.userRoleService.saveRole(userRoleEntity2);
-            AppClient user = new AppClient();
+            userRoleService.saveRole(userRoleEntity2);
+            UserEntity user = new AppClient();
             user.setUsername("user");
             user.setEmail("n13@gmail.com");
-            user.setPassword(this.passwordEncoder.encode("topsecret"));
-            user.setRoles(List.of(userRole));
-            user.setFullName("Nikoleta Doykova");
+            user.setPassword(passwordEncoder.encode("topsecret"));
+            user.setRole(UserRoleEnum.USER);
             user.setGender(GenderEnum.FEMALE);
 
-            appClientRepository.save(user);
+            userRepository.save(user);
             seededUsers.add(user);
 
 
@@ -59,13 +58,13 @@ public class UserServiceImpl implements UserService {
         if (businessOwnerRepository.count() == 0) {
             UserRoleEntity userRoleEntity3 = new UserRoleEntity();
             userRoleEntity3.setRole(UserRoleEnum.BUSINESS_USER);
-            UserRoleEntity businessRole = this.userRoleService.saveRole(userRoleEntity3);
+            userRoleService.saveRole(userRoleEntity3);
             //business_user
             BusinessOwner business_user = new BusinessOwner();
             business_user.setUsername("business");
             business_user.setEmail("n10@gamil.com");
             business_user.setPassword(this.passwordEncoder.encode("topsecret"));
-            business_user.setRoles(List.of(businessRole));
+            business_user.setRole(UserRoleEnum.USER);
             business_user.setBusinessName("My Business name");
             business_user.setAddress("My business address");
             businessOwnerRepository.save(business_user);
@@ -75,19 +74,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public AppClient register(AppClientSignUpDto user) {
-        UserRoleEntity userRole = this.userRoleService.getUserRoleByEnumName(UserRoleEnum.USER);
-        AppClient appClient = this.modelMapper.map(user, AppClient.class);
-        appClient.setRoles(List.of(userRole));
-        appClient.setPassword(this.passwordEncoder.encode(user.getPassword()));
-        return appClientRepository.save(appClient);
+    public UserEntity register(AppClientSignUpDto userDTO) {
+        UserEntity user = this.modelMapper.map(userDTO, UserEntity.class);
+        user.setRole(UserRoleEnum.USER);
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        return userRepository.save(user);
     }
 
     @Override
     public BusinessOwner registerBusiness(BusinessRegisterDto business) {
         UserRoleEntity businessUserRole = this.userRoleService.getUserRoleByEnumName(UserRoleEnum.BUSINESS_USER);
         BusinessOwner businessOwner = this.modelMapper.map(business, BusinessOwner.class);
-        businessOwner.setRoles(List.of(businessUserRole));
+        businessOwner.setRole(UserRoleEnum.USER);
         businessOwner.setPassword(this.passwordEncoder.encode(business.getPassword()));
         return businessOwnerRepository.save(businessOwner);
     }
@@ -144,8 +142,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean userExists(String username, String email) {
-        Optional<UserEntity> byUsername = this.userRepository.findByUsername(username);
-        Optional<UserEntity> byEmail = this.userRepository.findByEmail(email);
+        Optional<UserEntity> byUsername = userRepository.findByUsername(username);
+        Optional<UserEntity> byEmail = userRepository.findByEmail(email);
         return byUsername.isPresent() || byEmail.isPresent();
     }
 

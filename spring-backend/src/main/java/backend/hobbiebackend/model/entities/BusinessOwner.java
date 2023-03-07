@@ -1,10 +1,8 @@
 package backend.hobbiebackend.model.entities;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import backend.hobbiebackend.model.entities.enums.UserRoleEnum;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -14,8 +12,8 @@ public class BusinessOwner extends UserEntity {
     private String address;
     private Set<Hobby> hobby_offers;
 
-    public BusinessOwner(String username, String email, List<UserRoleEntity> roles, String password, String businessName, String address) {
-        super(username, email, roles, password);
+    public BusinessOwner(String username, String email, UserRoleEnum role, String password, String businessName, String address) {
+        super(username, email, null, null, role, password);
         this.businessName = businessName;
         this.address = address;
     }

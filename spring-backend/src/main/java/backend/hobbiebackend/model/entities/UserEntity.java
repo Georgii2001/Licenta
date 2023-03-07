@@ -1,66 +1,42 @@
 package backend.hobbiebackend.model.entities;
 
+import backend.hobbiebackend.model.entities.enums.GenderEnum;
+import backend.hobbiebackend.model.entities.enums.UserRoleEnum;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "users")
-public class UserEntity extends BaseEntity implements Serializable {
+public class UserEntity extends BaseEntity implements Serializable,Cloneable {
 
-    private String username;
-    private String email;
-    private List<UserRoleEntity> roles = new ArrayList<>();
-    private String password;
-
-
-    public UserEntity(String username, String email, List<UserRoleEntity> roles, String password) {
-        this.username = username;
-        this.email = email;
-        this.roles = roles;
-        this.password = password;
-    }
-
-    public UserEntity() {
-    }
+    private static final long serialVersionUID = 2798509641422598279L;
 
     @Column(nullable = false, unique = true)
-    public String getUsername() {
-        return username;
-    }
+    private String username;
+    @Column(nullable = false, unique = true)
+    private String email;
+    private GenderEnum gender;
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "test_results_id", referencedColumnName = "id")
+    private Test testResults;
 
     @Column(nullable = false)
-    public String getPassword() {
-        return password;
+    private UserRoleEnum role;
+    @Column(nullable = false)
+    private String password;
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    @Column(nullable = false, unique = true)
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    public List<UserRoleEntity> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<UserRoleEntity> roles) {
-        this.roles = roles;
-    }
-
-
 }

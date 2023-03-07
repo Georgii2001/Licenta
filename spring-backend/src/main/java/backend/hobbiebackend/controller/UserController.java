@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
@@ -39,15 +38,13 @@ public class UserController {
     private final HobbieUserDetailsService hobbieUserDetailsService;
 
     @PostMapping("/signup")
-    @CrossOrigin(origins = "http://localhost:4200")
     @Operation(summary = "Create new client-user")
-    public ResponseEntity<?> signup(@RequestBody AppClientSignUpDto user) {
-        System.out.println(user);
-        if (this.userService.userExists(user.getUsername(), user.getEmail())) {
+    public ResponseEntity<?> signup(@RequestBody AppClientSignUpDto userDTO) {
+        if (userService.userExists(userDTO.getUsername(), userDTO.getEmail())) {
             throw new RuntimeException("Username or email address already in use.");
         }
-        AppClient client = this.userService.register(user);
-        return new ResponseEntity<AppClient>(client, HttpStatus.CREATED);
+        UserEntity user = userService.register(userDTO);
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
     @PostMapping("/register")
@@ -151,15 +148,12 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    @CrossOrigin(origins = "http://localhost:4200")
     @Operation(summary = "Login based on user role after authentication", security = @SecurityRequirement(name = "bearerAuth"))
     public String logInUser(@RequestParam String username) {
         UserEntity userByUsername = this.userService.findUserByUsername(username);
-        if (userByUsername.getRoles().stream()
-                .anyMatch(u -> u.getRole().equals(UserRoleEnum.USER))) {
+        if (userByUsername.getRole().equals(UserRoleEnum.USER)) {
             return "USER";
-        } else if (userByUsername.getRoles().stream()
-                .anyMatch(u -> u.getRole().equals(UserRoleEnum.BUSINESS_USER))) {
+        } else if (userByUsername.getRole().equals(UserRoleEnum.BUSINESS_USER)) {
             return "BUSINESS_USER";
         }
         return null;
