@@ -1,7 +1,7 @@
 package backend.hobbiebackend.service;
 
-import backend.hobbiebackend.model.entities.Category;
-import backend.hobbiebackend.model.entities.enums.CategoryNameEnum;
+import backend.hobbiebackend.entities.Category;
+import backend.hobbiebackend.entities.enums.CategoryNameEnum;
 
 import java.util.List;
 

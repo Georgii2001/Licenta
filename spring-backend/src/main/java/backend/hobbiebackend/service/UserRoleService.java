@@ -1,7 +1,7 @@
 package backend.hobbiebackend.service;
 
-import backend.hobbiebackend.model.entities.UserRoleEntity;
-import backend.hobbiebackend.model.entities.enums.UserRoleEnum;
+import backend.hobbiebackend.entities.UserRoleEntity;
+import backend.hobbiebackend.entities.enums.UserRoleEnum;
 
 public interface UserRoleService {
     UserRoleEntity getUserRoleByEnumName(UserRoleEnum userRoleEnum);

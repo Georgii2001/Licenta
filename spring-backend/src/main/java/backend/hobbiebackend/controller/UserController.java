@@ -1,16 +1,16 @@
 package backend.hobbiebackend.controller;
 
 import backend.hobbiebackend.handler.NotFoundException;
-import backend.hobbiebackend.model.dto.AppClientSignUpDto;
-import backend.hobbiebackend.model.dto.BusinessRegisterDto;
-import backend.hobbiebackend.model.dto.UpdateAppClientDto;
-import backend.hobbiebackend.model.dto.UpdateBusinessDto;
-import backend.hobbiebackend.model.entities.AppClient;
-import backend.hobbiebackend.model.entities.BusinessOwner;
-import backend.hobbiebackend.model.entities.UserEntity;
-import backend.hobbiebackend.model.entities.enums.UserRoleEnum;
-import backend.hobbiebackend.model.jwt.JwtRequest;
-import backend.hobbiebackend.model.jwt.JwtResponse;
+import backend.hobbiebackend.dto.AppClientSignUpDto;
+import backend.hobbiebackend.dto.BusinessRegisterDto;
+import backend.hobbiebackend.dto.UpdateAppClientDto;
+import backend.hobbiebackend.dto.UpdateBusinessDto;
+import backend.hobbiebackend.entities.AppClient;
+import backend.hobbiebackend.entities.BusinessOwner;
+import backend.hobbiebackend.entities.UserEntity;
+import backend.hobbiebackend.entities.enums.UserRoleEnum;
+import backend.hobbiebackend.jwt.JwtRequest;
+import backend.hobbiebackend.jwt.JwtResponse;
 import backend.hobbiebackend.security.HobbieUserDetailsService;
 import backend.hobbiebackend.service.NotificationService;
 import backend.hobbiebackend.service.UserService;
@@ -151,9 +151,9 @@ public class UserController {
     @Operation(summary = "Login based on user role after authentication", security = @SecurityRequirement(name = "bearerAuth"))
     public String logInUser(@RequestParam String username) {
         UserEntity userByUsername = this.userService.findUserByUsername(username);
-        if (userByUsername.getRole().equals(UserRoleEnum.USER)) {
+        if (userByUsername.getRole().equals(UserRoleEnum.USER.name())) {
             return "USER";
-        } else if (userByUsername.getRole().equals(UserRoleEnum.BUSINESS_USER)) {
+        } else if (userByUsername.getRole().equals(UserRoleEnum.BUSINESS_USER.name())) {
             return "BUSINESS_USER";
         }
         return null;

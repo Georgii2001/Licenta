@@ -1,6 +1,6 @@
 package backend.hobbiebackend.controller;
 
-import backend.hobbiebackend.model.entities.Test;
+import backend.hobbiebackend.entities.Test;
 import backend.hobbiebackend.service.TestService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

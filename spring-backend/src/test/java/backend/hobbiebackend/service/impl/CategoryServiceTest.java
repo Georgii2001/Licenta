@@ -1,8 +1,8 @@
 package backend.hobbiebackend.service.impl;
 
-import backend.hobbiebackend.model.entities.Category;
-import backend.hobbiebackend.model.entities.enums.CategoryNameEnum;
-import backend.hobbiebackend.model.repostiory.CategoryRepository;
+import backend.hobbiebackend.entities.Category;
+import backend.hobbiebackend.entities.enums.CategoryNameEnum;
+import backend.hobbiebackend.repostiory.CategoryRepository;
 import backend.hobbiebackend.service.CategoryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

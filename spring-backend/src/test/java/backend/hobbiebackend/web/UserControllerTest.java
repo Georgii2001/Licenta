@@ -1,16 +1,16 @@
 package backend.hobbiebackend.web;
 
 import backend.hobbiebackend.controller.UserController;
-import backend.hobbiebackend.model.dto.AppClientSignUpDto;
-import backend.hobbiebackend.model.dto.BusinessRegisterDto;
-import backend.hobbiebackend.model.dto.UpdateAppClientDto;
-import backend.hobbiebackend.model.dto.UpdateBusinessDto;
-import backend.hobbiebackend.model.entities.AppClient;
-import backend.hobbiebackend.model.entities.BusinessOwner;
-import backend.hobbiebackend.model.entities.UserEntity;
-import backend.hobbiebackend.model.entities.UserRoleEntity;
-import backend.hobbiebackend.model.entities.enums.GenderEnum;
-import backend.hobbiebackend.model.entities.enums.UserRoleEnum;
+import backend.hobbiebackend.dto.AppClientSignUpDto;
+import backend.hobbiebackend.dto.BusinessRegisterDto;
+import backend.hobbiebackend.dto.UpdateAppClientDto;
+import backend.hobbiebackend.dto.UpdateBusinessDto;
+import backend.hobbiebackend.entities.AppClient;
+import backend.hobbiebackend.entities.BusinessOwner;
+import backend.hobbiebackend.entities.UserEntity;
+import backend.hobbiebackend.entities.UserRoleEntity;
+import backend.hobbiebackend.entities.enums.GenderEnum;
+import backend.hobbiebackend.entities.enums.UserRoleEnum;
 import backend.hobbiebackend.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,8 +24,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;

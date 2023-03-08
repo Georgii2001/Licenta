@@ -1,6 +1,6 @@
 package backend.hobbiebackend.service.impl;
 
-import backend.hobbiebackend.model.repostiory.TestRepository;
+import backend.hobbiebackend.repostiory.TestRepository;
 import backend.hobbiebackend.service.TestService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -14,8 +14,8 @@ class TestServiceImplTest {
 
     @Test
     void save_test_results_should_work() {
-        backend.hobbiebackend.model.entities.Test test = new backend.hobbiebackend.model.entities.Test();
-        when(mockTestRepository.save(Mockito.any(backend.hobbiebackend.model.entities.Test.class)))
+        backend.hobbiebackend.entities.Test test = new backend.hobbiebackend.entities.Test();
+        when(mockTestRepository.save(Mockito.any(backend.hobbiebackend.entities.Test.class)))
                 .thenAnswer(i -> i.getArguments()[0]);
         mockTestService.saveTestResults(test);
 

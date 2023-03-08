@@ -1,7 +1,7 @@
 package backend.hobbiebackend.security;
 
-import backend.hobbiebackend.model.entities.UserEntity;
-import backend.hobbiebackend.model.repostiory.UserRepository;
+import backend.hobbiebackend.entities.UserEntity;
+import backend.hobbiebackend.repostiory.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
