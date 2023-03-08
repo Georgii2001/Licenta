@@ -6,8 +6,10 @@ import backend.hobbiebackend.model.entities.AppClient;
 import backend.hobbiebackend.model.entities.BusinessOwner;
 import backend.hobbiebackend.model.entities.Hobby;
 import backend.hobbiebackend.model.entities.UserEntity;
+import org.apache.catalina.User;
 
 import java.util.List;
+import java.util.Set;
 
 public interface UserService {
     List<UserEntity> seedUsersAndUserRoles();
@@ -43,6 +45,8 @@ public interface UserService {
     AppClient findAppClientByUsername(String username);
 
     BusinessOwner findBusinessByUsername(String username);
+
+    Set<UserEntity> getAllUsersMatchesForClient(String username);
 }
 
 

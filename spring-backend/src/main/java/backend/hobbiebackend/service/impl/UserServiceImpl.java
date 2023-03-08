@@ -20,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -47,8 +49,8 @@ public class UserServiceImpl implements UserService {
             user.setUsername("user");
             user.setEmail("n13@gmail.com");
             user.setPassword(passwordEncoder.encode("topsecret"));
-            user.setRole(UserRoleEnum.USER);
-            user.setGender(GenderEnum.FEMALE);
+            user.setRole(UserRoleEnum.USER.name());
+            user.setGender(GenderEnum.FEMALE.name());
 
             userRepository.save(user);
             seededUsers.add(user);
@@ -64,7 +66,7 @@ public class UserServiceImpl implements UserService {
             business_user.setUsername("business");
             business_user.setEmail("n10@gamil.com");
             business_user.setPassword(this.passwordEncoder.encode("topsecret"));
-            business_user.setRole(UserRoleEnum.USER);
+            business_user.setRole(UserRoleEnum.USER.name());
             business_user.setBusinessName("My Business name");
             business_user.setAddress("My business address");
             businessOwnerRepository.save(business_user);
@@ -76,7 +78,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserEntity register(AppClientSignUpDto userDTO) {
         UserEntity user = this.modelMapper.map(userDTO, UserEntity.class);
-        user.setRole(UserRoleEnum.USER);
+        user.setRole(UserRoleEnum.USER.name());
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         return userRepository.save(user);
     }
@@ -85,7 +87,7 @@ public class UserServiceImpl implements UserService {
     public BusinessOwner registerBusiness(BusinessRegisterDto business) {
         UserRoleEntity businessUserRole = this.userRoleService.getUserRoleByEnumName(UserRoleEnum.BUSINESS_USER);
         BusinessOwner businessOwner = this.modelMapper.map(business, BusinessOwner.class);
-        businessOwner.setRole(UserRoleEnum.USER);
+        businessOwner.setRole(UserRoleEnum.USER.name());
         businessOwner.setPassword(this.passwordEncoder.encode(business.getPassword()));
         return businessOwnerRepository.save(businessOwner);
     }
@@ -211,5 +213,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public BusinessOwner findBusinessByUsername(String username) {
         return this.businessOwnerRepository.findByUsername(username).get();
+    }
+
+    @Override
+    public Set<UserEntity> getAllUsersMatchesForClient(String username) {
+        return userRepository.findAll().stream()
+                .filter(user -> !user.getUsername().equalsIgnoreCase(username))
+                .filter(user -> UserRoleEnum.USER.name().equalsIgnoreCase(user.getRole()))
+                .collect(Collectors.toSet());
     }
 }

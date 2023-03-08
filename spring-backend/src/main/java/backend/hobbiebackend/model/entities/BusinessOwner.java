@@ -12,8 +12,8 @@ public class BusinessOwner extends UserEntity {
     private String address;
     private Set<Hobby> hobby_offers;
 
-    public BusinessOwner(String username, String email, UserRoleEnum role, String password, String businessName, String address) {
-        super(username, email, null, null, role, password);
+    public BusinessOwner(String username, String email, String role, String password, String businessName, String address) {
+        super(username, email, null, null, role, password,null);
         this.businessName = businessName;
         this.address = address;
     }

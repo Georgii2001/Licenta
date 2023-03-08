@@ -74,7 +74,7 @@ public class UserController {
     public ResponseEntity<?> updateUser(@RequestBody UpdateAppClientDto user) {
         AppClient client = this.userService.findAppClientById(user.getId());
         client.setPassword(this.passwordEncoder.encode(user.getPassword()));
-        client.setGender(user.getGender());
+        client.setGender(user.getGender().name());
         client.setFullName(user.getFullName());
         this.userService.saveUpdatedUserClient(client);
         return new ResponseEntity<AppClient>(client, HttpStatus.CREATED);

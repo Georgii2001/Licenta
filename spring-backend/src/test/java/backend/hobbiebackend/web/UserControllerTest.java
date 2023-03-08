@@ -64,7 +64,7 @@ class UserControllerTest extends AbstractTest {
         UserRoleEntity roleAdmin = new UserRoleEntity();
         roleAdmin.setRole(UserRoleEnum.ADMIN);
         appClient = modelMapper.map(appClientSignUpDto, AppClient.class);
-        appClient.setRole(UserRoleEnum.ADMIN);
+        appClient.setRole(UserRoleEnum.ADMIN.name());
 
         //update client
         updateAppClientDto = new UpdateAppClientDto();
@@ -82,7 +82,7 @@ class UserControllerTest extends AbstractTest {
         businessRegisterDto.setBusinessName("business name");
         businessRegisterDto.setAddress("Business address");
         businessOwner = modelMapper.map(businessRegisterDto, BusinessOwner.class);
-        businessOwner.setRole(UserRoleEnum.ADMIN);
+        businessOwner.setRole(UserRoleEnum.ADMIN.name());
 
 
         //update business
@@ -94,7 +94,7 @@ class UserControllerTest extends AbstractTest {
 
         //prepare data user
         UserEntity user = new UserEntity();
-        user.setRole(UserRoleEnum.ADMIN);
+        user.setRole(UserRoleEnum.ADMIN.name());
 
     }
 

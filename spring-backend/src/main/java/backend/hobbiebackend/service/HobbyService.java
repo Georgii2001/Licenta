@@ -2,6 +2,7 @@ package backend.hobbiebackend.service;
 
 import backend.hobbiebackend.model.entities.AppClient;
 import backend.hobbiebackend.model.entities.Hobby;
+import org.apache.catalina.User;
 
 import java.io.IOException;
 import java.util.List;
