@@ -1,18 +1,20 @@
 package backend.hobbiebackend.service;
 
-import backend.hobbiebackend.model.dto.AppClientSignUpDto;
-import backend.hobbiebackend.model.dto.BusinessRegisterDto;
-import backend.hobbiebackend.model.entities.AppClient;
-import backend.hobbiebackend.model.entities.BusinessOwner;
-import backend.hobbiebackend.model.entities.Hobby;
-import backend.hobbiebackend.model.entities.UserEntity;
+import backend.hobbiebackend.dto.AppClientSignUpDto;
+import backend.hobbiebackend.dto.BusinessRegisterDto;
+import backend.hobbiebackend.dto.UsersDTO;
+import backend.hobbiebackend.entities.AppClient;
+import backend.hobbiebackend.entities.BusinessOwner;
+import backend.hobbiebackend.entities.Hobby;
+import backend.hobbiebackend.entities.UserEntity;
 
 import java.util.List;
+import java.util.Set;
 
 public interface UserService {
     List<UserEntity> seedUsersAndUserRoles();
 
-    AppClient register(AppClientSignUpDto user);
+    UserEntity register(AppClientSignUpDto userDTO);
 
     BusinessOwner registerBusiness(BusinessRegisterDto business);
 
@@ -43,6 +45,8 @@ public interface UserService {
     AppClient findAppClientByUsername(String username);
 
     BusinessOwner findBusinessByUsername(String username);
+
+    List<UsersDTO> getAllUsersMatchesForClient(String username);
 }
 
 

@@ -1,9 +1,9 @@
 package backend.hobbiebackend.service.impl;
 
 import backend.hobbiebackend.handler.NotFoundException;
-import backend.hobbiebackend.model.entities.UserRoleEntity;
-import backend.hobbiebackend.model.entities.enums.UserRoleEnum;
-import backend.hobbiebackend.model.repostiory.UserRoleRepository;
+import backend.hobbiebackend.entities.UserRoleEntity;
+import backend.hobbiebackend.entities.enums.UserRoleEnum;
+import backend.hobbiebackend.repostiory.UserRoleRepository;
 import backend.hobbiebackend.service.UserRoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

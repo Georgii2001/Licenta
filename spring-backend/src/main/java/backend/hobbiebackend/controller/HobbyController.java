@@ -1,11 +1,11 @@
 package backend.hobbiebackend.controller;
 
-import backend.hobbiebackend.model.dto.HobbyInfoDto;
-import backend.hobbiebackend.model.dto.HobbyInfoUpdateDto;
-import backend.hobbiebackend.model.entities.AppClient;
-import backend.hobbiebackend.model.entities.BusinessOwner;
-import backend.hobbiebackend.model.entities.Category;
-import backend.hobbiebackend.model.entities.Hobby;
+import backend.hobbiebackend.dto.HobbyInfoDto;
+import backend.hobbiebackend.dto.HobbyInfoUpdateDto;
+import backend.hobbiebackend.entities.AppClient;
+import backend.hobbiebackend.entities.BusinessOwner;
+import backend.hobbiebackend.entities.Category;
+import backend.hobbiebackend.entities.Hobby;
 import backend.hobbiebackend.service.CategoryService;
 import backend.hobbiebackend.service.HobbyService;
 import backend.hobbiebackend.service.UserService;

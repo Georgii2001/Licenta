@@ -1,10 +1,10 @@
 package backend.hobbiebackend.service.impl;
 
 import backend.hobbiebackend.handler.NotFoundException;
-import backend.hobbiebackend.model.entities.AppClient;
-import backend.hobbiebackend.model.entities.BusinessOwner;
-import backend.hobbiebackend.model.entities.Hobby;
-import backend.hobbiebackend.model.repostiory.HobbyRepository;
+import backend.hobbiebackend.entities.AppClient;
+import backend.hobbiebackend.entities.BusinessOwner;
+import backend.hobbiebackend.entities.Hobby;
+import backend.hobbiebackend.repostiory.HobbyRepository;
 import backend.hobbiebackend.service.CategoryService;
 import backend.hobbiebackend.service.HobbyService;
 import backend.hobbiebackend.service.UserService;

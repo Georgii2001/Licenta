@@ -1,13 +1,13 @@
 package backend.hobbiebackend.web;
 
 import backend.hobbiebackend.controller.HobbyController;
-import backend.hobbiebackend.model.dto.HobbyInfoDto;
-import backend.hobbiebackend.model.dto.HobbyInfoUpdateDto;
-import backend.hobbiebackend.model.entities.AppClient;
-import backend.hobbiebackend.model.entities.Category;
-import backend.hobbiebackend.model.entities.Hobby;
-import backend.hobbiebackend.model.entities.enums.CategoryNameEnum;
-import backend.hobbiebackend.model.entities.enums.LocationEnum;
+import backend.hobbiebackend.dto.HobbyInfoDto;
+import backend.hobbiebackend.dto.HobbyInfoUpdateDto;
+import backend.hobbiebackend.entities.AppClient;
+import backend.hobbiebackend.entities.Category;
+import backend.hobbiebackend.entities.Hobby;
+import backend.hobbiebackend.entities.enums.CategoryNameEnum;
+import backend.hobbiebackend.entities.enums.LocationEnum;
 import backend.hobbiebackend.service.HobbyService;
 import backend.hobbiebackend.service.UserService;
 import org.junit.Before;

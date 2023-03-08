@@ -1,31 +1,43 @@
 package backend.hobbiebackend.service.impl;
 
+import backend.hobbiebackend.dto.AppClientSignUpDto;
+import backend.hobbiebackend.dto.BusinessRegisterDto;
+import backend.hobbiebackend.dto.UsersDTO;
+import backend.hobbiebackend.entities.*;
+import backend.hobbiebackend.entities.enums.GenderEnum;
+import backend.hobbiebackend.entities.enums.UserRoleEnum;
 import backend.hobbiebackend.handler.NotFoundException;
-import backend.hobbiebackend.model.dto.AppClientSignUpDto;
-import backend.hobbiebackend.model.dto.BusinessRegisterDto;
-import backend.hobbiebackend.model.entities.*;
-import backend.hobbiebackend.model.entities.enums.GenderEnum;
-import backend.hobbiebackend.model.entities.enums.UserRoleEnum;
-import backend.hobbiebackend.model.repostiory.AppClientRepository;
-import backend.hobbiebackend.model.repostiory.BusinessOwnerRepository;
-import backend.hobbiebackend.model.repostiory.UserRepository;
+import backend.hobbiebackend.mapper.UserMapper;
+import backend.hobbiebackend.repostiory.AppClientRepository;
+import backend.hobbiebackend.repostiory.BusinessOwnerRepository;
+import backend.hobbiebackend.repostiory.UserRepository;
 import backend.hobbiebackend.service.UserRoleService;
 import backend.hobbiebackend.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static backend.hobbiebackend.constants.Constants.*;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final ModelMapper modelMapper;
+    private final UserMapper userMapper;
     private final UserRepository userRepository;
     private final AppClientRepository appClientRepository;
     private final BusinessOwnerRepository businessOwnerRepository;
@@ -39,19 +51,18 @@ public class UserServiceImpl implements UserService {
         if (appClientRepository.count() == 0) {
             UserRoleEntity userRoleEntity = new UserRoleEntity();
             userRoleEntity.setRole(UserRoleEnum.USER);
-            UserRoleEntity userRole = this.userRoleService.saveRole(userRoleEntity);
+            userRoleService.saveRole(userRoleEntity);
             UserRoleEntity userRoleEntity2 = new UserRoleEntity();
             userRoleEntity2.setRole(UserRoleEnum.ADMIN);
-            UserRoleEntity adminRole = this.userRoleService.saveRole(userRoleEntity2);
-            AppClient user = new AppClient();
+            userRoleService.saveRole(userRoleEntity2);
+            UserEntity user = new AppClient();
             user.setUsername("user");
             user.setEmail("n13@gmail.com");
-            user.setPassword(this.passwordEncoder.encode("topsecret"));
-            user.setRoles(List.of(userRole));
-            user.setFullName("Nikoleta Doykova");
-            user.setGender(GenderEnum.FEMALE);
+            user.setPassword(passwordEncoder.encode("topsecret"));
+            user.setRole(UserRoleEnum.USER.name());
+            user.setGender(GenderEnum.FEMALE.name());
 
-            appClientRepository.save(user);
+            userRepository.save(user);
             seededUsers.add(user);
 
 
@@ -59,13 +70,13 @@ public class UserServiceImpl implements UserService {
         if (businessOwnerRepository.count() == 0) {
             UserRoleEntity userRoleEntity3 = new UserRoleEntity();
             userRoleEntity3.setRole(UserRoleEnum.BUSINESS_USER);
-            UserRoleEntity businessRole = this.userRoleService.saveRole(userRoleEntity3);
+            userRoleService.saveRole(userRoleEntity3);
             //business_user
             BusinessOwner business_user = new BusinessOwner();
             business_user.setUsername("business");
             business_user.setEmail("n10@gamil.com");
             business_user.setPassword(this.passwordEncoder.encode("topsecret"));
-            business_user.setRoles(List.of(businessRole));
+            business_user.setRole(UserRoleEnum.USER.name());
             business_user.setBusinessName("My Business name");
             business_user.setAddress("My business address");
             businessOwnerRepository.save(business_user);
@@ -75,19 +86,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public AppClient register(AppClientSignUpDto user) {
-        UserRoleEntity userRole = this.userRoleService.getUserRoleByEnumName(UserRoleEnum.USER);
-        AppClient appClient = this.modelMapper.map(user, AppClient.class);
-        appClient.setRoles(List.of(userRole));
-        appClient.setPassword(this.passwordEncoder.encode(user.getPassword()));
-        return appClientRepository.save(appClient);
+    public UserEntity register(AppClientSignUpDto userDTO) {
+        UserEntity user = this.modelMapper.map(userDTO, UserEntity.class);
+        user.setRole(UserRoleEnum.USER.name());
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        return userRepository.save(user);
     }
 
     @Override
     public BusinessOwner registerBusiness(BusinessRegisterDto business) {
         UserRoleEntity businessUserRole = this.userRoleService.getUserRoleByEnumName(UserRoleEnum.BUSINESS_USER);
         BusinessOwner businessOwner = this.modelMapper.map(business, BusinessOwner.class);
-        businessOwner.setRoles(List.of(businessUserRole));
+        businessOwner.setRole(UserRoleEnum.USER.name());
         businessOwner.setPassword(this.passwordEncoder.encode(business.getPassword()));
         return businessOwnerRepository.save(businessOwner);
     }
@@ -144,8 +154,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean userExists(String username, String email) {
-        Optional<UserEntity> byUsername = this.userRepository.findByUsername(username);
-        Optional<UserEntity> byEmail = this.userRepository.findByEmail(email);
+        Optional<UserEntity> byUsername = userRepository.findByUsername(username);
+        Optional<UserEntity> byEmail = userRepository.findByEmail(email);
         return byUsername.isPresent() || byEmail.isPresent();
     }
 
@@ -213,5 +223,40 @@ public class UserServiceImpl implements UserService {
     @Override
     public BusinessOwner findBusinessByUsername(String username) {
         return this.businessOwnerRepository.findByUsername(username).get();
+    }
+
+    @Override
+    public List<UsersDTO> getAllUsersMatchesForClient(String username) {
+        List<UsersDTO> usersDTO = new ArrayList<>(Collections.emptyList());
+        userRepository.findByRole(UserRoleEnum.USER.name()).stream()
+                .filter(user -> !user.getUsername().equalsIgnoreCase(username))
+                .collect(Collectors.toList())
+                .forEach(user -> {
+                    final String avatar = getFile(user.getUsername());
+                    usersDTO.add(userMapper.mapUserToDTO(user, avatar));
+                });
+
+        return usersDTO;
+    }
+
+    private String getFile(String username) {
+
+        File directory = new File(USER_PHOTOS_PATH + username + SEPARATOR);
+        try {
+            if (directory.exists() && directory.isDirectory()) {
+                File[] files = directory.listFiles();
+                assert files != null;
+                for (File file : files) {
+                    if (file.getName().contains(PROFILE_PHOTO)) {
+                        byte[] encoded = Base64.encodeBase64(FileUtils.readFileToByteArray(file));
+                        return new String(encoded, StandardCharsets.US_ASCII);
+                    }
+                }
+            }
+            return null;
+
+        } catch (IOException e) {
+            throw new NotFoundException("File not found in directory");
+        }
     }
 }

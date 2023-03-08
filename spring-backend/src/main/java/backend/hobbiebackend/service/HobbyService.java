@@ -1,9 +1,8 @@
 package backend.hobbiebackend.service;
 
-import backend.hobbiebackend.model.entities.AppClient;
-import backend.hobbiebackend.model.entities.Hobby;
+import backend.hobbiebackend.entities.AppClient;
+import backend.hobbiebackend.entities.Hobby;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 

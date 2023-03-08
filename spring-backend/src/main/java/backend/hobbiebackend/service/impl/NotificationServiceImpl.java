@@ -1,6 +1,6 @@
 package backend.hobbiebackend.service.impl;
 
-import backend.hobbiebackend.model.entities.UserEntity;
+import backend.hobbiebackend.entities.UserEntity;
 import backend.hobbiebackend.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;

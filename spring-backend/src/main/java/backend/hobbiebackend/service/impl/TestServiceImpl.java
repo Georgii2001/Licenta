@@ -1,19 +1,16 @@
 package backend.hobbiebackend.service.impl;
 
-import backend.hobbiebackend.model.entities.AppClient;
-import backend.hobbiebackend.model.entities.Hobby;
-import backend.hobbiebackend.model.entities.Test;
-import backend.hobbiebackend.model.repostiory.TestRepository;
+import backend.hobbiebackend.entities.AppClient;
+import backend.hobbiebackend.entities.Hobby;
+import backend.hobbiebackend.entities.Test;
+import backend.hobbiebackend.repostiory.TestRepository;
 import backend.hobbiebackend.service.HobbyService;
 import backend.hobbiebackend.service.TestService;
 import backend.hobbiebackend.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Set;
 
 @Service

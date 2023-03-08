@@ -1,16 +1,16 @@
 package backend.hobbiebackend.web;
 
 import backend.hobbiebackend.controller.UserController;
-import backend.hobbiebackend.model.dto.AppClientSignUpDto;
-import backend.hobbiebackend.model.dto.BusinessRegisterDto;
-import backend.hobbiebackend.model.dto.UpdateAppClientDto;
-import backend.hobbiebackend.model.dto.UpdateBusinessDto;
-import backend.hobbiebackend.model.entities.AppClient;
-import backend.hobbiebackend.model.entities.BusinessOwner;
-import backend.hobbiebackend.model.entities.UserEntity;
-import backend.hobbiebackend.model.entities.UserRoleEntity;
-import backend.hobbiebackend.model.entities.enums.GenderEnum;
-import backend.hobbiebackend.model.entities.enums.UserRoleEnum;
+import backend.hobbiebackend.dto.AppClientSignUpDto;
+import backend.hobbiebackend.dto.BusinessRegisterDto;
+import backend.hobbiebackend.dto.UpdateAppClientDto;
+import backend.hobbiebackend.dto.UpdateBusinessDto;
+import backend.hobbiebackend.entities.AppClient;
+import backend.hobbiebackend.entities.BusinessOwner;
+import backend.hobbiebackend.entities.UserEntity;
+import backend.hobbiebackend.entities.UserRoleEntity;
+import backend.hobbiebackend.entities.enums.GenderEnum;
+import backend.hobbiebackend.entities.enums.UserRoleEnum;
 import backend.hobbiebackend.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,21 +19,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.List;
-
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
@@ -69,7 +62,7 @@ class UserControllerTest extends AbstractTest {
         UserRoleEntity roleAdmin = new UserRoleEntity();
         roleAdmin.setRole(UserRoleEnum.ADMIN);
         appClient = modelMapper.map(appClientSignUpDto, AppClient.class);
-        appClient.setRoles(List.of(roleUser, roleAdmin));
+        appClient.setRole(UserRoleEnum.ADMIN.name());
 
         //update client
         updateAppClientDto = new UpdateAppClientDto();
@@ -87,7 +80,7 @@ class UserControllerTest extends AbstractTest {
         businessRegisterDto.setBusinessName("business name");
         businessRegisterDto.setAddress("Business address");
         businessOwner = modelMapper.map(businessRegisterDto, BusinessOwner.class);
-        businessOwner.setRoles(List.of(roleUser, roleAdmin));
+        businessOwner.setRole(UserRoleEnum.ADMIN.name());
 
 
         //update business
@@ -99,7 +92,7 @@ class UserControllerTest extends AbstractTest {
 
         //prepare data user
         UserEntity user = new UserEntity();
-        user.setRoles(List.of(roleUser, roleAdmin));
+        user.setRole(UserRoleEnum.ADMIN.name());
 
     }
 
