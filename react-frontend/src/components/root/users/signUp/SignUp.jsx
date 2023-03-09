@@ -11,12 +11,14 @@ const SignUp = () => {
   const [loading, setLoading] = useState(false);
   const [checked, setCheckBoxChecked] = useState("other");
   const [error, setError] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
   const [info, setInfo] = useState({
     username: "",
     gender: "OTHER",
     email: "",
     password: "",
     repeatpassword: "",
+    image: null,
   });
 
   const [errors, setErrors] = useState({});
@@ -55,6 +57,14 @@ const SignUp = () => {
     if (Object.keys(errors).length === 0) {
       console.log(info);
       setLoading(true);
+
+      const formData = new FormData();
+      formData.append("username", info.username);
+      formData.append("gender", info.gender);
+      formData.append("email", info.email);
+      formData.append("password", info.password);
+      formData.append("repeatpassword", info.repeatpassword);
+      formData.append("image", info.image);
       await SignUpAppClientService(info)
         .then((response) => {
           if (response.status === 201) {
@@ -69,6 +79,7 @@ const SignUp = () => {
       console.log(errors);
     }
   };
+
 
   return (
     <>
@@ -186,6 +197,32 @@ const SignUp = () => {
             </label>
           </section>
 
+          <section className={styles.form_field}>
+            <div className={styles.upload_wrapper}>
+                {info.image ?
+                  <img src={imageUrl} className={styles.uploaded_image} />
+                : <span className={styles.file_name}> "No photo chosen"</span>}
+              <button className={styles.upload_button}>
+                <span>Choose a profile photo</span>
+                <input
+                  id="image"
+                  name="image"
+                  type="file"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    setInfo({ ...info, image: file });
+
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                      setImageUrl(reader.result);
+                    };
+                    reader.readAsDataURL(file);
+                  }}
+                />
+              </button>
+            </div>
+          </section>
+          
           <section className={styles.form_field}>
             {loading && <LoadingDotsDark />}
 
