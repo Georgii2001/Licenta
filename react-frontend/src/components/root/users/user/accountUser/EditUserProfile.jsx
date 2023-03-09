@@ -15,7 +15,6 @@ const EditUserProfile = () => {
   const [checked, setCheckBoxChecked] = useState("other");
   const [info, setInfo] = useState({
     id: location.state.id,
-    fullName: location.state.fullName,
     gender: "OTHER",
     password: "",
     repeatpassword: "",
@@ -25,12 +24,6 @@ const EditUserProfile = () => {
 
   const validate = () => {
     const errors = {};
-
-    if (!info.fullName) {
-      errors.fullName = "Required";
-    } else if (info.fullName.length < 2 || info.fullName.length > 20) {
-      errors.fullName = "2 and 20 char";
-    }
 
     if (!info.password) {
       errors.password = "Password is required";
@@ -69,21 +62,7 @@ const EditUserProfile = () => {
         <h2>Edit account</h2>
 
         <form id="userInfo" onSubmit={submitHandler}>
-          <section className={styles.form_field}>
-            <input
-              defaultValue={location.state.fullName}
-              type="text"
-              name="name"
-              onChange={(e) => setInfo({ ...info, fullName: e.target.value })}
-            />
-            <label htmlFor="name" className={styles.label_name}>
-              <span className={styles.content_name}>Full Name</span>
-              {errors.fullName && (
-                <small className={styles.errors}>Invalid Full Name</small>
-              )}
-            </label>
-          </section>
-
+  
           <section className={styles.form_field_radio}>
             <section className={styles.name_section}>
               <label id="gender" className={styles.label_name}>

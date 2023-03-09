@@ -59,8 +59,8 @@ public class UserController {
 
     @GetMapping("/client")
     @Operation(summary = "show client-user information", security = @SecurityRequirement(name = "bearerAuth"))
-    public AppClient showUserDetails(@RequestParam String username) {
-        return this.userService.findAppClientByUsername(username);
+    public UserEntity showUserDetails(@RequestParam String username) {
+        return this.userService.findUserByUsername(username);
     }
 
     @GetMapping("/business")
@@ -77,7 +77,7 @@ public class UserController {
         client.setGender(user.getGender().name());
         client.setFullName(user.getFullName());
         this.userService.saveUpdatedUserClient(client);
-        return new ResponseEntity<AppClient>(client, HttpStatus.CREATED);
+        return new ResponseEntity<>(client, HttpStatus.CREATED);
     }
 
     @PostMapping("/notification")

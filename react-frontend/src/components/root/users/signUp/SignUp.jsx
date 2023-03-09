@@ -13,7 +13,6 @@ const SignUp = () => {
   const [error, setError] = useState(false);
   const [info, setInfo] = useState({
     username: "",
-    fullName: "",
     gender: "OTHER",
     email: "",
     password: "",
@@ -29,12 +28,6 @@ const SignUp = () => {
       errors.username = "Required";
     } else if (info.username.length < 5) {
       errors.username = "Minimum 5 char";
-    }
-
-    if (!info.fullName) {
-      errors.fullName = "Required";
-    } else if (info.fullName.length < 2 || info.fullName.length > 20) {
-      errors.fullName = "2 to 20 char";
     }
 
     if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(info.email)) {
@@ -99,21 +92,6 @@ const SignUp = () => {
               <span className={styles.content_name}>Username</span>
               {errors.username && (
                 <small className={styles.errors}>{errors.username}</small>
-              )}
-            </label>
-          </section>
-
-          <section className={styles.form_field}>
-            <input
-              id="fullName"
-              type="text"
-              name="fullName"
-              onChange={(e) => setInfo({ ...info, fullName: e.target.value })}
-            />
-            <label htmlFor="fullName" className={styles.label_name}>
-              <span className={styles.content_name}>Full Name</span>
-              {errors.fullName && (
-                <small className={styles.errors}>{errors.fullName}</small>
               )}
             </label>
           </section>

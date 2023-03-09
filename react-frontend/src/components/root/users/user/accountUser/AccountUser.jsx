@@ -42,7 +42,7 @@ const AccountUser = () => {
     event.preventDefault();
     let path = "/edit-profile";
     navigate(path, {
-      state: { id: user.id, gender: user.gender, fullName: user.fullName },
+      state: { id: user.id, gender: user.gender},
     });
   };
 
@@ -76,7 +76,6 @@ const AccountUser = () => {
               <br></br>
               <p> Username: {user.username} </p>
               <p> Email: {user.email}</p>
-              <p> Full Name: {user.fullName} </p>
               <p> Gender: {user.gender} </p>
               <p> Change password: **** </p>
               <br></br>
