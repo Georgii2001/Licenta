@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Set;
 
 @Repository
-public interface HobbyRepository extends JpaRepository<Hobby, Long> {
+public interface HobbyRepository extends JpaRepository<Hobby, Integer> {
     Set<Hobby> findAllByCreator(String creator);
 }

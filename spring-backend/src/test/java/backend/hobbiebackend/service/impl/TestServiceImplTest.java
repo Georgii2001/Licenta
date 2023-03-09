@@ -19,6 +19,6 @@ class TestServiceImplTest {
                 .thenAnswer(i -> i.getArguments()[0]);
         mockTestService.saveTestResults(test);
 
-        assertNotNull(mockTestRepository.findById(1L));
+        assertNotNull(mockTestRepository.findById(1));
     }
 }

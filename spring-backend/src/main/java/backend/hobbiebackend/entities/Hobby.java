@@ -16,10 +16,6 @@ public class Hobby extends BaseEntity {
     private String slogan;
     private String intro;
     private String description;
-
-    @ManyToOne
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
-    private Category category;
     private String creator;
     private BigDecimal price;
     private String profileImgUrl;

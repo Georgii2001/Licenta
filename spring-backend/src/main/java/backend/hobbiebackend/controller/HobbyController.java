@@ -4,9 +4,7 @@ import backend.hobbiebackend.dto.HobbyInfoDto;
 import backend.hobbiebackend.dto.HobbyInfoUpdateDto;
 import backend.hobbiebackend.entities.AppClient;
 import backend.hobbiebackend.entities.BusinessOwner;
-import backend.hobbiebackend.entities.Category;
 import backend.hobbiebackend.entities.Hobby;
-import backend.hobbiebackend.service.CategoryService;
 import backend.hobbiebackend.service.HobbyService;
 import backend.hobbiebackend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,41 +24,38 @@ import java.util.Set;
 @CrossOrigin(origins = "http://localhost:4200")
 public class HobbyController {
     private final HobbyService hobbyService;
-    private final CategoryService categoryService;
     private final UserService userService;
     private final ModelMapper modelMapper;
 
     @PostMapping
     @Operation(summary = "Create new hobby", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<HttpStatus> saveHobby(@RequestBody HobbyInfoDto info) {
-        Hobby offer = this.modelMapper.map(info, Hobby.class);
-        Category category = this.categoryService.findByName(info.getCategory());
-        offer.setCategory(category);
-        BusinessOwner business = this.userService.findBusinessByUsername(info.getCreator());
-        Set<Hobby> hobby_offers = business.getHobby_offers();
-        hobby_offers.add(offer);
-        business.setHobby_offers(hobby_offers);
-        this.hobbyService.createHobby(offer);
-        this.userService.saveUpdatedUser(business);
+//        Hobby offer = this.modelMapper.map(info, Hobby.class);
+//        BusinessOwner business = this.userService.findBusinessByUsername(info.getCreator());
+//        Set<Hobby> hobby_offers = business.getHobby_offers();
+//        hobby_offers.add(offer);
+//        business.setHobby_offers(hobby_offers);
+//        this.hobbyService.createHobby(offer);
+//        this.userService.saveUpdatedUser(business);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/is-saved")
     @Operation(summary = "Show if hobby is saved in favorites", security = @SecurityRequirement(name = "bearerAuth"))
-    public boolean isHobbySaved(@RequestParam Long id, @RequestParam String username) {
+    public boolean isHobbySaved(@RequestParam Integer id, @RequestParam String username) {
         return this.hobbyService.isHobbySaved(id, username);
     }
 
     @GetMapping(value = "/{id}")
     @Operation(summary = "Show hobby details", security = @SecurityRequirement(name = "bearerAuth"))
-    public Hobby getHobbyDetails(@PathVariable Long id) {
+    public Hobby getHobbyDetails(@PathVariable Integer id) {
         return this.hobbyService.findHobbieById(id);
     }
 
 
     @PostMapping("/save")
     @Operation(summary = "Save hobby in favorites", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<Long> save(@RequestParam Long id, @RequestParam String username) {
+    public ResponseEntity<Integer> save(@RequestParam Integer id, @RequestParam String username) {
         Hobby hobby = this.hobbyService.findHobbieById(id);
         boolean isSaved = this.hobbyService.saveHobbyForClient(hobby, username);
         if (!isSaved) {
@@ -71,7 +66,7 @@ public class HobbyController {
 
     @DeleteMapping("/remove")
     @Operation(summary = "Remove hobby from favorites", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<Long> removeHobby(@RequestParam Long id, @RequestParam String username) {
+    public ResponseEntity<Integer> removeHobby(@RequestParam Integer id, @RequestParam String username) {
         Hobby hobby = this.hobbyService.findHobbieById(id);
         boolean isRemoved = this.hobbyService.removeHobbyForClient(hobby, username);
         if (!isRemoved) {
@@ -85,15 +80,13 @@ public class HobbyController {
     @Operation(summary = "Update hobby,(use existing hobby id)", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<?> updateHobby(@RequestBody HobbyInfoUpdateDto info) throws Exception {
         Hobby offer = this.modelMapper.map(info, Hobby.class);
-        Category category = this.categoryService.findByName(info.getCategory());
-        offer.setCategory(category);
         this.hobbyService.saveUpdatedHobby(offer);
-        return new ResponseEntity<Hobby>(offer, HttpStatus.CREATED);
+        return new ResponseEntity<>(offer, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete hobby", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<Long> deleteHobby(@PathVariable Long id) throws Exception {
+    public ResponseEntity<Integer> deleteHobby(@PathVariable Integer id) throws Exception {
         boolean isRemoved = this.hobbyService.deleteHobby(id);
         if (!isRemoved) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

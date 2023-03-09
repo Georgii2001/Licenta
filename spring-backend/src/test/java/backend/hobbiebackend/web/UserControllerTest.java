@@ -8,9 +8,8 @@ import backend.hobbiebackend.dto.UpdateBusinessDto;
 import backend.hobbiebackend.entities.AppClient;
 import backend.hobbiebackend.entities.BusinessOwner;
 import backend.hobbiebackend.entities.UserEntity;
-import backend.hobbiebackend.entities.UserRoleEntity;
-import backend.hobbiebackend.entities.enums.GenderEnum;
-import backend.hobbiebackend.entities.enums.UserRoleEnum;
+import backend.hobbiebackend.enums.GenderEnum;
+import backend.hobbiebackend.enums.UserRoleEnum;
 import backend.hobbiebackend.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -57,16 +56,12 @@ class UserControllerTest extends AbstractTest {
         appClientSignUpDto.setEmail("testemail@gmail.com");
         appClientSignUpDto.setFullName("full name");
         appClientSignUpDto.setGender(GenderEnum.FEMALE);
-        UserRoleEntity roleUser = new UserRoleEntity();
-        roleUser.setRole(UserRoleEnum.USER);
-        UserRoleEntity roleAdmin = new UserRoleEntity();
-        roleAdmin.setRole(UserRoleEnum.ADMIN);
         appClient = modelMapper.map(appClientSignUpDto, AppClient.class);
         appClient.setRole(UserRoleEnum.ADMIN.name());
 
         //update client
         updateAppClientDto = new UpdateAppClientDto();
-        updateAppClientDto.setId((1L));
+        updateAppClientDto.setId((1));
         updateAppClientDto.setPassword("topsecret");
         updateAppClientDto.setFullName("full name");
         updateAppClientDto.setGender(GenderEnum.FEMALE);
@@ -85,7 +80,7 @@ class UserControllerTest extends AbstractTest {
 
         //update business
         updateBusinessDto = new UpdateBusinessDto();
-        updateBusinessDto.setId(1L);
+        updateBusinessDto.setId(1);
         updateBusinessDto.setBusinessName("Business Name");
         updateBusinessDto.setPassword("password");
         updateBusinessDto.setBusinessName("Bizz name");
@@ -132,7 +127,7 @@ class UserControllerTest extends AbstractTest {
         String inputJson = super.mapToJson(updateAppClientDto);
         appClient.setId(updateAppClientDto.getId());
 
-        when(userService.findAppClientById(1L)).thenReturn(appClient);
+        when(userService.findAppClientById(1)).thenReturn(appClient);
 
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.put(uri)
                 .contentType(MediaType.APPLICATION_JSON_VALUE).content(inputJson)).andReturn();
@@ -148,7 +143,7 @@ class UserControllerTest extends AbstractTest {
         String inputJson = super.mapToJson(updateBusinessDto);
         businessOwner.setId(updateBusinessDto.getId());
 
-        when(userService.findBusinessOwnerById(1L)).thenReturn(businessOwner);
+        when(userService.findBusinessOwnerById(1)).thenReturn(businessOwner);
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.put(uri)
                 .contentType(MediaType.APPLICATION_JSON_VALUE).content(inputJson)).andReturn();
 
@@ -159,7 +154,7 @@ class UserControllerTest extends AbstractTest {
     @Test
     public void delete_user_should_work_when_not_found() throws Exception {
         String uri = "/user/1";
-        Long id = 1L;
+        Integer id = 1;
 
         when(userService.deleteUser(id)).thenReturn(false);
 
@@ -174,7 +169,7 @@ class UserControllerTest extends AbstractTest {
     @Test
     public void delete_user_should_work() throws Exception {
         String uri = "/user/1";
-        Long id = 1L;
+        Integer id = 1;
 
         when(userService.deleteUser(id)).thenReturn(true);
 
