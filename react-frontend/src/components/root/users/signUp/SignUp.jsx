@@ -11,13 +11,14 @@ const SignUp = () => {
   const [loading, setLoading] = useState(false);
   const [checked, setCheckBoxChecked] = useState("other");
   const [error, setError] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
   const [info, setInfo] = useState({
     username: "",
-    fullName: "",
     gender: "OTHER",
     email: "",
     password: "",
     repeatpassword: "",
+    image: null,
   });
 
   const [errors, setErrors] = useState({});
@@ -29,12 +30,6 @@ const SignUp = () => {
       errors.username = "Required";
     } else if (info.username.length < 5) {
       errors.username = "Minimum 5 char";
-    }
-
-    if (!info.fullName) {
-      errors.fullName = "Required";
-    } else if (info.fullName.length < 2 || info.fullName.length > 20) {
-      errors.fullName = "2 to 20 char";
     }
 
     if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(info.email)) {
@@ -62,6 +57,14 @@ const SignUp = () => {
     if (Object.keys(errors).length === 0) {
       console.log(info);
       setLoading(true);
+
+      const formData = new FormData();
+      formData.append("username", info.username);
+      formData.append("gender", info.gender);
+      formData.append("email", info.email);
+      formData.append("password", info.password);
+      formData.append("repeatpassword", info.repeatpassword);
+      formData.append("image", info.image);
       await SignUpAppClientService(info)
         .then((response) => {
           if (response.status === 201) {
@@ -76,6 +79,7 @@ const SignUp = () => {
       console.log(errors);
     }
   };
+
 
   return (
     <>
@@ -99,21 +103,6 @@ const SignUp = () => {
               <span className={styles.content_name}>Username</span>
               {errors.username && (
                 <small className={styles.errors}>{errors.username}</small>
-              )}
-            </label>
-          </section>
-
-          <section className={styles.form_field}>
-            <input
-              id="fullName"
-              type="text"
-              name="fullName"
-              onChange={(e) => setInfo({ ...info, fullName: e.target.value })}
-            />
-            <label htmlFor="fullName" className={styles.label_name}>
-              <span className={styles.content_name}>Full Name</span>
-              {errors.fullName && (
-                <small className={styles.errors}>{errors.fullName}</small>
               )}
             </label>
           </section>
@@ -208,6 +197,33 @@ const SignUp = () => {
             </label>
           </section>
 
+          <section className={styles.form_field}>
+            <div className={styles.upload_wrapper}>
+              <span>{info.image ?
+                  <img src={imageUrl} className={styles.uploaded_image} />
+                  : <span className={styles.file_name}>No photo chosen</span>}
+              </span>
+              <button className={styles.upload_button}>
+                <span>Choose a profile photo</span>
+                <input
+                  id="image"
+                  name="image"
+                  type="file"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    setInfo({ ...info, image: file });
+
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                      setImageUrl(reader.result);
+                    };
+                    reader.readAsDataURL(file);
+                  }}
+                />
+              </button>
+            </div>
+          </section>
+          
           <section className={styles.form_field}>
             {loading && <LoadingDotsDark />}
 
