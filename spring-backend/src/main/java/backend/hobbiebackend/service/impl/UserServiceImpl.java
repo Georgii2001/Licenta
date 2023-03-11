@@ -78,8 +78,8 @@ public class UserServiceImpl implements UserService {
         UserEntity user = this.modelMapper.map(userDTO, UserEntity.class);
         user.setRole(UserRoleEnum.USER.name());
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        user.setAvatar(userDTO.getAvatar().getOriginalFilename());
         photoUtils.savePhoto(userDTO.getAvatar(), userDTO.getUsername());
+        user.setAvatar(userDTO.getAvatar().getOriginalFilename());
         return userRepository.save(user);
     }
 

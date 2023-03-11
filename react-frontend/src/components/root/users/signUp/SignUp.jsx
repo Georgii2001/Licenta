@@ -65,7 +65,7 @@ const SignUp = () => {
       formData.append("password", info.password);
       formData.append("repeatpassword", info.repeatpassword);
       formData.append("image", info.image);
-      await SignUpAppClientService(info)
+      await SignUpAppClientService(formData)
         .then((response) => {
           if (response.status === 201) {
             navigate("/login");

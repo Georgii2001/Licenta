@@ -1,14 +1,14 @@
 package backend.hobbiebackend.dto;
 
 import backend.hobbiebackend.enums.GenderEnum;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class AppClientSignUpDto {
     private String username;
     private String fullName;
@@ -16,5 +16,4 @@ public class AppClientSignUpDto {
     private String email;
     private String password;
     private MultipartFile avatar;
-
 }

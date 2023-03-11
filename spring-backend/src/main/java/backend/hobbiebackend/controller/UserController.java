@@ -40,7 +40,7 @@ public class UserController {
     private final AuthenticationManager authenticationManager;
     private final HobbieUserDetailsService hobbieUserDetailsService;
 
-    @PostMapping(value ="/signup", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping("/signup")
     @Operation(summary = "Create new client-user")
     public ResponseEntity<?> signup( @Valid @ModelAttribute AppClientSignUpDto userDTO) {
         if (userService.userExists(userDTO.getUsername(), userDTO.getEmail())) {

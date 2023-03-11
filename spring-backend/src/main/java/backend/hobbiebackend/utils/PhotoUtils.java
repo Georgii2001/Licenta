@@ -18,11 +18,20 @@ public class PhotoUtils {
 
     public void savePhoto(MultipartFile avatar, String username) {
 
-        File filePath = new File(getPathname(avatar, username));
+        File filePath = new File(USER_PHOTOS_PATH + username + SEPARATOR + avatar.getOriginalFilename());
+        createMyFolder(filePath);
+
         try {
             avatar.transferTo(filePath);
         } catch (Exception e) {
             throw new RuntimeException("Photos wasn't uploaded.");
+        }
+    }
+
+    private void createMyFolder(File filePath) {
+        File parentDir = filePath.getParentFile();
+        if (!parentDir.exists()) {
+            parentDir.mkdirs();
         }
     }
 
@@ -47,7 +56,7 @@ public class PhotoUtils {
         }
     }
 
-    private String getPathname(MultipartFile avatar, String username) {
-        return USER_PHOTOS_PATH + username + SEPARATOR + avatar.getOriginalFilename();
+    private String getPathMyPhotos(String username) {
+        return USER_PHOTOS_PATH + username + SEPARATOR;
     }
 }
