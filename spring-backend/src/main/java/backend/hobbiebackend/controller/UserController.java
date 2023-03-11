@@ -1,6 +1,5 @@
 package backend.hobbiebackend.controller;
 
-import backend.hobbiebackend.handler.NotFoundException;
 import backend.hobbiebackend.dto.AppClientSignUpDto;
 import backend.hobbiebackend.dto.BusinessRegisterDto;
 import backend.hobbiebackend.dto.UpdateAppClientDto;
@@ -8,7 +7,8 @@ import backend.hobbiebackend.dto.UpdateBusinessDto;
 import backend.hobbiebackend.entities.AppClient;
 import backend.hobbiebackend.entities.BusinessOwner;
 import backend.hobbiebackend.entities.UserEntity;
-import backend.hobbiebackend.entities.enums.UserRoleEnum;
+import backend.hobbiebackend.enums.UserRoleEnum;
+import backend.hobbiebackend.handler.NotFoundException;
 import backend.hobbiebackend.jwt.JwtRequest;
 import backend.hobbiebackend.jwt.JwtResponse;
 import backend.hobbiebackend.security.HobbieUserDetailsService;
@@ -94,7 +94,7 @@ public class UserController {
 
     @PutMapping("/password")
     @Operation(summary = "Update password, (use existing user id)", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<?> setUpNewPassword(@RequestParam Long id, String password) {
+    public ResponseEntity<?> setUpNewPassword(@RequestParam Integer id, String password) {
         UserEntity userById = this.userService.findUserById(id);
         userById.setPassword(this.passwordEncoder.encode(password));
         this.userService.saveUserWithUpdatedPassword(userById);
@@ -113,12 +113,12 @@ public class UserController {
         businessOwner.setAddress(business.getAddress());
         this.userService.saveUpdatedUser(businessOwner);
 
-        return new ResponseEntity<BusinessOwner>(businessOwner, HttpStatus.CREATED);
+        return new ResponseEntity<>(businessOwner, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/user/{id}")
     @Operation(summary = "Delete user", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<Long> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<Integer> deleteUser(@PathVariable Integer id) {
         boolean isRemoved = this.userService.deleteUser(id);
         if (!isRemoved) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

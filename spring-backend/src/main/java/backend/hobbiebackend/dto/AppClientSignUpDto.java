@@ -1,6 +1,6 @@
 package backend.hobbiebackend.dto;
 
-import backend.hobbiebackend.entities.enums.GenderEnum;
+import backend.hobbiebackend.enums.GenderEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

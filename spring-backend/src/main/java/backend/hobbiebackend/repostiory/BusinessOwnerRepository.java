@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface BusinessOwnerRepository extends JpaRepository<BusinessOwner, Long> {
+public interface BusinessOwnerRepository extends JpaRepository<BusinessOwner, Integer> {
     Optional<BusinessOwner> findByUsername(String username);
 
     Optional<BusinessOwner> findByBusinessName(String businessName);

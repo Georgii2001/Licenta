@@ -31,7 +31,7 @@ public class TestServiceImpl implements TestService {
         currentUserAppClient.setTestResults(results);
 
         Set<Hobby> hobbyMatches = this.hobbyService.findHobbyMatches(currentUserAppClient.getUsername());
-        currentUserAppClient.setHobby_matches(hobbyMatches);
+       // currentUserAppClient.setHobby_matches(hobbyMatches);
         this.userService.saveUpdatedUserClient(currentUserAppClient);
     }
 }

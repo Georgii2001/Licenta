@@ -1,6 +1,6 @@
 package backend.hobbiebackend.dto;
 
-import backend.hobbiebackend.entities.enums.CategoryNameEnum;
+import backend.hobbiebackend.enums.CategoryNameEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

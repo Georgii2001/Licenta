@@ -23,7 +23,7 @@ public class UserEntity extends BaseEntity implements Serializable, Cloneable {
     private String email;
     private String gender;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "test_results_id", referencedColumnName = "id")
     private Test testResults;
 

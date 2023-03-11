@@ -1,11 +1,10 @@
 package backend.hobbiebackend.service.impl;
 
-import backend.hobbiebackend.handler.NotFoundException;
 import backend.hobbiebackend.entities.AppClient;
 import backend.hobbiebackend.entities.BusinessOwner;
 import backend.hobbiebackend.entities.Hobby;
+import backend.hobbiebackend.handler.NotFoundException;
 import backend.hobbiebackend.repostiory.HobbyRepository;
-import backend.hobbiebackend.service.CategoryService;
 import backend.hobbiebackend.service.HobbyService;
 import backend.hobbiebackend.service.UserService;
 import com.cloudinary.Cloudinary;
@@ -21,12 +20,11 @@ import java.util.*;
 @RequiredArgsConstructor
 public class HobbyServiceImpl implements HobbyService {
     private final HobbyRepository hobbyRepository;
-    private final CategoryService categoryService;
     private final UserService userService;
     private final Cloudinary cloudinary;
 
     @Override
-    public Hobby findHobbieById(Long id) {
+    public Hobby findHobbieById(Integer id) {
         Optional<Hobby> hobby = this.hobbyRepository.findById(id);
         if (hobby.isPresent()) {
             return hobby.get();
@@ -46,12 +44,12 @@ public class HobbyServiceImpl implements HobbyService {
     }
 
     @Override
-    public boolean deleteHobby(long id) throws Exception {
+    public boolean deleteHobby(int id) throws Exception {
         Optional<Hobby> byId = this.hobbyRepository.findById(id);
         if (byId.isPresent()) {
             deleteResourcesById(byId.get());
             BusinessOwner business = this.userService.findBusinessByUsername(byId.get().getCreator());
-            business.getHobby_offers().remove(byId.get());
+            //  business.getHobby_offers().remove(byId.get());
             this.userService.findAndRemoveHobbyFromClientsRecords(byId.get());
             this.hobbyRepository.deleteById(id);
             return true;
@@ -117,39 +115,40 @@ public class HobbyServiceImpl implements HobbyService {
     @Override
     public boolean saveHobbyForClient(Hobby hobby, String username) {
         AppClient currentUserAppClient = this.userService.findAppClientByUsername(username);
-        Optional<Hobby> hobbyById = hobbyRepository.findById(hobby.getId());
-        List<Hobby> saved_hobbies = currentUserAppClient.getSaved_hobbies();
-        if (hobbyById.isPresent() && !(saved_hobbies.contains(hobbyById.get()))) {
-            saved_hobbies.add(hobbyById.get());
-            return true;
-        }
+//        Optional<Hobby> hobbyById = hobbyRepository.findById(hobby.getId());
+//        List<Hobby> saved_hobbies = currentUserAppClient.getSaved_hobbies();
+//        if (hobbyById.isPresent() && !(saved_hobbies.contains(hobbyById.get()))) {
+//            saved_hobbies.add(hobbyById.get());
+//            return true;
+//        }
         return false;
     }
 
     @Override
     public boolean removeHobbyForClient(Hobby hobby, String username) {
-        AppClient currentUserAppClient = this.userService.findAppClientByUsername(username);
-        Optional<Hobby> hobbyById = this.hobbyRepository.findById(hobby.getId());
-        if (currentUserAppClient != null) {
-            hobbyById.ifPresent(value -> currentUserAppClient.getSaved_hobbies().remove(value));
-            return true;
-        }
+//        AppClient currentUserAppClient = this.userService.findAppClientByUsername(username);
+//        Optional<Hobby> hobbyById = this.hobbyRepository.findById(hobby.getId());
+//        if (currentUserAppClient != null) {
+//            hobbyById.ifPresent(value -> currentUserAppClient.getSaved_hobbies().remove(value));
+//            return true;
+//        }
         return false;
     }
 
     @Override
-    public boolean isHobbySaved(Long hobbyId, String username) {
-        Optional<Hobby> byId = this.hobbyRepository.findById(hobbyId);
-        if (byId.isPresent()) {
-            AppClient currentUserAppClient = this.userService.findAppClientByUsername(username);
-            return currentUserAppClient.getSaved_hobbies().contains(byId.get());
-        }
+    public boolean isHobbySaved(Integer hobbyId, String username) {
+//        Optional<Hobby> byId = this.hobbyRepository.findById(hobbyId);
+//        if (byId.isPresent()) {
+//            AppClient currentUserAppClient = this.userService.findAppClientByUsername(username);
+//            return currentUserAppClient.getSaved_hobbies().contains(byId.get());
+//        }
         return false;
     }
 
     @Override
     public List<Hobby> findSavedHobbies(AppClient currentAppClient) {
-        return currentAppClient.getSaved_hobbies();
+//        return currentAppClient.getSaved_hobbies();
+        return null;
     }
 
     @Override
@@ -159,8 +158,9 @@ public class HobbyServiceImpl implements HobbyService {
 
     @Override
     public Set<Hobby> getAllHobbieMatchesForClient(String username) {
-        AppClient currentUserAppClient = userService.findAppClientByUsername(username);
-        return currentUserAppClient.getHobby_matches();
+//        AppClient currentUserAppClient = userService.findAppClientByUsername(username);
+//        return currentUserAppClient.getHobby_matches();
+        return null;
     }
 
     @Override

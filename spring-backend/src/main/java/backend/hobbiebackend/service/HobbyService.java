@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Set;
 
 public interface HobbyService {
-    Hobby findHobbieById(Long id);
+    Hobby findHobbieById(Integer id);
 
     void saveUpdatedHobby(Hobby hobby) throws Exception;
 
-    boolean deleteHobby(long id) throws Exception;
+    boolean deleteHobby(int id) throws Exception;
 
     Set<Hobby> findHobbyMatches(String username);
 
@@ -19,7 +19,7 @@ public interface HobbyService {
 
     boolean removeHobbyForClient(Hobby hobby, String username);
 
-    boolean isHobbySaved(Long hobbyId, String username);
+    boolean isHobbySaved(Integer hobbyId, String username);
 
     List<Hobby> findSavedHobbies(AppClient appClient);
 

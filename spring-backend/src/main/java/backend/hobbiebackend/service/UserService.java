@@ -22,13 +22,13 @@ public interface UserService {
 
     AppClient saveUpdatedUserClient(AppClient appClient);
 
-    UserEntity findUserById(Long userId);
+    UserEntity findUserById(Integer userId);
 
     UserEntity findUserByEmail(String email);
 
-    boolean deleteUser(Long id);
+    boolean deleteUser(Integer id);
 
-    BusinessOwner findBusinessOwnerById(Long id);
+    BusinessOwner findBusinessOwnerById(Integer id);
 
     UserEntity findUserByUsername(String username);
 
@@ -36,7 +36,7 @@ public interface UserService {
 
     void saveUserWithUpdatedPassword(UserEntity userEntity);
 
-    AppClient findAppClientById(Long clientId);
+    AppClient findAppClientById(Integer clientId);
 
     void findAndRemoveHobbyFromClientsRecords(Hobby hobby);
     
