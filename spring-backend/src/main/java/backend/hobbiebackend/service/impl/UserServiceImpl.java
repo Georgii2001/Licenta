@@ -13,24 +13,18 @@ import backend.hobbiebackend.repostiory.BusinessOwnerRepository;
 import backend.hobbiebackend.repostiory.UserRepository;
 import backend.hobbiebackend.service.UserRoleService;
 import backend.hobbiebackend.service.UserService;
+import backend.hobbiebackend.utils.PhotoUtils;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.FileUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static backend.hobbiebackend.constants.Constants.*;
 
 @Service
 @Transactional
@@ -39,6 +33,7 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper modelMapper;
     private final UserMapper userMapper;
     private final UserRepository userRepository;
+    private final PhotoUtils photoUtils;
     private final AppClientRepository appClientRepository;
     private final BusinessOwnerRepository businessOwnerRepository;
     private final UserRoleService userRoleService;
@@ -90,6 +85,8 @@ public class UserServiceImpl implements UserService {
         UserEntity user = this.modelMapper.map(userDTO, UserEntity.class);
         user.setRole(UserRoleEnum.USER.name());
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        user.setAvatar(userDTO.getAvatar().getOriginalFilename());
+        photoUtils.savePhoto(userDTO.getAvatar(), userDTO.getUsername());
         return userRepository.save(user);
     }
 
@@ -232,31 +229,10 @@ public class UserServiceImpl implements UserService {
                 .filter(user -> !user.getUsername().equalsIgnoreCase(username))
                 .collect(Collectors.toList())
                 .forEach(user -> {
-                    final String avatar = getFile(user.getUsername());
+                    final String avatar = photoUtils.getEncodedFile(user.getAvatar(), user.getUsername());
                     usersDTO.add(userMapper.mapUserToDTO(user, avatar));
                 });
 
         return usersDTO;
-    }
-
-    private String getFile(String username) {
-
-        File directory = new File(USER_PHOTOS_PATH + username + SEPARATOR);
-        try {
-            if (directory.exists() && directory.isDirectory()) {
-                File[] files = directory.listFiles();
-                assert files != null;
-                for (File file : files) {
-                    if (file.getName().contains(PROFILE_PHOTO)) {
-                        byte[] encoded = Base64.encodeBase64(FileUtils.readFileToByteArray(file));
-                        return new String(encoded, StandardCharsets.US_ASCII);
-                    }
-                }
-            }
-            return null;
-
-        } catch (IOException e) {
-            throw new NotFoundException("File not found in directory");
-        }
     }
 }

@@ -1,7 +1,7 @@
 package backend.hobbiebackend.filter;
 
 import backend.hobbiebackend.security.HobbieUserDetailsService;
-import backend.hobbiebackend.utility.JWTUtility;
+import backend.hobbiebackend.utils.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,7 +19,7 @@ import java.io.IOException;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
     @Autowired
-    private JWTUtility jwtUtility;
+    private JWTUtils jwtUtils;
 
     @Autowired
     private HobbieUserDetailsService hobbieUserDetailsService;
@@ -32,14 +32,14 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (null != authorization && authorization.startsWith("Bearer ")) {
             token = authorization.substring(7);
-            userName = jwtUtility.getUsernameFromToken(token);
+            userName = jwtUtils.getUsernameFromToken(token);
         }
 
         if (null != userName && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails
                     = hobbieUserDetailsService.loadUserByUsername(userName);
 
-            if (jwtUtility.validateToken(token, userDetails)) {
+            if (jwtUtils.validateToken(token, userDetails)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken
                         = new UsernamePasswordAuthenticationToken(userDetails,
                         null, userDetails.getAuthorities());

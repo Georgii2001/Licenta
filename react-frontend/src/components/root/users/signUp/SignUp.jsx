@@ -199,9 +199,10 @@ const SignUp = () => {
 
           <section className={styles.form_field}>
             <div className={styles.upload_wrapper}>
-                {info.image ?
+              <span>{info.image ?
                   <img src={imageUrl} className={styles.uploaded_image} />
-                : <span className={styles.file_name}> "No photo chosen"</span>}
+                  : <span className={styles.file_name}>No photo chosen</span>}
+              </span>
               <button className={styles.upload_button}>
                 <span>Choose a profile photo</span>
                 <input

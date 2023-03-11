@@ -14,11 +14,12 @@ import backend.hobbiebackend.jwt.JwtResponse;
 import backend.hobbiebackend.security.HobbieUserDetailsService;
 import backend.hobbiebackend.service.NotificationService;
 import backend.hobbiebackend.service.UserService;
-import backend.hobbiebackend.utility.JWTUtility;
+import backend.hobbiebackend.utils.JWTUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -27,19 +28,21 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final NotificationService notificationService;
-    private final JWTUtility jwtUtility;
+    private final JWTUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
     private final HobbieUserDetailsService hobbieUserDetailsService;
 
-    @PostMapping("/signup")
+    @PostMapping(value ="/signup", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Create new client-user")
-    public ResponseEntity<?> signup(@RequestBody AppClientSignUpDto userDTO) {
+    public ResponseEntity<?> signup( @Valid @ModelAttribute AppClientSignUpDto userDTO) {
         if (userService.userExists(userDTO.getUsername(), userDTO.getEmail())) {
             throw new RuntimeException("Username or email address already in use.");
         }
@@ -143,7 +146,7 @@ public class UserController {
                 = hobbieUserDetailsService.loadUserByUsername(jwtRequest.getUsername());
 
         final String token =
-                jwtUtility.generateToken(userDetails);
+                jwtUtils.generateToken(userDetails);
         return new JwtResponse(token);
     }
 
