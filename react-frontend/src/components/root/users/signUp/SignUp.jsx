@@ -11,14 +11,14 @@ const SignUp = () => {
   const [loading, setLoading] = useState(false);
   const [checked, setCheckBoxChecked] = useState("other");
   const [error, setError] = useState(false);
-  const [imageUrl, setImageUrl] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState("");
   const [info, setInfo] = useState({
     username: "",
     gender: "OTHER",
     email: "",
     password: "",
     repeatpassword: "",
-    image: null,
+    avatar: null,
   });
 
   const [errors, setErrors] = useState({});
@@ -64,7 +64,7 @@ const SignUp = () => {
       formData.append("email", info.email);
       formData.append("password", info.password);
       formData.append("repeatpassword", info.repeatpassword);
-      formData.append("image", info.image);
+      formData.append("avatar", info.avatar);
       await SignUpAppClientService(formData)
         .then((response) => {
           if (response.status === 201) {
@@ -199,23 +199,23 @@ const SignUp = () => {
 
           <section className={styles.form_field}>
             <div className={styles.upload_wrapper}>
-              <span>{info.image ?
-                  <img src={imageUrl} className={styles.uploaded_image} />
+              <span>{info.avatar ?
+                <img src={avatarUrl} className={styles.uploaded_avatar} />
                   : <span className={styles.file_name}>No photo chosen</span>}
               </span>
               <button className={styles.upload_button}>
                 <span>Choose a profile photo</span>
                 <input
-                  id="image"
-                  name="image"
+                  id="avatar"
+                  name="avatar"
                   type="file"
                   onChange={(e) => {
                     const file = e.target.files[0];
-                    setInfo({ ...info, image: file });
+                    setInfo({ ...info, avatar: file });
 
                     const reader = new FileReader();
                     reader.onload = () => {
-                      setImageUrl(reader.result);
+                      setAvatarUrl(reader.result);
                     };
                     reader.readAsDataURL(file);
                   }}

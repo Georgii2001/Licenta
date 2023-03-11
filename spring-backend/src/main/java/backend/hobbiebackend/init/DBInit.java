@@ -8,18 +8,18 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DBInit implements CommandLineRunner {
-    private final UserService userService;
+//    private final UserService userService;
 //    private final HobbyService hobbyService;
 
     @Autowired
     public DBInit(UserService userService, HobbyService hobbyService) {
-        this.userService = userService;
+//        this.userService = userService;
 //        this.hobbyService = hobbyService;
     }
 
     @Override
     public void run(String... args) throws Exception {
-        this.userService.seedUsersAndUserRoles();
+//        this.userService.seedUsersAndUserRoles();
     }
 
 }

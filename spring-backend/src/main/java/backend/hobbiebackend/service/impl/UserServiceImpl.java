@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
         List<UserEntity> seededUsers = new ArrayList<>();
         //simple user
         if (appClientRepository.count() == 0) {
-            UserEntity user = new AppClient();
+            UserEntity user = new UserEntity();
             user.setUsername("user");
             user.setEmail("n13@gmail.com");
             user.setPassword(passwordEncoder.encode("topsecret"));
