@@ -19,7 +19,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -42,7 +41,7 @@ public class UserController {
 
     @PostMapping("/signup")
     @Operation(summary = "Create new client-user")
-    public ResponseEntity<?> signup( @Valid @ModelAttribute AppClientSignUpDto userDTO) {
+    public ResponseEntity<?> signup(@Valid @ModelAttribute AppClientSignUpDto userDTO) {
         if (userService.userExists(userDTO.getUsername(), userDTO.getEmail())) {
             throw new RuntimeException("Username or email address already in use.");
         }
@@ -57,7 +56,7 @@ public class UserController {
             throw new RuntimeException("Username or email address already in use.");
         }
         BusinessOwner businessOwner = this.userService.registerBusiness(business);
-        return new ResponseEntity<BusinessOwner>(businessOwner, HttpStatus.CREATED);
+        return new ResponseEntity<>(businessOwner, HttpStatus.CREATED);
     }
 
     @GetMapping("/client")
@@ -101,7 +100,7 @@ public class UserController {
         UserEntity userById = this.userService.findUserById(id);
         userById.setPassword(this.passwordEncoder.encode(password));
         this.userService.saveUserWithUpdatedPassword(userById);
-        return new ResponseEntity<UserEntity>(userById, HttpStatus.CREATED);
+        return new ResponseEntity<>(userById, HttpStatus.CREATED);
     }
 
     @PutMapping("/business")

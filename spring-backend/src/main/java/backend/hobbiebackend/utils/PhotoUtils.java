@@ -17,8 +17,8 @@ import static backend.hobbiebackend.constants.Constants.USER_PHOTOS_PATH;
 public class PhotoUtils {
 
     public void savePhoto(MultipartFile avatar, String username) {
-
-        File filePath = new File(USER_PHOTOS_PATH + username + SEPARATOR + avatar.getOriginalFilename());
+        final String pathname = getPathMyPhotos(username) + avatar.getOriginalFilename();
+        File filePath = new File(pathname);
         createMyFolder(filePath);
 
         try {
@@ -36,8 +36,8 @@ public class PhotoUtils {
     }
 
     public String getEncodedFile(String fileName, String username) {
-
-        File directory = new File(USER_PHOTOS_PATH + username + SEPARATOR);
+        final String pathname = getPathMyPhotos(username);
+        File directory = new File(pathname);
         try {
             if (directory.exists() && directory.isDirectory()) {
                 File[] files = directory.listFiles();

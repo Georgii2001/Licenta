@@ -42,7 +42,7 @@ const AccountUser = () => {
     event.preventDefault();
     let path = "/edit-profile";
     navigate(path, {
-      state: { id: user.id, gender: user.gender},
+      state: { id: user.id, gender: user.gender },
     });
   };
 
