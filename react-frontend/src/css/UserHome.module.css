@@ -1,167 +1,201 @@
-.hobby_details_page {
-  width: 100%;
-  height: 100%;
-}
-
-.hobbie_main {
-  height: auto;
-  width: 100%;
-  margin-bottom: 2%;
-}
-
-.hobbie_container_home {
-  padding: 50px;
-  width: 60%;
-  height: 100%;
-  margin: 0px auto;
-  box-shadow: -2px 0px 33px 0px rgba(0, 0, 0, 0.15);
-  position: relative;
-  background-color: transparent;
-  grid-template-columns: 1fr repeat(9, minmax(auto, 100px)) 1fr;
-  grid-gap: 20px;
-}
-
-.intro {
-  font-size: 14px;
-}
-
-.cards {
-  width: 100%;
-  grid-column: 2 / span 11;
-  display: grid;
-  grid-template-columns: repeat(12, minmax(auto, 60px));
-  position: relative;
-  grid-gap: 25px;
-}
-
-.rapper {
-  flex: 1 1 auto;
-  background: gold;
-  overflow: auto;
-  grid-column-end: span 4;
+.tinderCards {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
 .card {
-  grid-column-end: span 4;
+  position: absolute;
+  top: 18%;
+  width: 100%;
+  height: 100%;
+  max-width: 500px;
+  max-height: 600px;
   display: flex;
   flex-direction: column;
-  cursor: pointer;
-  transition: all 0.5 ease 0s;
-  background: linear-gradient(to right, #494969, #696989);
-  width: auto;
-  box-shadow: -2px 0px 33px 0px rgb(0 0 0 / 15%);
-  /* padding: 10px; */
-}
-
-.card_image_container {
-  padding-top: 56.25%;
+  justify-content: flex-end;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #ffffff;
   overflow: hidden;
-  position: relative;
-}
-.card_image_container img {
-  width: 100%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  cursor: pointer;
 }
 
-.text_medium {
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 400;
-  color: white;
+
+.card img {
+  width: 100%;
+  height: 130%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .card_content {
+  position: absolute;
+  bottom: 10;
+  left: 0;
+  right: 0;
   padding: 20px;
-}
-
-.card_content p {
-  margin-top: 0px;
-  margin-bottom: 0px;
+  width: 100%;
+  height: 30%;
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .card_title {
-  font-size: 16px;
-  line-height: 20px;
-  font-weight: 400;
-  color: white;
-}
-.card_info {
-  display: flex;
-  align-self: end;
-  align-items: center;
-}
-.card_price {
-  margin-left: auto;
-  padding: 5px, 20px;
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 400;
-  color: white;
+  position: absolute;
+  top: 10%;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  text-align: center;
+  margin: 0;
 }
 
-.card:hover {
-  transform: translateY(-7px);
+.card_info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.card_price {
+  font-size: 18px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.card_infoDetails{
+  position: absolute;
+  font-size: 12px;
+  left: 40%;
+  bottom: 0px;
+}
+
+.swipe {
+  position: absolute;
+  top: 100px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 48px;
+  color: #fff;
+  z-index: 1;
+}
+
+.swipe--left {
+  background-color: rgba(255, 69, 0, 0.7);
+}
+
+.swipe--right {
+  background-color: rgba(0, 128, 0, 0.7);
 }
 
 .introduction_home {
-  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+}
+
+.intro_text {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+}
+
+.intro {
+  font-size: 24px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.buttuns {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.link {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.link:hover {
+  background-color: #0069d9;
+  cursor: pointer;
+}
+
+.btn {
+  text-decoration: none;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.card_image_container {
+  height: 70%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
   align-items: center;
 }
-.intro_text {
-  margin: auto;
-  padding-bottom: 30px;
-  margin-bottom: 100px;
-}
-.intro_text h1 {
-  font-size: 44px;
-  font-weight: 900;
-  background: linear-gradient(to right, #494969, #696989);
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+
+.matchButtons {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
 }
 
-.intro_text p {
-  width: 400px;
-  margin: auto;
-  margin-top: 5px;
-  font-size: 14px;
-  color: #585772;
-}
-
-/* .cta */
-.buttuns {
-  padding: 20px 0px 0px 0px;
-  width: 280px;
-  margin: auto;
-}
-/* .cta_second */
-.btn {
-  border: 2px solid #c36cbb;
-  background: #c36cbb;
+.rightButton,
+.leftButton {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 60px;
+  font-size: 24px;
+  top:150px;
+  font-weight: bold;
+  text-transform: uppercase;
   color: white;
-  width: 150px;
-  height: 50px;
+  border: none;
+  outline: none;
   cursor: pointer;
-  font-family: "Poppins", sans-serif;
-  font-size: 16px;
+  margin: 0 20px;
 }
 
-/* .cta_second_s */
-.link {
-  color: #c36cbb;
-  background: #c36cbb;
-  width: 150px;
-  height: 50px;
-  cursor: pointer;
-  font-family: "Poppins", sans-serif;
-  font-size: 16px;
-  border: 2px solid #c36cbb;
+.leftButton {
+  left: 150px;
+  background-color: #f25a4a;
 }
+
+.rightButton {
+  left: 1200px;
+  background-color: #3bd37a;
+}
+
+
 @media all and (min-width: 1024px) {
   .hobbie_container_home {
     position: relative;
@@ -231,8 +265,4 @@
     grid-row-gap: 20px;
   }
 
-  .card_price {
-    font-size: auto;
-    padding-left: 5px;
-  }
 }

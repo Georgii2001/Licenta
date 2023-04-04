@@ -69,6 +69,15 @@ const UserHome = () => {
       <BackgroundHome />
       <main className={styles.users_main}>
         <section className={styles.users_container_home}>
+          <div className={styles.matchButtons}>
+            <button className={styles.rightButton}>     {/*  onClick={() => handleRightSwipe() */}
+              Like
+            </button>
+             <button className={styles.leftButton} >     {/*  onClick={() => handleRightSwipe() */}
+              Dislike
+            </button>
+          </div>
+
           {state.length !== 0 && (
             <div className={styles.tinderCards}>
               {state.map((user) => (
@@ -91,11 +100,11 @@ const UserHome = () => {
                           alt="user"
                         />
                       </section>
-
                       <section className={styles.card_content}>
                         <p className={styles.card_title}>{user.username}</p>
                         <div className={styles.card_info}>
-                          <p className={styles.card_price}>{user.gender}</p>
+                          {/* <p className={styles.card_price}>{user.gender}</p> */}
+                          <p className={styles.card_infoDetails}>Tap to see more</p>
                         </div>
                       </section>
                     </Link>
