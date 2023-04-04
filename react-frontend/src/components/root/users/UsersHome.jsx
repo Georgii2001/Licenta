@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import BackgroundHome from "../fragments/background/BackgroundHome";
 import HomeDataService from "../../../api/hobby/HomeDataService";
 import AuthenticationService from "../../../api/authentication/AuthenticationService";
-import { useState, useLayoutEffect } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import TinderCard from "react-tinder-card";
 import styles from "../../../css/UserHome.module.css";
 
 const UserHome = () => {
@@ -12,11 +11,10 @@ const UserHome = () => {
   const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
   const isBusinessLoggedIn = AuthenticationService.isBusinessLoggedIn();
 
-  const [state, setState] = useState({
-    hobbies: [],
-  });
-
+  const [state, setState] = useState([]);
   const [welcomeDiv, setWelcomeDiv] = useState({ showDiv: false });
+  const [page, setPage] = useState(0);
+  const [index, setIndex] = useState(0);
 
   const handleSort = (value) => (event) => {
     event.preventDefault();
@@ -26,61 +24,85 @@ const UserHome = () => {
     } else if (isBusinessLoggedIn) {
       navigate(`/offer/${value}`, { state: { id: value } });
     }
+
+    setPage(page + 1);
   };
 
-  useLayoutEffect(() => {
+  const swiped = (direction, id) => {
+    console.log("removing card: " + id);
+    // Remove the card from the list
+    setState((prevState) => prevState.filter((hobby) => hobby.id !== id));
+  };
+
+  const outOfFrame = (id) => {
+    console.log(id + " left the screen");
+  };
+
+  useEffect(() => {
     let unmounted = false;
 
-    HomeDataService().then((response) => {
-      if (!unmounted) {
-        setState(response.data);
-        setWelcomeDiv({ showDiv: false });
-        console.log(response);
+    const fetchData = async () => {
+      try {
+        const response = await HomeDataService(page);
+        if (!unmounted) {
+          setState(response.data);
+          setWelcomeDiv({ showDiv: false });
+          console.log(response);
+        }
+        if (!response.data.length) {
+          setWelcomeDiv({ showDiv: true });
+        }
+      } catch (error) {
+        console.error(error);
       }
-      if (!Object.keys(response.data).length) {
-        setWelcomeDiv({ showDiv: true });
-      }
-    });
+    };
+
+    fetchData();
 
     return () => {
       unmounted = true;
     };
-  }, [isBusinessLoggedIn, isUserLoggedIn]);
+  }, [isBusinessLoggedIn, isUserLoggedIn, page]);
 
   return (
     <>
       <BackgroundHome />
       <main className={styles.users_main}>
         <section className={styles.users_container_home}>
-          {state.length !== undefined && (
-            <section className={styles.cards}>
+          {state.length !== 0 && (
+            <div className={styles.tinderCards}>
               {state.map((user) => (
-                <div
-                  data-testid={user.id}
+                <TinderCard
                   key={user.id}
-                  className={styles.rapper}
+                  className={styles.swipe}
+                  onSwipe={(dir) => swiped(dir, user.id)}
+                  onCardLeftScreen={() => outOfFrame(user.id)}
+                  preventSwipe={["up", "down"]}
                 >
-                  <Link
-                    to="#"
-                    onClick={handleSort(user.id)}
-                    className={styles.card}
-                    id={user.id}
-                  >
-                    <section className={styles.card_image_container}>
-                      <img src={`data:image/png;base64,${user.avatarFile}`} alt="user" />
-                    </section>
+                  <div className={styles.card}>
+                    <Link
+                      to="#"
+                      onClick={handleSort(user.id)}
+                      id={user.id}
+                    >
+                      <section className={styles.card_image_container}>
+                        <img
+                          src={`data:image/png;base64,${user.avatarFile}`}
+                          alt="user"
+                        />
+                      </section>
 
-                    <section className={styles.card_content}>
-                      <p className={styles.card_title}>{user.username}</p>
-                      <div className={styles.card_info}>
-                        {/* <p className={styles.text_medium}> Find out more...</p> */}
-                        <p className={styles.card_price}>{user.gender}</p>
-                      </div>
-                    </section>
-                  </Link>
-                </div>
+                      <section className={styles.card_content}>
+                        <p className={styles.card_title}>{user.username}</p>
+                        <div className={styles.card_info}>
+                          <p className={styles.card_price}>{user.gender}</p>
+                        </div>
+                      </section>
+                    </Link>
+                  </div>
+                </TinderCard>
               ))}
-            </section>
+            </div>
           )}
 
           {welcomeDiv.showDiv && (

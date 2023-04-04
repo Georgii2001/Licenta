@@ -1,7 +1,7 @@
 import AuthenticationService from "../authentication/AuthenticationService";
 import axios from "../customAxiosConfig/CustomAxiosConfig";
 
-const HomeDataService = () => {
+const HomeDataService = (page) => {
   let username = AuthenticationService.getLoggedInUser();
   const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
 
@@ -16,6 +16,7 @@ const HomeDataService = () => {
       params: {
         username,
         role,
+        page,
       },
     });
   } catch (err) {
@@ -28,3 +29,6 @@ const HomeDataService = () => {
 };
 
 export default HomeDataService;
+
+
+

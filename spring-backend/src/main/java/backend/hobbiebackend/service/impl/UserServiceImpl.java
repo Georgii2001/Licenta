@@ -18,6 +18,8 @@ import backend.hobbiebackend.service.UserService;
 import backend.hobbiebackend.utils.PhotoUtils;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -220,6 +222,19 @@ public class UserServiceImpl implements UserService {
         userRepository.findByRole(UserRoleEnum.USER.name()).stream()
                 .filter(user -> !user.getUsername().equalsIgnoreCase(username))
                 .collect(Collectors.toList())
+                .forEach(user -> {
+                    final String avatar = photoUtils.getEncodedFile(user.getAvatar(), user.getUsername());
+                    usersDTO.add(userMapper.mapUserToDTO(user, avatar));
+                });
+
+        return usersDTO;
+    }
+
+    @Override
+    public List<UsersDTO> getAllUsersMatchesForClient(String username, Integer page) {
+        List<UsersDTO> usersDTO = new ArrayList<>(Collections.emptyList());
+        Pageable pageable = PageRequest.of(page, 1);
+        userRepository.findByRole(UserRoleEnum.USER.name(), username, pageable).toList()
                 .forEach(user -> {
                     final String avatar = photoUtils.getEncodedFile(user.getAvatar(), user.getUsername());
                     usersDTO.add(userMapper.mapUserToDTO(user, avatar));

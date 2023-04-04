@@ -9,7 +9,6 @@ import backend.hobbiebackend.entities.Hobby;
 import backend.hobbiebackend.entities.UserEntity;
 
 import java.util.List;
-import java.util.Set;
 
 public interface UserService {
     List<UserEntity> seedUsersAndUserRoles();
@@ -39,7 +38,7 @@ public interface UserService {
     AppClient findAppClientById(Integer clientId);
 
     void findAndRemoveHobbyFromClientsRecords(Hobby hobby);
-    
+
     boolean businessExists(String businessName);
 
     AppClient findAppClientByUsername(String username);
@@ -47,6 +46,8 @@ public interface UserService {
     BusinessOwner findBusinessByUsername(String username);
 
     List<UsersDTO> getAllUsersMatchesForClient(String username);
+
+    List<UsersDTO> getAllUsersMatchesForClient(String username, Integer page);
 }
 
 
