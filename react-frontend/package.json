@@ -1,9 +1,13 @@
 {
-  "name": "hobbie",
+  "name": "TravelWithMe",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
     "@ionic/react": "^6.0.2",
+    "@material/image-list": "^14.0.0",
+    "@mui/material": "^5.12.1",
     "@react-mock/state": "^0.1.8",
     "@react-spring/web": "^9.7.1",
     "@testing-library/jest-dom": "^5.15.0",
@@ -19,6 +23,7 @@
     "formik": "^2.2.9",
     "jest-mock-axios": "^4.5.0",
     "npm": "^8.7.0",
+    "qs": "^6.11.1",
     "react": "^17.0.2",
     "react-bootstrap": "^2.7.2",
     "react-confirm-alert": "^2.7.0",
@@ -31,6 +36,7 @@
     "react-scripts": "^5.0.1",
     "react-swipeable-views": "^0.14.0",
     "react-tinder-card": "^1.6.2",
+    "reactjs-popup": "^2.0.5",
     "styled-components": "^5.3.3",
     "web-vitals": "^1.1.2",
     "yup": "^0.32.11"

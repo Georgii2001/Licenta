@@ -23,6 +23,12 @@ const SignUp = () => {
 
   const [errors, setErrors] = useState({});
 
+
+  const avatarInput = React.useRef(null);
+  const handleClick = event => {
+    avatarInput.current.click();
+  };
+
   const validate = () => {
     const errors = {};
 
@@ -201,29 +207,33 @@ const SignUp = () => {
             <div className={styles.upload_wrapper}>
               <span>{info.avatar ?
                 <img src={avatarUrl} className={styles.uploaded_avatar} />
-                  : <span className={styles.file_name}>No photo chosen</span>}
+                : <span className={styles.file_name}>No photo chosen</span>}
               </span>
-              <button className={styles.upload_button}>
+              <button className={styles.upload_button} onClick={handleClick}>
                 <span>Choose a profile photo</span>
                 <input
                   id="avatar"
                   name="avatar"
                   type="file"
+                  ref={avatarInput}
+                  styles={{ display: "none" }}
                   onChange={(e) => {
                     const file = e.target.files[0];
                     setInfo({ ...info, avatar: file });
+                    console.log(info);
 
                     const reader = new FileReader();
                     reader.onload = () => {
                       setAvatarUrl(reader.result);
                     };
                     reader.readAsDataURL(file);
+                    console.log(info);
                   }}
                 />
               </button>
             </div>
           </section>
-          
+
           <section className={styles.form_field}>
             {loading && <LoadingDotsDark />}
 
