@@ -1,12 +1,12 @@
 import React from "react";
-import TestResultsService from "../../../../../api/test/TestResultsService";
-import AuthenticationService from "../../../../../api/authentication/AuthenticationService";
+import TestResultsService from "../../../api/test/TestResultsService";
+import AuthenticationService from "../../../api/authentication/AuthenticationService";
 import { useState } from "react";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import styles from "../../../../../css/Test.module.css";
-import layout from "../../../../../css/UserHome.module.css";
-import BackgroundHome from "../../../fragments/background/BackgroundHome";
+import styles from "../../../css/Test.module.css";
+import layout from "../../../css/UserHome.module.css";
+import BackgroundHome from "../fragments/background/BackgroundHome";
 
 const TestForm = () => {
   let key = 1;

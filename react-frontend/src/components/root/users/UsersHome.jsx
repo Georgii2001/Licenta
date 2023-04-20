@@ -14,7 +14,6 @@ const UserHome = () => {
   const [state, setState] = useState([]);
   const [welcomeDiv, setWelcomeDiv] = useState({ showDiv: false });
   const [page, setPage] = useState(0);
-  const [index, setIndex] = useState(0);
 
   const handleSort = (value) => (event) => {
     event.preventDefault();
@@ -28,10 +27,10 @@ const UserHome = () => {
     setPage(page + 1);
   };
 
-  const swiped = (direction, id) => {
+  const swiped = (id) => {
     console.log("removing card: " + id);
     // Remove the card from the list
-    setState((prevState) => prevState.filter((hobby) => hobby.id !== id));
+    setState((prevState) => prevState.filter((user) => user.id !== id));
   };
 
   const outOfFrame = (id) => {
@@ -71,10 +70,10 @@ const UserHome = () => {
         <section className={styles.users_container_home}>
           <div className={styles.matchButtons}>
             <button className={styles.rightButton}>     {/*  onClick={() => handleRightSwipe() */}
-              Like
+              Let's go
             </button>
-             <button className={styles.leftButton} >     {/*  onClick={() => handleRightSwipe() */}
-              Dislike
+            <button className={styles.leftButton} >     {/*  onClick={() => handleRightSwipe() */}
+              Pass
             </button>
           </div>
 
@@ -87,8 +86,9 @@ const UserHome = () => {
                   onSwipe={(dir) => swiped(dir, user.id)}
                   onCardLeftScreen={() => outOfFrame(user.id)}
                   preventSwipe={["up", "down"]}
+                  swipeThreshold={5}
                 >
-                  <div className={styles.card}>
+                  <div className={styles.card} style={{ 'avatarFile': `url(${user.avatarFile})` }}>
                     <Link
                       to="#"
                       onClick={handleSort(user.id)}

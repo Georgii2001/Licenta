@@ -1,5 +1,5 @@
 import { render, cleanup, screen } from "@testing-library/react";
-import TestForm from "../../components/root/users/user/test/TestForm";
+import TestForm from "../../components/root/test/TestForm";
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import TestResultsService from "../../api/test/TestResultsService";
