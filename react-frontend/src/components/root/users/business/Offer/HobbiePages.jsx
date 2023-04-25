@@ -1,18 +1,16 @@
 import React from "react";
 import styles from "../../../../../css/Hobbie.module.css";
 import AuthenticationService from "../../../../../api/authentication/AuthenticationService";
-import { useState, useEffect } from "react";
+import { useState, useLayoutEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import HobbyDetailsDataService from "../../../../../api/hobby/HobbyDetailsDataService";
-import { useMediaQuery } from "beautiful-react-hooks";
 import gallery_styles from "../../../../../css/Gallery.module.css";
 import DeleteHobbyService from "../../../../../api/hobby/DeleteHobbyService";
-import IsHobbySavedService from "../../../../../api/hobby/IsHobbySavedService";
 import SaveHobbyService from "../../../../../api/hobby/SaveHobbyService";
 import RemoveHobbyService from "../../../../../api/hobby/RemoveHobbyService";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
+import UserByIdDataService from "../../../../../api/users/UserByIdDataService";
 
 const HobbiePages = () => {
   const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
@@ -22,7 +20,9 @@ const HobbiePages = () => {
   let params = useParams();
 
   const id = params.id;
-  const [currentPage, setCurrentPage] = useState("about");
+  const [user, setUser] = useState([]);
+
+  const [currentPage, setCurrentPage] = useState("Media");
 
   const [hobby, setHobby] = useState({
     name: "",
@@ -99,181 +99,78 @@ const HobbiePages = () => {
     }
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     let unmounted = false;
 
-    if (isUserLoggedIn) {
-      IsHobbySavedService(id).then((response) => {
-        if (!unmounted) {
-          setSaved(response.data);
-          console.log(saved);
-        }
-      });
-    }
-    if (isBusinessLoggedIn || isUserLoggedIn) {
-      HobbyDetailsDataService(id).then((response) => {
-        if (!unmounted) {
-          setHobby(response.data);
-          console.log(response.data);
-          setHobbieDiv({ showDiv: false });
-        }
-        if (!Object.keys(response.data).length) {
-          setHobbieDiv({ showDiv: true });
-        }
-      });
-    }
+    UserByIdDataService(id).then((response) => {
+      if (!unmounted) {
+        setUser(response.data);
+      }
+    });
     return () => {
       unmounted = true;
     };
-  }, [id, isUserLoggedIn, isBusinessLoggedIn, saved]);
-
-  const isColumnBasedSmall = useMediaQuery("(max-width: 1200px)");
+  }, []);
 
   const changePage = (page) => {
     setCurrentPage(page);
   };
+
   return (
     <>
-      {isColumnBasedSmall && (
-        <div>
-          {" "}
-          <span className={styles.hobbie_title_small}>
-            <b>{hobby.name}</b>
-          </span>{" "}
-          <h4 className={styles.slogan_small}> {hobby.slogan} </h4>
-        </div>
-      )}
-
-      <section
-        className={
-          isColumnBasedSmall
-            ? styles.hobbie_container_small
-            : styles.hobbie_container
-        }
-      >
+      <section className={styles.hobbie_container}>
         {hobby !== undefined && (
-          <div
-            className={
-              isColumnBasedSmall
-                ? styles.hobbie_content_small
-                : styles.hobbie_content
-            }
-          >
-            {currentPage !== "gallery" && (
-              <section className={styles.hobbie_cover}>
-                <img
-                  className={styles.hobbie_cover}
-                  src={hobby.profileImgUrl}
-                  alt="profile"
-                />
-              </section>
-            )}
-p
-            <div
-              className={
-                isColumnBasedSmall
-                  ? styles.hobbie_content_body_small
-                  : styles.hobbie_content_body
-              }
-            >
-              {!isColumnBasedSmall && (
-                <article className={styles.hobbie_pages}>
-                  <span
-                    onClick={() => changePage("about")}
-                    className={
-                      currentPage === "about" ? styles.hobbie_active : ""
-                    }
-                  >
-                    about
-                  </span>
-                  <span
-                    onClick={() => changePage("more")}
-                    className={
-                      currentPage === "more" ? styles.hobbie_active : ""
-                    }
-                  >
-                    more
-                  </span>
-                  <span
-                    onClick={() => changePage("gallery")}
-                    className={
-                      currentPage === "gallery" ? styles.hobbie_active : ""
-                    }
-                  >
-                    gallery
-                  </span>
-                  <span
-                    onClick={() => changePage("contact")}
-                    className={
-                      currentPage === "contact" ? styles.hobbie_active : ""
-                    }
-                  >
-                    contact
-                  </span>
-                </article>
-              )}
+          <div className={styles.hobbie_content}>
+            <div className={styles.username}>
+              {user.username}
+            </div>
+            <div className={styles.hobbie_content_body_small}>
 
-              {isColumnBasedSmall && (
-                <article className={styles.hobbie_pages_horizontal}>
-                  <span
-                    onClick={() => changePage("about")}
-                    className={
-                      currentPage === "about"
-                        ? styles.hobbie_active_small
-                        : styles.hobbie_small
-                    }
-                  >
-                    about
-                  </span>
-                  <span
-                    onClick={() => changePage("more")}
-                    className={
-                      currentPage === "more"
-                        ? styles.hobbie_active_small
-                        : styles.hobbie_small
-                    }
-                  >
-                    more
-                  </span>
-                  <span
-                    onClick={() => changePage("gallery")}
-                    className={
-                      currentPage === "gallery"
-                        ? styles.hobbie_active_small
-                        : styles.hobbie_small
-                    }
-                  >
-                    gallery
-                  </span>
-                  <span
-                    onClick={() => changePage("contact")}
-                    className={
-                      currentPage === "contact"
-                        ? styles.hobbie_active_small
-                        : styles.hobbie_small
-                    }
-                  >
-                    contact
-                  </span>
-                </article>
-              )}
+              <article className={styles.hobbie_pages_horizontal}>
+                <span
+                  onClick={() => changePage("Media")}
+                  className={
+                    currentPage === "Media"
+                      ? styles.page_title_active
+                      : styles.page_title
+                  }
+                >
+                  Media
+                </span>
+                <span
+                  onClick={() => changePage("Description")}
+                  className={
+                    currentPage === "Description"
+                      ? styles.page_title_active
+                      : styles.page_title
+                  }
+                >
+                  Description
+                </span>
+                <span
+                  onClick={() => changePage("Contacts")}
+                  className={
+                    currentPage === "Contacts"
+                      ? styles.page_title_active
+                      : styles.page_title
+                  }
+                >
+                  Contacts
+                </span>
+              </article>
 
               <section className={styles.hobbie_lable}>
-                {!isColumnBasedSmall && (
-                  <div>
-                    {" "}
-                    <span className={styles.hobbie_title}>
-                      <b>{hobby.name}</b>
-                    </span>
-                    <h4 className={styles.slogan}> {hobby.slogan} </h4>
-                  </div>
-                )}
+                <div>
+                  {" "}
+                  <span className={styles.hobbie_title}>
+                    <b>{hobby.name}</b>
+                  </span>
+                  <h4 className={styles.slogan}> {hobby.slogan} </h4>
+                </div>
 
-                {currentPage === "about" && <p>{hobby.intro}</p>}
+                {currentPage === "Media" && <p>{hobby.intro}</p>}
 
-                {currentPage === "more" && <p> {hobby.description} </p>}
-
-                {currentPage === "gallery" && (
+                {currentPage === "Description" && (
                   <section className={gallery_styles.gallery}>
                     <div className={gallery_styles.row}>
                       <article className={gallery_styles.column}>
@@ -305,7 +202,7 @@ p
                   </section>
                 )}
 
-                {currentPage === "contact" && <p> {hobby.contactInfo} </p>}
+                {currentPage === "Contacts" && <p> {hobby.contactInfo} </p>}
 
                 {currentPage !== "gallery" && (
                   <article className={styles.buttons}>

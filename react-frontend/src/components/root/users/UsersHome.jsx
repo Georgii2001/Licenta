@@ -13,7 +13,11 @@ const UserHome = () => {
 
   const [state, setState] = useState([]);
   const [welcomeDiv, setWelcomeDiv] = useState({ showDiv: false });
+  const [likePressed, setLikePressed] = useState(false);
+  const [dislikePressed, setDislikePressed] = useState(false);
+  const [cards, setCards] = useState([]);
   const [page, setPage] = useState(0);
+  const [index, setIndex] = useState(0);
 
   const handleSort = (value) => (event) => {
     event.preventDefault();
@@ -27,10 +31,20 @@ const UserHome = () => {
     setPage(page + 1);
   };
 
-  const swiped = (id) => {
-    console.log("removing card: " + id);
+  const swiped = (direction, id) => {
+    console.log(`Removing card ${id} by swiping ${direction}`);
+
+    // Set the pressed button state to true
+    if (direction === 'right') {
+      setLikePressed(true);
+      setDislikePressed(false);
+    } else {
+      setLikePressed(false);
+      setDislikePressed(true);
+    }
+
     // Remove the card from the list
-    setState((prevState) => prevState.filter((user) => user.id !== id));
+    setState(prevState => prevState.filter(hobby => hobby.id !== id));
   };
 
   const outOfFrame = (id) => {
@@ -54,30 +68,51 @@ const UserHome = () => {
       } catch (error) {
         console.error(error);
       }
+
+      // Find the first card that hasn't been swiped yet
+      const index = state.findIndex(hobby => !cards.includes(hobby.id));
+      setIndex(index);
+
+      // Log the pressed button
+      if (likePressed) {
+        console.log(`Like button pressed for card ${state[index].id}`);
+      } else if (dislikePressed) {
+        console.log(`Dislike button pressed for card ${state[index].id}`);
+      }
+
+      // Reset the button state
+      setLikePressed(false);
+      setDislikePressed(false);
     };
 
     fetchData();
-
     return () => {
       unmounted = true;
     };
-  }, [isBusinessLoggedIn, isUserLoggedIn, page]);
+  }, [isBusinessLoggedIn, isUserLoggedIn, cards, likePressed, dislikePressed, state]);
 
   return (
     <>
       <BackgroundHome />
       <main className={styles.users_main}>
         <section className={styles.users_container_home}>
-          <div className={styles.matchButtons}>
-            <button className={styles.rightButton}>     {/*  onClick={() => handleRightSwipe() */}
-              Let's go
-            </button>
-            <button className={styles.leftButton} >     {/*  onClick={() => handleRightSwipe() */}
-              Pass
-            </button>
-          </div>
-
           {state.length !== 0 && (
+            <>
+             <div className={styles.matchButtons}>
+                <button
+                  className={styles.rightButton}
+                  onClick={() => swiped('right', state[index].id)}
+                >
+                  Like
+                </button>
+
+                <button
+                  className={styles.leftButton}
+                  onClick={() => swiped('left', state[index].id)}
+                >
+                  Dislike
+                </button>
+              </div>
             <div className={styles.tinderCards}>
               {state.map((user) => (
                 <TinderCard
@@ -86,9 +121,8 @@ const UserHome = () => {
                   onSwipe={(dir) => swiped(dir, user.id)}
                   onCardLeftScreen={() => outOfFrame(user.id)}
                   preventSwipe={["up", "down"]}
-                  swipeThreshold={5}
                 >
-                  <div className={styles.card} style={{ 'avatarFile': `url(${user.avatarFile})` }}>
+                  <div className={styles.card}>
                     <Link
                       to="#"
                       onClick={handleSort(user.id)}
@@ -112,6 +146,7 @@ const UserHome = () => {
                 </TinderCard>
               ))}
             </div>
+            </>
           )}
 
           {welcomeDiv.showDiv && (
@@ -123,7 +158,7 @@ const UserHome = () => {
                       <p className={styles.intro}>
                         You have no parteners to be matched with.
                       </p>
-                      <div className={styles.buttuns}>
+                      <div className={styles.buttons}>
                         <button className={styles.link}>
                           <Link to="/test" className={styles.btn}>
                             Discover
@@ -135,7 +170,7 @@ const UserHome = () => {
                   {isBusinessLoggedIn && (
                     <div>
                       <p className={styles.intro}>You have no parteners to be matched with.</p>
-                      <div className={styles.buttuns}>
+                      <div className={styles.buttons}>
                         <button className={styles.link}>
                           <Link to="/create-offer" className={styles.btn}>
                             Create Offer

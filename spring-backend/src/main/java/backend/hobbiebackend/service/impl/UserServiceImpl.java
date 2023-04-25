@@ -226,7 +226,6 @@ public class UserServiceImpl implements UserService {
                     final String avatar = photoUtils.getEncodedFile(user.getAvatar(), user.getUsername());
                     usersDTO.add(userMapper.mapUserToDTO(user, avatar));
                 });
-
         return usersDTO;
     }
 
