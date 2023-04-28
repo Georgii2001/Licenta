@@ -1,13 +1,15 @@
 import axios from "../customAxiosConfig/CustomAxiosConfig";
 import AuthenticationService from "../authentication/AuthenticationService";
 
-const GetUserAvatarService = () => {
+const PostUserInterestsService = (interestNames) => {
     let username = AuthenticationService.getLoggedInUser();
+    const interestsList = interestNames.join(",");
 
     try {
-        return axios.get(`/getAvatar`, {
+        return axios.post(`/userInterests`, null, {
             params: {
                 username,
+                interestsList
             },
         });
     } catch (err) {
@@ -19,4 +21,4 @@ const GetUserAvatarService = () => {
     }
 };
 
-export default GetUserAvatarService;
+export default PostUserInterestsService;

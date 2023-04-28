@@ -1,4 +1,4 @@
-import React from "react";
+import { React, useState, useLayoutEffect } from "react";
 import BackgroundHome from "../../../fragments/background/BackgroundHome";
 import dancingImg from "../../../../../img/2.jpg";
 import styles from "../../../../../css/Account.module.css";
@@ -7,17 +7,41 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import UserInterests from "./modules/UserInterests"
 import UserInfo from "./modules/UserInfo";
 import UserMedia from "./modules/UserMedia";
+import UserDataService from "../../../../../api/users/UserDataService";
+import UserDescription from "./modules/UserDescription";
 
 const AccountUser = () => {
+
+  const [user, setUser] = useState([]);
+
+  useLayoutEffect(() => {
+    let unmounted = false;
+
+    UserDataService().then((response) => {
+      if (!unmounted) {
+        setUser(response.data);
+      }
+    });
+    return () => {
+      unmounted = true;
+    };
+  }, []);
+
+  const refreshUserData = () => {
+    UserDataService().then((response) => {
+      setUser(response.data);
+    });
+  }
 
   return (
     <>
       <main className={layout.hobbie_main}>
         <section className={layout.hobbie_container_home}>
           <section className={styles.account_container}>
-            <UserMedia />
-            <UserInterests />
-            <UserInfo />
+            <UserMedia userAvatars={user.avatarFiles} refreshUserData={refreshUserData} />
+            <UserInterests userInterests={user.interests} refreshUserData={refreshUserData} />
+            <UserDescription description={user.description} refreshUserData={refreshUserData}/>
+            <UserInfo user={user} />
           </section>
 
           <BackgroundHome />

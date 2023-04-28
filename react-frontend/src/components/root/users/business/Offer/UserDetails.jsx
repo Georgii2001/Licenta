@@ -5,7 +5,7 @@ import { useMediaQuery } from "beautiful-react-hooks";
 import styles from "../../../../../css/Hobbie.module.css";
 import "react-confirm-alert/src/react-confirm-alert.css";
 
-const Hobbie = () => {
+const UserDetails = () => {
   const isColumnBasedSmall = useMediaQuery("(max-width: 900px)");
   console.log(isColumnBasedSmall);
 
@@ -23,4 +23,4 @@ const Hobbie = () => {
   );
 };
 
-export default Hobbie;
+export default UserDetails;

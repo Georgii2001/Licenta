@@ -1,13 +1,12 @@
 import axios from "../customAxiosConfig/CustomAxiosConfig";
 
-const RemoveUserInterestService = (id) => {
+const UserByIdDataService = (id) => {
   try {
-    return axios.delete(`/removeInterests`, {
+    return axios.get(`/client`, {
       params: {
         id,
       },
     });
-
   } catch (err) {
     let error = "";
     if (err.response) {
@@ -17,4 +16,4 @@ const RemoveUserInterestService = (id) => {
   }
 };
 
-export default RemoveUserInterestService;
+export default UserByIdDataService;

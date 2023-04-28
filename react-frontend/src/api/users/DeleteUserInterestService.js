@@ -1,11 +1,17 @@
 import axios from "../customAxiosConfig/CustomAxiosConfig";
 import AuthenticationService from "../authentication/AuthenticationService";
 
-const UserInterestsService = () => {
+const DeleteUserInterestService = (interest) => {
   let username = AuthenticationService.getLoggedInUser();
 
   try {
-    return axios.get(`/getUserInterests`);
+    return axios.delete(`/userInterests`, {
+      params: {
+        interest,
+        username
+      },
+    });
+
   } catch (err) {
     let error = "";
     if (err.response) {
@@ -15,4 +21,4 @@ const UserInterestsService = () => {
   }
 };
 
-export default UserInterestsService;
+export default DeleteUserInterestService;

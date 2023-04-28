@@ -1,17 +1,14 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../../../../../../css/Account.module.css";
-import UserDataService from "../../../../../../api/users/UserDataService";
-import { useState, useLayoutEffect } from "react";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { Link } from "react-router-dom";
 import DeleteUserService from "../../../../../../api/users/DeleteUserService";
 import { confirmAlert } from "react-confirm-alert";
 import AuthenticationService from "../../../../../../api/authentication/AuthenticationService";
 
-const UserInfo = () => {
+const UserInfo = ({ user }) => {
     const navigate = useNavigate();
-    const [user, setUser] = useState([]);
 
     const handleDelete = (user) => (event) => {
         event.preventDefault();
@@ -43,18 +40,6 @@ const UserInfo = () => {
         });
     };
 
-    useLayoutEffect(() => {
-        let unmounted = false;
-
-        UserDataService().then((response) => {
-            if (!unmounted) {
-                setUser(response.data);
-            }
-        });
-        return () => {
-            unmounted = true;
-        };
-    }, []);
     return (
         <>
             <div className={styles.account_content}>

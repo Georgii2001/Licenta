@@ -5,59 +5,47 @@ import { useState, useLayoutEffect } from "react";
 import Popup from 'reactjs-popup';
 import UserInterestsItem from "./elements/UserInterestsItem";
 import InterestsService from "../../../../../../api/users/InterestsService";
-import UserInterestsService from "../../../../../../api/users/UserInterestsService";
-import RemoveUserInterestService from "../../../../../../api/users/RemoveUserInterestService";
-import UpdateUserInterestsService from "../../../../../../api/users/UpdateUserInterestsService";
+import DeleteUserInterestService from "../../../../../../api/users/DeleteUserInterestService";
+import PostUserInterestsService from "../../../../../../api/users/PostUserInterestsService";
 
-const UserInterests = () => {
+const UserInterests = ({ userInterests, refreshUserData }) => {
 
-  const [userInterests, setUserInterests] = useState([]);
   const [unassignedInterests, setUnassignedInterests] = useState([]);
   const [saveInterestsList, setSaveInterestsList] = useState([]);
-
-  const handleRemoveInterest = async (id) => {
-    await RemoveUserInterestService(id);
-
-    UserInterestsService().then((getResponse) => {
-      setUserInterests(getResponse.data);
-    });
-
-    InterestsService().then((response) => {
-      setUnassignedInterests(response.data);
-    });
-
-  }
-
+  
   useLayoutEffect(() => {
-    UserInterestsService().then((response) => {
-      setUserInterests(response.data);
-    });
-
-    InterestsService().then((response) => {
-      setUnassignedInterests(response.data);
-    });
+    refreshUnassignedInterests();
+    
   }, []);
 
-  const addUserInterests = (id) => {
-    setSaveInterestsList(prevState => ([...prevState, id]));
+  const handleRemoveInterest = async (interest) => {
+    await DeleteUserInterestService(interest);
+
+    refreshUnassignedInterests();
+    refreshUserData();
+  }
+
+  const saveUserInterests = async () => {
+    
+    await PostUserInterestsService(saveInterestsList);
+    
+    refreshUnassignedInterests();
+    refreshUserData();
+    setSaveInterestsList([]);
+  }
+
+  const refreshUnassignedInterests = () =>{
+    InterestsService().then((response) => {
+      setUnassignedInterests(response.data);
+    });
+  }
+
+  const addUserInterests = (interestNames) => {
+    setSaveInterestsList(prevState => ([...prevState, interestNames]));
   }
 
   const removeUserInterests = (id) => {
     setSaveInterestsList(saveInterestsList.filter(interest => interest !== id));
-  }
-
-  const saveUserInterests = async () => {
-    await UpdateUserInterestsService(saveInterestsList);
-
-    UserInterestsService().then((getResponse) => {
-      setUserInterests(getResponse.data);
-    });
-
-    InterestsService().then((response) => {
-      setUnassignedInterests(response.data);
-    });
-
-    setSaveInterestsList([]);
   }
 
   return (
@@ -71,9 +59,9 @@ const UserInterests = () => {
         <div className={styles.interest_input_container}>
           {userInterests && userInterests.length ?
             userInterests.map((interest) => (
-              <div className={styles.interest_item} key={interest.id}>
-                <span >{interest.interest}</span>
-                <span className={styles.close} onClick={() => handleRemoveInterest(interest.id)}>&times;</span>
+              <div className={styles.interest_item}>
+                <span >{interest}</span>
+                <span className={styles.close} onClick={() => handleRemoveInterest(interest)}>&times;</span>
               </div>
             ))
             : <div>Add your interests to start jorney</div>
@@ -86,7 +74,7 @@ const UserInterests = () => {
                     <div className={styles.popup_header}>Choose your interests</div>
                     <div className={styles.popup_body}>
                       {unassignedInterests.map((unassignedInterest) => (
-                        <UserInterestsItem saveUserInterests={addUserInterests} removeUserInterests={removeUserInterests} id={unassignedInterest.id} interest={unassignedInterest.interest} />
+                        <UserInterestsItem saveUserInterests={addUserInterests} removeUserInterests={removeUserInterests} interest={unassignedInterest} />
                       ))}
                     </div>
                     <button className={styles.popup_button} onClick={() => { saveUserInterests(); close(); }}>Save</button>

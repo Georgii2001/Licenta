@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import BackgroundHome from "../fragments/background/BackgroundHome";
 import HomeDataService from "../../../api/hobby/HomeDataService";
 import AuthenticationService from "../../../api/authentication/AuthenticationService";
@@ -11,45 +11,47 @@ const UserHome = () => {
   const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
   const isBusinessLoggedIn = AuthenticationService.isBusinessLoggedIn();
 
-  const [state, setState] = useState([]);
+  const [possibleMatches, setPossibleMatches] = useState([]);
   const [welcomeDiv, setWelcomeDiv] = useState({ showDiv: false });
-  const [likePressed, setLikePressed] = useState(false);
-  const [dislikePressed, setDislikePressed] = useState(false);
-  const [cards, setCards] = useState([]);
   const [page, setPage] = useState(0);
-  const [index, setIndex] = useState(0);
+
+  const [currentIndex, setCurrentIndex] = useState([]);
+  const currentIndexRef = useRef(currentIndex);
+  const canSwipe = currentIndex >= 0;
+  const [childRefs, setChildRefs] = useState([]);
 
   const handleSort = (value) => (event) => {
     event.preventDefault();
 
     if (isUserLoggedIn) {
-      navigate(`/hobbie/${value}`, { state: { id: value } });
-    } else if (isBusinessLoggedIn) {
-      navigate(`/offer/${value}`, { state: { id: value } });
-    }
+      navigate(`/user-details/${value}`, { possibleMatches: { id: value } });
+    } 
 
     setPage(page + 1);
   };
 
-  const swiped = (direction, id) => {
-    console.log(`Removing card ${id} by swiping ${direction}`);
 
-    // Set the pressed button state to true
-    if (direction === 'right') {
-      setLikePressed(true);
-      setDislikePressed(false);
-    } else {
-      setLikePressed(false);
-      setDislikePressed(true);
+  const updateCurrentIndex = (val) => {
+    setCurrentIndex(val);
+    console.log(currentIndexRef.current);
+    currentIndexRef.current = val;
+  }
+
+  const swiped = (direction, nameToDelete, index) => {
+    console.log('removing: ' + nameToDelete);
+    console.log(direction);
+    updateCurrentIndex(index - 1);
+  }
+
+  const outOfFrame = (name) => {
+    console.log(name + ' left the screen!');
+  }
+
+  const swipe = async (dir) => {
+    if (canSwipe && currentIndex < possibleMatches.length) {
+      await childRefs[currentIndex].current.swipe(dir);
     }
-
-    // Remove the card from the list
-    setState(prevState => prevState.filter(hobby => hobby.id !== id));
-  };
-
-  const outOfFrame = (id) => {
-    console.log(id + " left the screen");
-  };
+  }
 
   useEffect(() => {
     let unmounted = false;
@@ -58,9 +60,14 @@ const UserHome = () => {
       try {
         const response = await HomeDataService(page);
         if (!unmounted) {
-          setState(response.data);
+          setPossibleMatches(response.data);
           setWelcomeDiv({ showDiv: false });
-          console.log(response);
+          setCurrentIndex(response.data.length - 1);
+          setChildRefs(() =>
+            Array(response.data.length)
+              .fill(0)
+              .map((i) => React.createRef()),
+            []);
         }
         if (!response.data.length) {
           setWelcomeDiv({ showDiv: true });
@@ -68,123 +75,96 @@ const UserHome = () => {
       } catch (error) {
         console.error(error);
       }
-
-      // Find the first card that hasn't been swiped yet
-      const index = state.findIndex(hobby => !cards.includes(hobby.id));
-      setIndex(index);
-
-      // Log the pressed button
-      if (likePressed) {
-        console.log(`Like button pressed for card ${state[index].id}`);
-      } else if (dislikePressed) {
-        console.log(`Dislike button pressed for card ${state[index].id}`);
-      }
-
-      // Reset the button state
-      setLikePressed(false);
-      setDislikePressed(false);
     };
 
     fetchData();
+
     return () => {
       unmounted = true;
     };
-  }, [isBusinessLoggedIn, isUserLoggedIn, cards, likePressed, dislikePressed, state]);
+  }, [isBusinessLoggedIn, isUserLoggedIn, page]);
 
   return (
     <>
       <BackgroundHome />
-      <main className={styles.users_main}>
-        <section className={styles.users_container_home}>
-          {state.length !== 0 && (
-            <>
-             <div className={styles.matchButtons}>
-                <button
-                  className={styles.rightButton}
-                  onClick={() => swiped('right', state[index].id)}
-                >
-                  Like
-                </button>
-
-                <button
-                  className={styles.leftButton}
-                  onClick={() => swiped('left', state[index].id)}
-                >
-                  Dislike
-                </button>
-              </div>
-            <div className={styles.tinderCards}>
-              {state.map((user) => (
-                <TinderCard
-                  key={user.id}
-                  className={styles.swipe}
-                  onSwipe={(dir) => swiped(dir, user.id)}
-                  onCardLeftScreen={() => outOfFrame(user.id)}
-                  preventSwipe={["up", "down"]}
-                >
-                  <div className={styles.card}>
-                    <Link
-                      to="#"
-                      onClick={handleSort(user.id)}
-                      id={user.id}
-                    >
-                      <section className={styles.card_image_container}>
-                        <img
-                          src={`data:image/png;base64,${user.avatarFile}`}
-                          alt="user"
-                        />
-                      </section>
-                      <section className={styles.card_content}>
-                        <p className={styles.card_title}>{user.username}</p>
-                        <div className={styles.card_info}>
-                          {/* <p className={styles.card_price}>{user.gender}</p> */}
-                          <p className={styles.card_infoDetails}>Tap to see more</p>
-                        </div>
-                      </section>
-                    </Link>
-                  </div>
-                </TinderCard>
-              ))}
-            </div>
-            </>
-          )}
-
-          {welcomeDiv.showDiv && (
-            <div>
-              <article className={styles.introduction_home}>
-                <div className={styles.intro_text}>
-                  {isUserLoggedIn && (
-                    <div>
-                      <p className={styles.intro}>
-                        You have no parteners to be matched with.
-                      </p>
-                      <div className={styles.buttons}>
-                        <button className={styles.link}>
-                          <Link to="/test" className={styles.btn}>
-                            Discover
-                          </Link>
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                  {isBusinessLoggedIn && (
-                    <div>
-                      <p className={styles.intro}>You have no parteners to be matched with.</p>
-                      <div className={styles.buttons}>
-                        <button className={styles.link}>
-                          <Link to="/create-offer" className={styles.btn}>
-                            Create Offer
-                          </Link>
-                        </button>
-                      </div>
-                    </div>
-                  )}
+      {possibleMatches.length !== 0 && (
+        <div className={styles.card_container}>
+          {possibleMatches.map((user, index) => (
+            <TinderCard
+              key={user.id}
+              ref={childRefs[index]}
+              className={styles.swipe}
+              onSwipe={(dir) => swiped(dir, user.id, index)}
+              onCardLeftScreen={() => outOfFrame(user.id)}
+              preventSwipe={[`up`, `down`]}
+            >
+              <div className={styles.card}>
+                <div className={styles.card_image_container} style={{ backgroundImage: "url(data:image/png;base64," + user.avatarFile + ")" }}>
                 </div>
-              </article>
+                <div className={styles.card_title}>{user.username}</div>
+                <div className={styles.card_description}>{user.gender}</div>
+                <Link
+                  to="#"
+                  onClick={handleSort(user.id)}
+                  id={user.id}
+                >
+                  <div className={styles.card_user_details}>Tap to see more</div>
+                </Link>
+              </div>
+            </TinderCard>
+          ))}
+          <div className={styles.final_card_no_swipe}>
+            <div className={styles.final_card}>
+              <div className={styles.final_card_image_container}>You have no matches. Try later.</div>
+              <div className={styles.final_card_title}>Name</div>
+              <div className={styles.final_card_description}>Gender</div>
+              <div className={styles.final_card_user_details}><br></br></div>
             </div>
-          )}
-        </section>
-      </main>
+          </div>
+        </div>
+      )}
+
+      <div className={styles.buttons_container}>
+        <div className={styles.buttons}>
+          <button className={styles.button_pass} style={{ backgroundColor: !canSwipe && '#c3c4d3' }} onClick={() => swipe('left')}>Pass</button>
+          <button className={styles.button_go} style={{ backgroundColor: !canSwipe && '#c3c4d3' }} onClick={() => swipe('right')}>Let's go!</button>
+        </div>
+      </div>
+
+      {welcomeDiv.showDiv && (
+        <div>
+          <article className={styles.introduction_home}>
+            <div className={styles.intro_text}>
+              {isUserLoggedIn && (
+                <div>
+                  <p className={styles.intro}>
+                    You have no parteners to be matched with.
+                  </p>
+                  <div className={styles.buttuns}>
+                    <button className={styles.link}>
+                      <Link to="/test" className={styles.btn}>
+                        Discover
+                      </Link>
+                    </button>
+                  </div>
+                </div>
+              )}
+              {isBusinessLoggedIn && (
+                <div>
+                  <p className={styles.intro}>You have no parteners to be matched with.</p>
+                  <div className={styles.buttuns}>
+                    <button className={styles.link}>
+                      <Link to="/create-offer" className={styles.btn}>
+                        Create Offer
+                      </Link>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </article>
+        </div>
+      )}
     </>
   );
 };

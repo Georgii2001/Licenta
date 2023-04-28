@@ -79,6 +79,7 @@
 
   .blueImg4 {
     width: 100%;
+    user-select: none;
   }
 
   .blue {

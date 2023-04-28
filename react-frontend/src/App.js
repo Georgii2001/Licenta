@@ -7,7 +7,6 @@ import SignUp from "./components/root/users/signUp/SignUp";
 import RegisterBusiness from "./components/root/users/signUp/RegisterBusiness";
 import Login from "./components/root/users/login/Login";
 import UserHome from "./components/root/users/UsersHome";
-import Hobbie from "./components/root/users/business/Offer/Hobbie";
 import AccountUser from "./components/root/users/user/accountUser/AccountUser";
 import AccountBusiness from "./components/root/users/business/AccountBusiness/AccountBusiness";
 import TestForm from "./components/root/test/TestForm";
@@ -21,6 +20,7 @@ import EditBusinessProfile from "./components/root/users/business/AccountBusines
 import UpdateOffer from "./components/root/users/business/Offer/UpdateOffer";
 import PasswordChange from "./components/root/users/login/forgottenPassword/PasswordChange";
 import SetUpNewPassword from "./components/root/users/login/forgottenPassword/SetUpNewPassword";
+import UserDetails from "./components/root/users/business/Offer/UserDetails";
 
 function App() {
   return (
@@ -42,7 +42,7 @@ function App() {
             <Route path="/account-user" element={<AccountUser />} />
             <Route path="/test" element={<TestForm />} />
             <Route path="/my-hobbies" element={<MyHobbies />} />
-            <Route path="/hobbie/:id" element={<Hobbie />} />
+            <Route path="/user-details/:id" element={<UserDetails />} />
           </Route>
 
           <Route element={<ProtectedRoutesBusiness />}>
@@ -55,7 +55,7 @@ function App() {
             <Route path="/account-business" element={<AccountBusiness />} />
             <Route path="/create-offer" element={<CreateOffer />} />
             <Route path="/account-business" element={<AccountBusiness />} />
-            <Route path="/offer/:id" element={<Hobbie />} />
+            <Route path="/offer/:id" element={<UserDetails />} />
           </Route>
         </Routes>
       </div>

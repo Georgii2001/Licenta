@@ -211,12 +211,13 @@ const SignUp = () => {
               </span>
               <button className={styles.upload_button} onClick={handleClick}>
                 <span>Choose a profile photo</span>
-                <input
+              </button>
+              <input
                   id="avatar"
                   name="avatar"
                   type="file"
                   ref={avatarInput}
-                  styles={{ display: "none" }}
+                  style={{ display: "none" }}
                   onChange={(e) => {
                     const file = e.target.files[0];
                     setInfo({ ...info, avatar: file });
@@ -230,10 +231,8 @@ const SignUp = () => {
                     console.log(info);
                   }}
                 />
-              </button>
             </div>
           </section>
-
           <section className={styles.form_field}>
             {loading && <LoadingDotsDark />}
 

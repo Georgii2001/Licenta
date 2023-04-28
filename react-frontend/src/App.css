@@ -9,6 +9,7 @@
 }
 #root {
   height: auto;
+  overflow: hidden;
 }
 
 * {
@@ -29,7 +30,7 @@ body {
 h2 {
   font: 1em;
   background: linear-gradient(to right, #494969, #696989);
-    /* -webkit-background-clip: text; */
+  -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
