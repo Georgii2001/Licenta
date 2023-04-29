@@ -1,9 +1,6 @@
 package backend.hobbiebackend.controller;
 
-import backend.hobbiebackend.dto.AppClientSignUpDto;
-import backend.hobbiebackend.dto.BusinessRegisterDto;
-import backend.hobbiebackend.dto.UpdateAppClientDto;
-import backend.hobbiebackend.dto.UpdateBusinessDto;
+import backend.hobbiebackend.dto.*;
 import backend.hobbiebackend.entities.AppClient;
 import backend.hobbiebackend.entities.BusinessOwner;
 import backend.hobbiebackend.entities.UserEntity;
@@ -60,9 +57,9 @@ public class UserController {
     }
 
     @GetMapping("/client")
-    @Operation(summary = "show client-user information", security = @SecurityRequirement(name = "bearerAuth"))
-    public UserEntity showUserDetails(@RequestParam String username) {
-        return this.userService.findUserByUsername(username);
+    @Operation(summary = "Show client-user information", security = @SecurityRequirement(name = "bearerAuth"))
+    public UsersDTO showUserDetails(@RequestParam(required = false) String username, @RequestParam(required = false) Integer id) {
+        return this.userService.getUserMainDetails(username, id);
     }
 
     @GetMapping("/business")
@@ -152,7 +149,7 @@ public class UserController {
     @PostMapping("/login")
     @Operation(summary = "Login based on user role after authentication", security = @SecurityRequirement(name = "bearerAuth"))
     public String logInUser(@RequestParam String username) {
-        UserEntity userByUsername = this.userService.findUserByUsername(username);
+        UsersDTO userByUsername = this.userService.getUserMainDetails(username, null);
         if (userByUsername.getRole().equals(UserRoleEnum.USER.name())) {
             return "USER";
         } else if (userByUsername.getRole().equals(UserRoleEnum.BUSINESS_USER.name())) {

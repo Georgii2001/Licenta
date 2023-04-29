@@ -29,7 +29,7 @@ public interface UserService {
 
     BusinessOwner findBusinessOwnerById(Integer id);
 
-    UserEntity findUserByUsername(String username);
+    UsersDTO getUserMainDetails(String username, Integer id);
 
     boolean userExists(String username, String email);
 

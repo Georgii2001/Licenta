@@ -1,0 +1,362 @@
+databaseChangeLog:
+  - changeSet:
+      id: 202304181340_changelog#1
+      author: Georgiana Voicea
+      preConditions:
+        - onFail: CONTINUE
+        - not:
+            tableExists:
+              tableName: interests
+      changes:
+        - createTable:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: INTEREST_ID_PKEY
+              - column:
+                  name: interest_name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: interest_description
+                  type: VARCHAR(250)
+              - column:
+                  name: sys_creation_date
+                  type: TIMESTAMP
+                  defaultValueComputed: NOW()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sys_update_date
+                  type: TIMESTAMP
+                  defaultValueComputed: NOW() ON UPDATE NOW()
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 202304181340_changelog#2
+      author: Georgiana Voicea
+      preConditions:
+        - onFail: CONTINUE
+        - tableExists:
+            tableName: interests
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM interests
+      changes:
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Hotel
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Hostel
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Airbnb
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Couchsurfing
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Resort
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Expensive trips
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Cheap trips
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Restaurants
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Street Food
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Cooking
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Big cities
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Mountains
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Sea
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Nature
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Relax
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Culture
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Fun
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Walking
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Public transport
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Taxi
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Car
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Europe
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Asia
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Australia
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Africa
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: America
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: City break
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Backpacking
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Volunteer
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Work and travel
+  - changeSet:
+      id: 202304181340_changelog#3
+      author: Georgiana Voicea
+      preConditions:
+        - onFail: CONTINUE
+        - tableExists:
+            tableName: interests
+        - not:
+            tableExists:
+              tableName: user_interests
+      changes:
+        - createTable:
+            tableName: user_interests
+            columns:
+              - column:
+                  name: user_interest_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: USER_INTEREST_ID_PKEY
+              - column:
+                  name: user_id
+                  type: INT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: USER_ID_FKEY
+                    references: users(id)
+              - column:
+                  name: interest_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: INTEREST_ID_FKEY
+                    references: interests(interest_id)
+              - column:
+                  name: sys_creation_date
+                  type: TIMESTAMP
+                  defaultValueComputed: NOW()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sys_update_date
+                  type: TIMESTAMP
+                  defaultValueComputed: NOW() ON UPDATE NOW()
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 202304181340_changelog#4
+      author: Georgiana Voicea
+      preConditions:
+        - onFail: CONTINUE
+        - not:
+            tableExists:
+              tableName: avatars
+      changes:
+        - createTable:
+            tableName: avatars
+            columns:
+              - column:
+                  name: avatars_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: AVATARS_ID_PKEY
+              - column:
+                  name: user_id
+                  type: INT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: USER_AVATARS_ID_FKEY
+                    references: users(id)
+              - column:
+                  name: avatar_name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sys_creation_date
+                  type: TIMESTAMP
+                  defaultValueComputed: NOW()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sys_update_date
+                  type: TIMESTAMP
+                  defaultValueComputed: NOW() ON UPDATE NOW()
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 202304181340_changelog#5
+      author: Georgiana Voicea
+      preConditions:
+        - onFail: CONTINUE
+        - and:
+            not:
+              - columnExists:
+                  tableName: users
+                  columnName: description
+              - columnExists:
+                  tableName: users
+                  columnName: sys_creation_date
+              - columnExists:
+                  tableName: users
+                  columnName: sys_update_date
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: description
+                  type: VARCHAR(2000)
+                  afterColumn: username
+                  constraints:
+                    nullable: true
+              - column:
+                  name: sys_creation_date
+                  type: TIMESTAMP
+                  defaultValueComputed: NOW()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sys_update_date
+                  type: TIMESTAMP
+                  defaultValueComputed: NOW() ON UPDATE NOW()
+                  constraints:
+                    nullable: false
