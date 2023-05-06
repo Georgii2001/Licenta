@@ -61,7 +61,7 @@ class UserControllerTest extends AbstractTest {
 
         //update client
         updateAppClientDto = new UpdateAppClientDto();
-        updateAppClientDto.setId((1));
+        updateAppClientDto.setEmail("test@gmail.com");
         updateAppClientDto.setPassword("topsecret");
         updateAppClientDto.setFullName("full name");
         updateAppClientDto.setGender(GenderEnum.FEMALE);
@@ -125,9 +125,7 @@ class UserControllerTest extends AbstractTest {
         String uri = "/user";
 
         String inputJson = super.mapToJson(updateAppClientDto);
-        appClient.setId(updateAppClientDto.getId());
-
-        when(userService.findAppClientById(1)).thenReturn(appClient);
+        appClient.setId(1);
 
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.put(uri)
                 .contentType(MediaType.APPLICATION_JSON_VALUE).content(inputJson)).andReturn();

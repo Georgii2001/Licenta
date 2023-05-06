@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import BackgroundHome from "../fragments/background/BackgroundHome";
-import HomeDataService from "../../../api/hobby/HomeDataService";
+import GetPossibleMatchesService from "../../../api/hobby/GetPossibleMatchesService";
 import AuthenticationService from "../../../api/authentication/AuthenticationService";
 import { Link, useNavigate } from "react-router-dom";
 import TinderCard from "react-tinder-card";
@@ -13,7 +13,6 @@ const UserHome = () => {
 
   const [possibleMatches, setPossibleMatches] = useState([]);
   const [welcomeDiv, setWelcomeDiv] = useState({ showDiv: false });
-  const [page, setPage] = useState(0);
 
   const [currentIndex, setCurrentIndex] = useState([]);
   const currentIndexRef = useRef(currentIndex);
@@ -24,10 +23,10 @@ const UserHome = () => {
     event.preventDefault();
 
     if (isUserLoggedIn) {
-      navigate(`/user-details/${value}`, { possibleMatches: { id: value } });
-    } 
-
-    setPage(page + 1);
+      navigate(`/user-details`, {
+        state: { id: value },
+      });
+    }
   };
 
 
@@ -58,7 +57,7 @@ const UserHome = () => {
 
     const fetchData = async () => {
       try {
-        const response = await HomeDataService(page);
+        const response = await GetPossibleMatchesService();
         if (!unmounted) {
           setPossibleMatches(response.data);
           setWelcomeDiv({ showDiv: false });
@@ -82,7 +81,7 @@ const UserHome = () => {
     return () => {
       unmounted = true;
     };
-  }, [isBusinessLoggedIn, isUserLoggedIn, page]);
+  }, [isBusinessLoggedIn, isUserLoggedIn]);
 
   return (
     <>
@@ -102,12 +101,9 @@ const UserHome = () => {
                 <div className={styles.card_image_container} style={{ backgroundImage: "url(data:image/png;base64," + user.avatarFile + ")" }}>
                 </div>
                 <div className={styles.card_title}>{user.username}</div>
+                <div className={styles.card_matches}>You have <b>{user.userMatchCount}</b> matches</div>
                 <div className={styles.card_description}>{user.gender}</div>
-                <Link
-                  to="#"
-                  onClick={handleSort(user.id)}
-                  id={user.id}
-                >
+                <Link to="#" onClick={handleSort(user.id)} id={user.id}>
                   <div className={styles.card_user_details}>Tap to see more</div>
                 </Link>
               </div>
@@ -117,6 +113,7 @@ const UserHome = () => {
             <div className={styles.final_card}>
               <div className={styles.final_card_image_container}>You have no matches. Try later.</div>
               <div className={styles.final_card_title}>Name</div>
+              <div className={styles.final_card_matches}>You have <b>x</b> matches</div>
               <div className={styles.final_card_description}>Gender</div>
               <div className={styles.final_card_user_details}><br></br></div>
             </div>

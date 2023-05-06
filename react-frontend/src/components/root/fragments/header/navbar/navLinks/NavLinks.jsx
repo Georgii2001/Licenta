@@ -14,10 +14,7 @@ const NavLinks = () => {
       {userLogged && (
         <ul className={styles.nav_links}>
           <li className={styles.nav_link}>
-            <NavLink to="/user-home">Home</NavLink>
-          </li>
-          <li className={styles.nav_link}>
-            <NavLink to="/test">Discover</NavLink>
+            <NavLink to="user-home">Home</NavLink>
           </li>
           <li className={styles.nav_link}>
             <NavLink to="my-hobbies" className="nav-link">
@@ -27,8 +24,7 @@ const NavLinks = () => {
           <li className={styles.nav_link}>
             <NavLink to="account-user">Account</NavLink>
           </li>
-          <li
-            className={styles.nav_link}
+          <li className={styles.nav_link}
             onClick={AuthenticationService.logout}
           >
             <NavLink to="/"> Logout</NavLink>

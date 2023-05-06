@@ -29,6 +29,7 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 public class UserController {
+
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final NotificationService notificationService;
@@ -69,14 +70,10 @@ public class UserController {
     }
 
     @PutMapping("/user")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Update client-user information (use existing user id)", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<?> updateUser(@RequestBody UpdateAppClientDto user) {
-        AppClient client = this.userService.findAppClientById(user.getId());
-        client.setPassword(this.passwordEncoder.encode(user.getPassword()));
-        client.setGender(user.getGender().name());
-        client.setFullName(user.getFullName());
-        this.userService.saveUpdatedUserClient(client);
-        return new ResponseEntity<>(client, HttpStatus.CREATED);
+    public void updateUser(@RequestBody UpdateAppClientDto user) {
+        userService.updatedUserEntity(user);
     }
 
     @PostMapping("/notification")

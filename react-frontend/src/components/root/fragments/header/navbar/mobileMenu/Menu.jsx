@@ -30,21 +30,17 @@ const Menu = () => {
         <menu className={styles.popup_menu}>
           <ul className={styles.nav_links_popup}>
             <li className={styles.nav_link}>
-              <NavLink to="/user-home">Home</NavLink>
+              <NavLink to="user-home">Home</NavLink>
             </li>
             <li className={styles.nav_link}>
-              <NavLink to="/test">Discover</NavLink>
-            </li>
-            <li className={styles.nav_link}>
-              <NavLink to="/my-hobbies" className="nav-link">
+              <NavLink to="my-hobbies" className="nav-link">
                 MyMatches
               </NavLink>
             </li>
             <li className={styles.nav_link}>
-              <NavLink to="/account-user">Account</NavLink>
+              <NavLink to="account-user">Account</NavLink>
             </li>
-            <li
-              className={styles.nav_link}
+            <li className={styles.nav_link}
               onClick={AuthenticationService.logout}
             >
               <NavLink to="/"> Logout</NavLink>

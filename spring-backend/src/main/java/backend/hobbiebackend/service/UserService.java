@@ -2,6 +2,7 @@ package backend.hobbiebackend.service;
 
 import backend.hobbiebackend.dto.AppClientSignUpDto;
 import backend.hobbiebackend.dto.BusinessRegisterDto;
+import backend.hobbiebackend.dto.UpdateAppClientDto;
 import backend.hobbiebackend.dto.UsersDTO;
 import backend.hobbiebackend.entities.AppClient;
 import backend.hobbiebackend.entities.BusinessOwner;
@@ -19,7 +20,7 @@ public interface UserService {
 
     BusinessOwner saveUpdatedUser(BusinessOwner businessOwner);
 
-    AppClient saveUpdatedUserClient(AppClient appClient);
+    void updatedUserEntity(UpdateAppClientDto appClient);
 
     UserEntity findUserById(Integer userId);
 
@@ -34,8 +35,6 @@ public interface UserService {
     boolean userExists(String username, String email);
 
     void saveUserWithUpdatedPassword(UserEntity userEntity);
-
-    AppClient findAppClientById(Integer clientId);
 
     void findAndRemoveHobbyFromClientsRecords(Hobby hobby);
 

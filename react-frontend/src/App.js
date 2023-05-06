@@ -8,19 +8,19 @@ import RegisterBusiness from "./components/root/users/signUp/RegisterBusiness";
 import Login from "./components/root/users/login/Login";
 import UserHome from "./components/root/users/UsersHome";
 import AccountUser from "./components/root/users/user/accountUser/AccountUser";
-import AccountBusiness from "./components/root/users/business/AccountBusiness/AccountBusiness";
-import TestForm from "./components/root/test/TestForm";
-import CreateOffer from "./components/root/users/business/Offer/CreateOffer";
+import AccountBusiness from "./components/root/users/userDetails/AccountBusiness/AccountBusiness";
+import DiscoverInterests from "./components/root/users/discoverInterests/DiscoverInterests";
+import CreateOffer from "./components/root/users/userDetails/CreateOffer";
 import MyHobbies from "./components/root/users/user/MyHobbies";
 import ProtectedRoutesGuest from "./components/protectedRoutes/ProtectedRoutesGuest";
 import ProtectedRoutesUser from "./components/protectedRoutes/ProtectedRoutesUser";
 import ProtectedRoutesBusiness from "./components/protectedRoutes/ProtectedRoutesBusiness";
 import EditUserProfile from "./components/root/users/user/accountUser/EditUserProfile";
-import EditBusinessProfile from "./components/root/users/business/AccountBusiness/EditBusinessProfile";
-import UpdateOffer from "./components/root/users/business/Offer/UpdateOffer";
+import EditBusinessProfile from "./components/root/users/userDetails/AccountBusiness/EditBusinessProfile";
+import UpdateOffer from "./components/root/users/userDetails/UpdateOffer";
 import PasswordChange from "./components/root/users/login/forgottenPassword/PasswordChange";
 import SetUpNewPassword from "./components/root/users/login/forgottenPassword/SetUpNewPassword";
-import UserDetails from "./components/root/users/business/Offer/UserDetails";
+import UserDetails from "./components/root/users/userDetails/UserDetails";
 
 function App() {
   return (
@@ -36,13 +36,14 @@ function App() {
             <Route path="/change-password" element={<PasswordChange />} />
             <Route path="/password/:id" element={<SetUpNewPassword />} />
           </Route>
+          
           <Route element={<ProtectedRoutesUser />}>
             <Route path="/edit-profile" element={<EditUserProfile />} />
             <Route path="/user-home" element={<UserHome />} />
             <Route path="/account-user" element={<AccountUser />} />
-            <Route path="/test" element={<TestForm />} />
+            <Route path="/discover-interests" element={<DiscoverInterests />} />
             <Route path="/my-hobbies" element={<MyHobbies />} />
-            <Route path="/user-details/:id" element={<UserDetails />} />
+            <Route path="/user-details" element={<UserDetails />} />
           </Route>
 
           <Route element={<ProtectedRoutesBusiness />}>
@@ -55,7 +56,7 @@ function App() {
             <Route path="/account-business" element={<AccountBusiness />} />
             <Route path="/create-offer" element={<CreateOffer />} />
             <Route path="/account-business" element={<AccountBusiness />} />
-            <Route path="/offer/:id" element={<UserDetails />} />
+            <Route path="/offer" element={<UserDetails />} />
           </Route>
         </Routes>
       </div>

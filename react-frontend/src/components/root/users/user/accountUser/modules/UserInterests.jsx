@@ -2,14 +2,18 @@ import React from "react";
 import styles from "../../../../../../css/Account.module.css";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { useState, useLayoutEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Popup from 'reactjs-popup';
 import UserInterestsItem from "./elements/UserInterestsItem";
 import InterestsService from "../../../../../../api/users/InterestsService";
+import AuthenticationService from "../../../../../../api/authentication/AuthenticationService";
 import DeleteUserInterestService from "../../../../../../api/users/DeleteUserInterestService";
 import PostUserInterestsService from "../../../../../../api/users/PostUserInterestsService";
 
-const UserInterests = ({ userInterests, refreshUserData }) => {
+const UserInterests = ({ id, userInterests, refreshUserData }) => {
 
+  const navigate = useNavigate();
+  const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
   const [unassignedInterests, setUnassignedInterests] = useState([]);
   const [saveInterestsList, setSaveInterestsList] = useState([]);
   
@@ -48,6 +52,14 @@ const UserInterests = ({ userInterests, refreshUserData }) => {
     setSaveInterestsList(saveInterestsList.filter(interest => interest !== id));
   }
 
+  const discoverInterests = () => {
+    if (isUserLoggedIn) {
+      navigate(`/discover-interests`, {
+        state: { id: id },
+      });
+    }
+  }
+
   return (
     <>
       <div className={styles.account_content}>
@@ -59,7 +71,7 @@ const UserInterests = ({ userInterests, refreshUserData }) => {
         <div className={styles.interest_input_container}>
           {userInterests && userInterests.length ?
             userInterests.map((interest) => (
-              <div className={styles.interest_item}>
+              <div key={interest} className={styles.interest_item}>
                 <span >{interest}</span>
                 <span className={styles.close} onClick={() => handleRemoveInterest(interest)}>&times;</span>
               </div>
@@ -74,7 +86,7 @@ const UserInterests = ({ userInterests, refreshUserData }) => {
                     <div className={styles.popup_header}>Choose your interests</div>
                     <div className={styles.popup_body}>
                       {unassignedInterests.map((unassignedInterest) => (
-                        <UserInterestsItem saveUserInterests={addUserInterests} removeUserInterests={removeUserInterests} interest={unassignedInterest} />
+                        <UserInterestsItem key={unassignedInterest} saveUserInterests={addUserInterests} removeUserInterests={removeUserInterests} interest={unassignedInterest} />
                       ))}
                     </div>
                     <button className={styles.popup_button} onClick={() => { saveUserInterests(); close(); }}>Save</button>
@@ -84,6 +96,7 @@ const UserInterests = ({ userInterests, refreshUserData }) => {
             </Popup>
             : null
           }
+          <button className={styles.add_interest_button} onClick={() => { discoverInterests(); }}>Discover interests</button>
         </div>
       </div>
     </>

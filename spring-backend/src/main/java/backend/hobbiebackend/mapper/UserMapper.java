@@ -14,7 +14,6 @@ public interface UserMapper {
     @Mapping(target = "avatarFile", source = "avatarFile")
     @Mapping(target = "avatarFiles", source = "avatarFiles")
     @Mapping(target = "interests", source = "interests")
-    UsersDTO mapUserToDTO(UserEntity user, String avatarFile, List<AvatarsDTO> avatarFiles, List<String> interests);
-
-
+    @Mapping(target = "userMatchCount", source = "userMatchCount")
+    UsersDTO mapUserToDTO(UserEntity user, String avatarFile, List<AvatarsDTO> avatarFiles, List<String> interests, Long userMatchCount);
 }

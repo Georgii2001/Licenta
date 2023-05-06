@@ -8,6 +8,7 @@ import backend.hobbiebackend.repostiory.InterestsRepository;
 import backend.hobbiebackend.repostiory.UserInterestsRepository;
 import backend.hobbiebackend.repostiory.UserRepository;
 import backend.hobbiebackend.service.InterestsService;
+import backend.hobbiebackend.utils.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class InterestsServiceImpl implements InterestsService {
 
+    private final UserUtils userUtils;
     private final UserRepository userRepository;
     private final InterestsRepository interestsRepository;
     private final UserInterestsRepository userInterestsRepository;
@@ -39,38 +41,35 @@ public class InterestsServiceImpl implements InterestsService {
 
     @Override
     public void saveNewUserInterest(String username, List<String> interestsList) {
-        Optional<UserEntity> byUsername = userRepository.findByUsername(username);
-        if (byUsername.isPresent()) {
-            UserEntity user = byUsername.get();
-            final Integer userId = user.getId();
+        saveInterestByUserEntity(userUtils.getUserEntity(username, null, null), interestsList);
+    }
 
-            Map<String, Interests> availableInterestsList = interestsRepository.findInterestAvailableForUser(userId)
-                    .stream().collect(Collectors.toMap(Interests::getInterestName, i -> i));
+    @Override
+    public void discoverNewInterests(Integer userId, List<String> interestsList) {
+        userInterestsRepository.deleteByUserEntityId(userId);
+        saveInterestByUserEntity(userUtils.getUserEntity(null, userId, null), interestsList);
+    }
 
-            List<UserInterests> userInterests = new ArrayList<>();
-            interestsList.forEach(interest -> {
-                if(availableInterestsList.containsKey(interest)){
-                    UserInterests userInterest = UserInterests.builder()
-                            .userEntity(user)
-                            .interests(availableInterestsList.get(interest))
-                            .build();
-                    userInterests.add(userInterest);
-                }
-            });
-            userInterestsRepository.saveAll(userInterests);
-        } else {
-            throw new NotFoundException("Can not find user with this username");
-        }
+    private void saveInterestByUserEntity(UserEntity userEntity, List<String> interestsList) {
+        Map<String, Interests> availableInterestsList = interestsRepository.findInterestAvailableForUser(userEntity.getId())
+                .stream().collect(Collectors.toMap(Interests::getInterestName, i -> i));
+
+        List<UserInterests> userInterests = new ArrayList<>();
+        interestsList.forEach(interest -> {
+            if (availableInterestsList.containsKey(interest)) {
+                UserInterests userInterest = UserInterests.builder()
+                        .userEntity(userEntity)
+                        .interests(availableInterestsList.get(interest))
+                        .build();
+                userInterests.add(userInterest);
+            }
+        });
+        userInterestsRepository.saveAll(userInterests);
     }
 
     @Override
     public void removeCurrentUserInterest(String username, String interest) {
-        Optional<UserEntity> byUsername = userRepository.findByUsername(username);
-        if (byUsername.isPresent()) {
-            UserEntity user = byUsername.get();
-            userInterestsRepository.deleteUserInterest(user.getId(), interest);
-        } else {
-            throw new NotFoundException("Can not find user with this username");
-        }
+        UserEntity userEntity = userUtils.getUserEntity(username, null, null);
+        userInterestsRepository.deleteUserInterest(userEntity.getId(), interest);
     }
 }

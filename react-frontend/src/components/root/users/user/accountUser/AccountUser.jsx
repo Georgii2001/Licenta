@@ -1,6 +1,5 @@
 import { React, useState, useLayoutEffect } from "react";
 import BackgroundHome from "../../../fragments/background/BackgroundHome";
-import dancingImg from "../../../../../img/2.jpg";
 import styles from "../../../../../css/Account.module.css";
 import layout from "../../../../../css/UserHome.module.css";
 import "react-confirm-alert/src/react-confirm-alert.css";
@@ -39,8 +38,8 @@ const AccountUser = () => {
         <section className={layout.hobbie_container_home}>
           <section className={styles.account_container}>
             <UserMedia userAvatars={user.avatarFiles} refreshUserData={refreshUserData} />
-            <UserInterests userInterests={user.interests} refreshUserData={refreshUserData} />
-            <UserDescription description={user.description} refreshUserData={refreshUserData}/>
+            <UserInterests id={user.id} userInterests={user.interests} refreshUserData={refreshUserData} />
+            <UserDescription email={user.email} description={user.description} refreshUserData={refreshUserData}/>
             <UserInfo user={user} />
           </section>
 

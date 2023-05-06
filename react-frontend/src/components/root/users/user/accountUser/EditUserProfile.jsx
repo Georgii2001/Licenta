@@ -14,7 +14,7 @@ const EditUserProfile = () => {
 
   const [checked, setCheckBoxChecked] = useState("other");
   const [info, setInfo] = useState({
-    id: location.state.id,
+    email: location.state.email,
     gender: "OTHER",
     password: "",
     repeatpassword: "",
@@ -24,7 +24,7 @@ const EditUserProfile = () => {
 
   const validate = () => {
     const errors = {};
-
+    
     if (!info.password) {
       errors.password = "Password is required";
     }
@@ -47,8 +47,8 @@ const EditUserProfile = () => {
       setLoading(true);
       const response = await UpdateUserDataService(info);
 
-      if (response.status === 201) {
-        navigate("/account-user");
+      if (response.status === 204) {
+          navigate("/account-user");
       }
     } else {
       setLoading(false);
@@ -141,7 +141,7 @@ const EditUserProfile = () => {
             {loading && <LoadingDotsDark />}
 
             {!loading && (
-              <button id="button" type="submit" className={styles.button}>
+              <button id="button" type="submit" className={styles.sign_up_button}>
                 Save
               </button>
             )}

@@ -3,10 +3,10 @@ import OfferInputField from "./fields/OfferInputField";
 import OfferTextaria from "./fields/OfferTextaria";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import AuthenticationService from "../../../../../api/authentication/AuthenticationService";
-import UpdateOfferDataService from "../../../../../api/hobby/UpdateOfferDataService";
+import AuthenticationService from "../../../../api/authentication/AuthenticationService";
+import UpdateOfferDataService from "../../../../api/hobby/UpdateOfferDataService";
 import { useState, useEffect } from "react";
-import styles from "../../../../../css/CreateOffer.module.css";
+import styles from "../../../../css/CreateOffer.module.css";
 import { useLocation } from "react-router-dom";
 import LoadingDots from "./animation/LoadingDots";
 

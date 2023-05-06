@@ -1,9 +1,6 @@
 package backend.hobbiebackend.service.impl;
 
-import backend.hobbiebackend.dto.AppClientSignUpDto;
-import backend.hobbiebackend.dto.AvatarsDTO;
-import backend.hobbiebackend.dto.BusinessRegisterDto;
-import backend.hobbiebackend.dto.UsersDTO;
+import backend.hobbiebackend.dto.*;
 import backend.hobbiebackend.entities.*;
 import backend.hobbiebackend.enums.GenderEnum;
 import backend.hobbiebackend.enums.UserRoleEnum;
@@ -12,6 +9,7 @@ import backend.hobbiebackend.mapper.UserMapper;
 import backend.hobbiebackend.repostiory.*;
 import backend.hobbiebackend.service.UserService;
 import backend.hobbiebackend.utils.PhotoUtils;
+import backend.hobbiebackend.utils.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
@@ -34,12 +32,12 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper modelMapper;
     private final UserMapper userMapper;
     private final UserRepository userRepository;
-    private final AvatarsRepository avatarsRepository;
     private final PhotoUtils photoUtils;
     private final AppClientRepository appClientRepository;
     private final BusinessOwnerRepository businessOwnerRepository;
     private final UserInterestsRepository userInterestsRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserUtils userUtils;
 
     @Override
     public List<UserEntity> seedUsersAndUserRoles() {
@@ -78,9 +76,19 @@ public class UserServiceImpl implements UserService {
         UserEntity user = this.modelMapper.map(userDTO, UserEntity.class);
         user.setRole(UserRoleEnum.USER.name());
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        photoUtils.savePhoto(userDTO.getAvatar(), userDTO.getUsername());
-        user.setAvatar(userDTO.getAvatar().getOriginalFilename());
-        return userRepository.save(user);
+
+        final String avatarName = userDTO.getAvatar().getOriginalFilename();
+        user.setAvatar(avatarName);
+        userRepository.saveAndFlush(user);
+
+        user = userRepository.getOne(user.getId());
+        final String finalAvatarName = photoUtils.saveAvatarInDB(user, avatarName, 0);
+        user.setAvatar(finalAvatarName);
+        userRepository.saveAndFlush(user);
+
+        photoUtils.savePhoto(userDTO.getAvatar(), userDTO.getUsername(), finalAvatarName);
+
+        return user;
     }
 
     @Override
@@ -97,8 +105,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public AppClient saveUpdatedUserClient(AppClient appClient) {
-        return this.appClientRepository.save(appClient);
+    public void updatedUserEntity(UpdateAppClientDto user) {
+        UserEntity userEntity = userUtils.getUserEntity(null, null, user.getEmail());
+
+        final String username = user.getFullName();
+        if (username != null && !username.isEmpty()) {
+            userEntity.setUsername(username);
+        }
+
+        final GenderEnum gender = user.getGender();
+        if (gender != null) {
+            userEntity.setGender(gender.name());
+        }
+
+        final String password = user.getPassword();
+        if (password != null && !password.isEmpty()) {
+            userEntity.setPassword(passwordEncoder.encode(password));
+        }
+
+        final String description = user.getDescription();
+        if (description != null && !description.isEmpty()) {
+            userEntity.setDescription(description);
+        }
     }
 
     @Override
@@ -133,21 +161,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UsersDTO getUserMainDetails(String username, Integer id) {
-        Optional<UserEntity> userEntity = Optional.empty();
-        if(username != null ) {
-            userEntity = this.userRepository.findByUsername(username);
-        } else if(id != null){
-            userEntity = this.userRepository.findById(id);
-        }
-        if (userEntity.isPresent()) {
-            UserEntity user = userEntity.get();
-            final String mainAvatar = photoUtils.getEncodedFile(user.getAvatar(), username);
-            List<String> userInterests = getUserInterests(user);
-            List<AvatarsDTO> userAvatars = getUserAvatars(username, user.getAvatar(), user.getId());
-            return userMapper.mapUserToDTO(user, mainAvatar, userAvatars, userInterests);
-        } else {
-            throw new NotFoundException("Can not find user with this username");
-        }
+        UserEntity user = userUtils.getUserEntity(username, id, null);
+        final String mainAvatar = photoUtils.getEncodedFile(user.getAvatar(), username);
+        List<String> userInterests = getUserInterests(user);
+        List<AvatarsDTO> userAvatars = getUserAvatars(username, user.getId());
+        return userMapper.mapUserToDTO(user, mainAvatar, userAvatars, userInterests, null);
     }
 
     @Override
@@ -182,18 +200,6 @@ public class UserServiceImpl implements UserService {
 //        }
         userRepository.delete(user);
         return true;
-    }
-
-
-    @Override
-    public AppClient findAppClientById(Integer clientId) {
-        Optional<AppClient> user = this.appClientRepository.findById(clientId);
-        if (user.isPresent()) {
-
-            return user.get();
-        } else {
-            throw new NotFoundException("Can not find current user.");
-        }
     }
 
     @Override
@@ -231,7 +237,7 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList())
                 .forEach(user -> {
                     final String avatar = photoUtils.getEncodedFile(user.getAvatar(), user.getUsername());
-                    usersDTO.add(userMapper.mapUserToDTO(user, avatar, null, null));
+                    usersDTO.add(userMapper.mapUserToDTO(user, avatar, null, null, null));
                 });
 
         return usersDTO;
@@ -244,7 +250,7 @@ public class UserServiceImpl implements UserService {
         userRepository.findByRole(UserRoleEnum.USER.name(), username, pageable).toList()
                 .forEach(user -> {
                     final String avatar = photoUtils.getEncodedFile(user.getAvatar(), user.getUsername());
-                    usersDTO.add(userMapper.mapUserToDTO(user, avatar, null, null));
+                    usersDTO.add(userMapper.mapUserToDTO(user, avatar, null, null, null));
                 });
 
         return usersDTO;
@@ -256,16 +262,12 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
-    private List<AvatarsDTO> getUserAvatars(String username, String mainAvatar, Integer userId) {
-        List<Avatars> avatars= avatarsRepository.findByUserEntityId(userId);
-        List<AvatarsDTO> avatarsDTOList = avatars.stream().filter(avatar -> avatar.getAvatarName().equalsIgnoreCase(mainAvatar))
-                .map(avatar ->
-                        new AvatarsDTO(avatar.getAvatarsId(), photoUtils.getEncodedFile(avatar.getAvatarName(), username)))
+    private List<AvatarsDTO> getUserAvatars(String username, Integer userId) {
+        return photoUtils.getSortedAvatars(userId).stream()
+                .map(avatar -> AvatarsDTO.builder()
+                        .avatarId(avatar.getAvatarsId())
+                        .avatarFile(photoUtils.getEncodedFile(avatar.getAvatarName(), username))
+                        .build())
                 .collect(Collectors.toList());
-        avatarsDTOList.addAll(avatars.stream().filter(avatar -> !avatar.getAvatarName().equalsIgnoreCase(mainAvatar))
-                .map(avatar ->
-                        new AvatarsDTO(avatar.getAvatarsId(), photoUtils.getEncodedFile(avatar.getAvatarName(), username)))
-                .collect(Collectors.toList()));
-        return avatarsDTOList;
     }
 }

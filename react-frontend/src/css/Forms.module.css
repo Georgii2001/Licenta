@@ -85,15 +85,15 @@ input[type="checkbox"] {
   color: #5fa8d3;
 }
 
-.form_field input:focus + .label_name .content_name,
-.form_field input:valid + .lable_name .content_name {
+.form_field input:focus+.label_name .content_name,
+.form_field input:valid+.lable_name .content_name {
   transform: translateY(-150%);
   font-size: 14px;
   color: #5fa8d3;
 }
 
-.form_field input:focus + .label_name::after,
-.form_field input:valid + .label_name::after {
+.form_field input:focus+.label_name::after,
+.form_field input:valid+.label_name::after {
   transform: translateX(0%);
 }
 
@@ -140,11 +140,11 @@ input[type="checkbox"] {
   margin-top: 40px;
   overflow-wrap: normal;
   margin-bottom: 40px;
-  -moz-appearance:initial;
+  -moz-appearance: initial;
 }
 
 input[type="checkbox"]:after {
-  -moz-appearance:initial;
+  -moz-appearance: initial;
   content: " ";
   background-color: #fff;
   display: inline-block;
@@ -178,32 +178,71 @@ input[type="checkbox"]:checked:after {
   width: 300px;
 }
 
-/* .button2 */
-.button {
-  background-color: #00bff0;
-  padding: 10px 10px 10px 10px;
-  content: " ";
+.sign_up_button {
+  padding: 10px;
   justify-content: center;
-  background-color: #fff;
-  display: inline-block;
-  margin-top: 20px;
-  padding-bottom: 5px;
-  color: #00bff0;
-  width: 100px;
+  width: 100%;
   height: 50px;
-  visibility: visible;
-  border: 1px solid #00bff0;
-  padding-left: 3px;
+  background-color: #00bff0;
+  border: 3px solid #00bff0;
   border-radius: 5px;
-  margin-bottom: 60px;
+  margin-bottom: 50px;
   cursor: pointer;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.sign_up_button:hover {
+  padding: 10px;
+  justify-content: center;
+  width: 100%;
+  height: 50px;
+  background-color: #ffffff;
+  border: 3px solid #00bff0;
+  border-radius: 5px;
+  margin-bottom: 50px;
+  cursor: pointer;
+  color: #00bff0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.login_button {
+  padding: 10px;
+  justify-content: center;
+  width: 200px;
+  height: 50px;
+  background-color: #00bff0;
+  border: 3px solid #00bff0;
+  border-radius: 5px;
+  margin-top: 20px;
+  cursor: pointer;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.login_button:hover {
+  padding: 10px;
+  justify-content: center;
+  width: 200px;
+  height: 50px;
+  background-color: #ffffff;
+  border: 3px solid #00bff0;
+  border-radius: 5px;
+  margin-top: 20px;
+  cursor: pointer;
+  color: #00bff0;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 .button_password_forgot {
   color: #73bacc;
   font-size: small;
   cursor: pointer;
-  left: 0 ;
+  left: 0;
 }
 
 .checkbox_choice_section {
@@ -217,9 +256,10 @@ input::placeholder {
   color: #c2dbf1;
 }
 
-.checkbox_choice_section:hover input ~ .checkmark {
+.checkbox_choice_section:hover input~.checkmark {
   background-color: #ccc;
 }
+
 .dots {
   color: #5fa8d3;
 }
@@ -240,35 +280,30 @@ input::placeholder {
 .upload_button {
   position: relative;
   cursor: pointer;
-  background-color: #00bff0;
-  padding: 10px 10px 10px 10px;
-  content: " ";
+  padding: 10px 0px 0px 18px;
   background-color: #fff;
-  display: inline-block;
   margin-top: 25px;
-  padding-bottom: 5px;
   color: #00bff0;
   width: 200px;
   height: 40px;
-  visibility: visible;
   border: 1px solid #00bff0;
-  padding-left: 3px;
   border-radius: 5px;
   margin-bottom: 30px;
   margin-left: 40px;
+  font-size: 14px;
 }
 
 .file_name {
   font-size: 15px;
-    border-style: dotted;
-    width: 170px;
-    height: 170px;
-    margin-top: 10px;
-    border-color: #00bff0;
-    color: #5fa8d3;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  border-style: dotted;
+  width: 170px;
+  height: 170px;
+  margin-top: 10px;
+  border-color: #00bff0;
+  color: #5fa8d3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .image_preview {
@@ -279,6 +314,7 @@ input::placeholder {
   border-radius: 4px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);
 }
+
 .uploaded_avatar {
   width: 170px;
   height: 170px;
@@ -302,10 +338,12 @@ input::placeholder {
     font-size: 20px;
     margin-top: 10px;
   }
+
   .checkbox {
     font-size: 10px;
     padding-left: 15px;
   }
+
   input[type="checkbox"]:after {
     width: 15px;
     height: 15px;
@@ -317,6 +355,7 @@ input::placeholder {
     padding: -15px;
     font-weight: bold;
   }
+
   .signup_form {
     width: 90%;
   }

@@ -1,13 +1,15 @@
 package backend.hobbiebackend.dto;
 
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class UserAvatarDto {
-    private String avatar;
-    private String avatarName;
+
+    private Integer id;
+    private MultipartFile avatar;
 }

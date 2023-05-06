@@ -1,22 +1,16 @@
-import React from "react";
-import TestResultsService from "../../../api/test/TestResultsService";
-import AuthenticationService from "../../../api/authentication/AuthenticationService";
-import { useState } from "react";
-import { useEffect } from "react";
+import {React, useState, useEffect} from "react";
 import { Link } from "react-router-dom";
-import styles from "../../../css/Test.module.css";
-import layout from "../../../css/UserHome.module.css";
-import BackgroundHome from "../fragments/background/BackgroundHome";
+import styles from "../../../../css/DiscoverInterests.module.css";
+import layout from "../../../../css/UserHome.module.css";
+import BackgroundHome from "../../fragments/background/BackgroundHome";
+import { useLocation } from "react-router-dom";
+import PostDiscoveryInterestsService from "../../../../api/users/PostDiscoveryInterestsService";
 
-const TestForm = () => {
-  let key = 1;
-  let username = AuthenticationService.getLoggedInUser();
-  let [loading, setLoading] = useState(true);
+const DiscoverInterests = () => {
 
   const questions = [
     {
       questionText: "What type of accommodation do you prefer?",
-      value: "categoryOne",
       answerOptions: [
         { answerText: "Hotel", category: "Hotel" },
         { answerText: "Hostel", category: "Hostel" },
@@ -27,7 +21,6 @@ const TestForm = () => {
     },
     {
       questionText: "How is your budget?",
-      value: "categoryTwo",
       answerOptions: [
         { answerText: "I don't think about money", category: "Expensive" },
         { answerText: "Medium", category: "Medium" },
@@ -37,7 +30,6 @@ const TestForm = () => {
     },
     {
       questionText: "Where do you prefer to eat?",
-      value: "categoryThree",
       answerOptions: [
         { answerText: "Restaurants", category: "Restaurants" },
         { answerText: "Street Food", category: "Street Food" },
@@ -47,7 +39,6 @@ const TestForm = () => {
     },
     {
       questionText: "Where do you like to travel?",
-      value: "categoryFour",
       answerOptions: [
         { answerText: "Big cities", category: "City" },
         { answerText: "The mountains", category: "Mountains" },
@@ -58,7 +49,6 @@ const TestForm = () => {
     },
     {
       questionText: "Why do you travel?",
-      value: "categoryFive",
       answerOptions: [
         { answerText: "To relax", category: "Relax" },
         { answerText: "For culture", category: "Culture" },
@@ -68,7 +58,6 @@ const TestForm = () => {
     },
     {
       questionText: "What type of transport do you prefer?",
-      value: "categorySix",
       answerOptions: [
         { answerText: "Walking", category: "Walking" },
         { answerText: "Public transport", category: "Public transport" },
@@ -78,7 +67,6 @@ const TestForm = () => {
     },
     {
       questionText: "On which continent is your next journey?",
-      value: "categorySeven",
       answerOptions: [
         { answerText: "Europe", category: "Europe" },
         { answerText: "Asia", category: "Asia" },
@@ -89,7 +77,6 @@ const TestForm = () => {
     },
     {
       questionText: "What kind of trip do you want?",
-      value: "location",
       answerOptions: [
         { answerText: "City break", category: "City break" },
         { answerText: "Backpacking", category: "Backpacking" },
@@ -100,19 +87,17 @@ const TestForm = () => {
     },
   ];
 
+  let key = 1;
+  let [loading, setLoading] = useState(true);
+  
+  const location = useLocation();
+  const id = location.state.id;
+
+  const [saveInterestsList, setSaveInterestsList] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [test, setTest] = useState({
-    username: username,
-  });
 
   const handleAnswerOptionClick = (answer) => {
-    console.log(questions[currentQuestion].value);
-    console.log(answer);
-
-    setTest((test) => ({
-      ...test,
-      [questions[currentQuestion].value]: answer,
-    }));
+    setSaveInterestsList(prevState => ([...prevState, answer]));
 
     const nextQuestion = currentQuestion + 1;
     setCurrentQuestion(nextQuestion);
@@ -124,11 +109,11 @@ const TestForm = () => {
   useEffect(() => {
     const check_uploaded = () => {
       if (!loading) {
-        TestResultsService(test);
+        PostDiscoveryInterestsService(id, saveInterestsList);
       }
     };
     check_uploaded();
-  }, [loading, test]);
+  }, [loading, id, saveInterestsList]);
 
   return (
     <>
@@ -136,7 +121,7 @@ const TestForm = () => {
         {currentQuestion === questions.length && (
           <div className={styles.test_form_end}>
             <section className={styles.test_end}>
-              Thank you! Please visit your homepage to discover new travel parteners!{" "}
+              Thank you! Please visit your homepage to discover new travel parteners!
               <br></br>
               <button type="submit" className={styles.button}>
                 <Link to="/user-home" className={styles.link_home}>
@@ -184,4 +169,4 @@ const TestForm = () => {
   );
 };
 
-export default TestForm;
+export default DiscoverInterests;

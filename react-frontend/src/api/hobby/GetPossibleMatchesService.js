@@ -1,22 +1,15 @@
 import AuthenticationService from "../authentication/AuthenticationService";
 import axios from "../customAxiosConfig/CustomAxiosConfig";
 
-const HomeDataService = (page) => {
+const GetPossibleMatchesService = () => {
   let username = AuthenticationService.getLoggedInUser();
   const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
 
   try {
-    let role = "business";
 
-    if (isUserLoggedIn) {
-      role = "user";
-    }
-
-    return axios.get(`/home`, {
+    return axios.get(`/possible-matches`, {
       params: {
-        username,
-        role,
-        page,
+        username
       },
     });
   } catch (err) {
@@ -28,7 +21,7 @@ const HomeDataService = (page) => {
   }
 };
 
-export default HomeDataService;
+export default GetPossibleMatchesService;
 
 
 

@@ -1,10 +1,14 @@
 import axios from "../customAxiosConfig/CustomAxiosConfig";
+import AuthenticationService from "../authentication/AuthenticationService";
 
-const DeleteUserAvatarService = (userAvatarName) => {
+const DeleteUserAvatarService = (avatarId) => {
+    let username = AuthenticationService.getLoggedInUser();
+
     try {
-        const res = axios.delete(`/deleteUserAvatar`, {
+        const res = axios.delete(`/avatar`, {
             params: {
-                userAvatarName,
+                username,
+                avatarId,
             },
         });
 

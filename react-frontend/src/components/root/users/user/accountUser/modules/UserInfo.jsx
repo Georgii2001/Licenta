@@ -36,7 +36,7 @@ const UserInfo = ({ user }) => {
         event.preventDefault();
         let path = "/edit-profile";
         navigate(path, {
-            state: { id: user.id, gender: user.gender },
+            state: { email: user.email, gender: user.gender },
         });
     };
 
@@ -48,25 +48,19 @@ const UserInfo = ({ user }) => {
                 </span>
                 <hr className={styles.account_hr}></hr>
                 <br></br>
-                <p> Username: {user.username} </p>
-                <p> Email: {user.email}</p>
-                <p> Gender: {user.gender} </p>
-                <p> Change password: **** </p>
+                <div className={styles.user_info_style}>
+                    <div className={styles.user_property}> Username: {user.username} </div>
+                    <div className={styles.user_property}> Email: {user.email}</div>
+                    <div className={styles.user_property}> Gender: {user.gender} </div>
+                    <div className={styles.user_property}> Password: **** </div>
+                </div>
                 <br></br>
-                <article className={styles.account_buttons}>
-                    <Link
-                        to="#"
-                        onClick={handleDelete(user)}
-                        className={styles.account_btn}
-                    >
-                        Delete
-                    </Link>
-                    <Link
-                        to="#"
-                        onClick={handleEdit(user)}
-                        className={styles.account_btn}
-                    >
+                <article>
+                    <Link to="#" onClick={handleEdit(user)} className={styles.account_button}>
                         Edit
+                    </Link>
+                    <Link to="#" onClick={handleDelete(user)} className={styles.account_button}>
+                        Delete
                     </Link>
                 </article>
             </div>

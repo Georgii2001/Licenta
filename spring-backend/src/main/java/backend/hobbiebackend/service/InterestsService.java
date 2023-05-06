@@ -8,5 +8,7 @@ public interface InterestsService {
 
     void saveNewUserInterest(String username, List<String> interestsList);
 
+    void discoverNewInterests(Integer userId, List<String> interestsList);
+
     void removeCurrentUserInterest(String username, String interest);
 }

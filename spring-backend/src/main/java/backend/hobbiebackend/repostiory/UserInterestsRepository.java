@@ -1,6 +1,7 @@
 package backend.hobbiebackend.repostiory;
 
 import backend.hobbiebackend.entities.UserInterests;
+import backend.hobbiebackend.models.UserMatches;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,6 +17,15 @@ public interface UserInterestsRepository  extends JpaRepository<UserInterests, I
     @Transactional
     @Query("DELETE FROM UserInterests ui " +
             "WHERE ui.userEntity.id = :userId " +
-            "AND ui.interests.interestId = (SELECT interestId FROM Interests i WHERE interestName = :interest)")
+            "AND ui.interests.interestId = (SELECT interestId FROM Interests WHERE interestName = :interest)")
     void deleteUserInterest(Integer userId, String interest);
+
+    @Transactional
+    void deleteByUserEntityId(Integer userId);
+
+    @Query("SELECT new backend.hobbiebackend.models.UserMatches(userEntity.id, COUNT(*)) " +
+            "FROM UserInterests WHERE userEntity.id <> :userId " +
+            "AND interests.interestId IN (SELECT interests.interestId FROM UserInterests WHERE userEntity.id = :userId) " +
+            "GROUP BY userEntity.id ORDER BY COUNT(*)")
+    List<UserMatches> countCommonInterestsByUserId(Integer userId);
 }

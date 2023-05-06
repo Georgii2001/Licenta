@@ -156,12 +156,12 @@ const Login = () => {
           </p>
           {loading && <LoadingDotsDark className={styles.dots} />}  
           {!loading && (
-            <button className={styles.button} onClick={loginClicked}>
+            <button className={styles.login_button} onClick={loginClicked}>
               Login
             </button>
           )}
         </form>
-      </main>
+      </main> 
       <Background />
     </>
   );

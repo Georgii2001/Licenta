@@ -1,14 +1,14 @@
 import axios from "../customAxiosConfig/CustomAxiosConfig";
 import AuthenticationService from "../authentication/AuthenticationService";
 
-const UpdateuserMainAvatar = (userAvatarName) => {
+const UpdateUserMainAvatar = (avatarId) => {
     let username = AuthenticationService.getLoggedInUser();
 
     try {
-        return axios.post(`/changeUserMainAvatar`, null, {
+        return axios.post(`/changeMainAvatar`, null, {
             params: {
                 username,
-                userAvatarName
+                avatarId
             },
         });
     } catch (err) {
@@ -20,4 +20,4 @@ const UpdateuserMainAvatar = (userAvatarName) => {
     }
 };
 
-export default UpdateuserMainAvatar;
+export default UpdateUserMainAvatar;

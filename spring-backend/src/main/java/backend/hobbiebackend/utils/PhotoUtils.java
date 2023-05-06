@@ -1,6 +1,10 @@
 package backend.hobbiebackend.utils;
 
+import backend.hobbiebackend.entities.Avatars;
+import backend.hobbiebackend.entities.UserEntity;
 import backend.hobbiebackend.handler.NotFoundException;
+import backend.hobbiebackend.repostiory.AvatarsRepository;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Component;
@@ -9,15 +13,20 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import static backend.hobbiebackend.constants.Constants.SEPARATOR;
-import static backend.hobbiebackend.constants.Constants.USER_PHOTOS_PATH;
+import static backend.hobbiebackend.constants.Constants.*;
 
 @Component
+@RequiredArgsConstructor
 public class PhotoUtils {
 
-    public void savePhoto(MultipartFile avatar, String username) {
-        final String pathname = getPathMyPhotos(username) + avatar.getOriginalFilename();
+    private final AvatarsRepository avatarsRepository;
+
+    public void savePhoto(MultipartFile avatar, String username, String avatarFileName) {
+        final String pathname = getPathMyPhotos(username) + avatarFileName;
         File filePath = new File(pathname);
         createMyFolder(filePath);
 
@@ -33,6 +42,27 @@ public class PhotoUtils {
         if (!parentDir.exists()) {
             parentDir.mkdirs();
         }
+    }
+
+    public String saveAvatarInDB(UserEntity userEntity, String avatarName, Integer priority) {
+        Avatars avatar = Avatars.builder()
+                .userEntity(userEntity)
+                .avatarName(avatarName)
+                .avatarPriority(priority)
+                .build();
+        avatarsRepository.saveAndFlush(avatar);
+
+        final String finalAvatarName = avatar.getAvatarsId() + UNDERSCORE + avatarName;
+        avatar.setAvatarName(finalAvatarName);
+        avatarsRepository.saveAndFlush(avatar);
+
+        return finalAvatarName;
+    }
+
+    public List<Avatars> getSortedAvatars(Integer userId) {
+        return avatarsRepository.findByUserEntityId(userId).stream()
+                .sorted(Comparator.comparing(Avatars::getAvatarPriority))
+                .collect(Collectors.toList());
     }
 
     public String getEncodedFile(String fileName, String username) {

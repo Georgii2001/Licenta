@@ -29,6 +29,13 @@ public class InterestsController {
         interestsService.saveNewUserInterest(username, interestsList);
     }
 
+    @PostMapping("/discoverInterests")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Save user interests", security = @SecurityRequirement(name = "bearerAuth"))
+    public void discoverUserInterests(@RequestParam Integer userId, @RequestParam List<String> interestsList) {
+        interestsService.discoverNewInterests(userId, interestsList);
+    }
+
     @DeleteMapping("/userInterests")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Delete user interests", security = @SecurityRequirement(name = "bearerAuth"))

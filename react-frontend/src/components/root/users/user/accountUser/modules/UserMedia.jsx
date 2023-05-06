@@ -1,13 +1,12 @@
 import React from "react";
 import "react-confirm-alert/src/react-confirm-alert.css";
-import { useLayoutEffect } from "react";
 import styles from "../../../../../../css/Account.module.css";
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import Tooltip from '@mui/material/Tooltip';
 import PostUserAvatarService from "../../../../../../api/users/PostUserAvatarService";
 import DeleteUserAvatarService from "../../../../../../api/users/DeleteUserAvatarService";
-import UpdateuserMainAvatar from "../../../../../../api/users/UpdateUserMainAvatar";
+import UpdateUserMainAvatar from "../../../../../../api/users/UpdateUserMainAvatar";
 
 const UserMedia = ({ userAvatars, refreshUserData }) => {
 
@@ -17,38 +16,26 @@ const UserMedia = ({ userAvatars, refreshUserData }) => {
         avatarInput.current.click();
     };
 
-    const changeMainAvatar = async (avatarName) => {
-        await UpdateuserMainAvatar(avatarName);
+    const changeMainAvatar = async (avatarId) => {
+        await UpdateUserMainAvatar(avatarId);
 
-        // GetUserAvatarService().then((response) => {
-        //     setUserAvatars(response.data);
-        // });
+        refreshUserData();
     };
 
     const saveAvatarInDB = async (avatar) => {
         const formData = new FormData();
         formData.append("avatar", avatar);
-        formData.append("avatarName", avatar.name)
         await PostUserAvatarService(formData);
 
-        // GetUserAvatarService().then((response) => {
-        //     setUserAvatars(response.data);
-        // });
+        avatarInput.current.value = "";
+        refreshUserData();
     };
 
-    const removeAvatarFromDB = async (avatarName) => {
-        await DeleteUserAvatarService(avatarName);
+    const removeAvatarFromDB = async (avatarId) => {
+        await DeleteUserAvatarService(avatarId);
 
-        // GetUserAvatarService().then((response) => {
-        //     setUserAvatars(response.data);
-        // });
+        refreshUserData();
     };
-
-    useLayoutEffect(() => {
-        // GetUserAvatarService().then((response) => {
-        //     setUserAvatars(response.data);
-        // });
-    }, []);
 
     return (
         <>
@@ -61,7 +48,7 @@ const UserMedia = ({ userAvatars, refreshUserData }) => {
                     {userAvatars && userAvatars.length ?
                         <ImageList cols={3} gap={8} sx={{ overflowY: 'hidden' }}>
                             {userAvatars.map((avatar, index) => (
-                                <ImageListItem key={avatar.avatarId} className={styles.avatar_style} >
+                                <ImageListItem key={avatar.avatarId} >
                                     <img
                                         title={avatar.avatarId}
                                         src={`data:image/png;base64,${avatar.avatarFile}`}
@@ -82,7 +69,7 @@ const UserMedia = ({ userAvatars, refreshUserData }) => {
                             ))}
                             <span>
                                 <div className={styles.add_more_photo} onClick={handleClick}>
-                                    <span>Add more photo</span>
+                                    <div className={styles.add_more_photo_text}>Add more photo</div>
                                 </div>
                                 <input
                                     id="avatar"
@@ -93,6 +80,7 @@ const UserMedia = ({ userAvatars, refreshUserData }) => {
                                     onChange={(e) => {
                                         const file = e.target.files[0];
                                         saveAvatarInDB(file);
+
                                     }} />
                             </span>
                         </ImageList>

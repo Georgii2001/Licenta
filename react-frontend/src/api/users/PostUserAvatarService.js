@@ -5,7 +5,7 @@ const PostUserAvatarService = (avatar) => {
   let username = AuthenticationService.getLoggedInUser();
 
   try {
-    return axios.post(`/userAvatar`, avatar, {
+    return axios.post(`/avatar`, avatar, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

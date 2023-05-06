@@ -23,8 +23,8 @@ const SignUp = () => {
 
   const [errors, setErrors] = useState({});
 
-
   const avatarInput = React.useRef(null);
+  
   const handleClick = event => {
     avatarInput.current.click();
   };
@@ -209,9 +209,9 @@ const SignUp = () => {
                 <img src={avatarUrl} className={styles.uploaded_avatar} />
                 : <span className={styles.file_name}>No photo chosen</span>}
               </span>
-              <button className={styles.upload_button} onClick={handleClick}>
-                <span>Choose a profile photo</span>
-              </button>
+              <div className={styles.upload_button} onClick={handleClick}>
+                Choose a profile photo
+              </div>
               <input
                   id="avatar"
                   name="avatar"
@@ -221,14 +221,12 @@ const SignUp = () => {
                   onChange={(e) => {
                     const file = e.target.files[0];
                     setInfo({ ...info, avatar: file });
-                    console.log(info);
 
                     const reader = new FileReader();
                     reader.onload = () => {
                       setAvatarUrl(reader.result);
                     };
                     reader.readAsDataURL(file);
-                    console.log(info);
                   }}
                 />
             </div>
@@ -237,7 +235,7 @@ const SignUp = () => {
             {loading && <LoadingDotsDark />}
 
             {!loading && (
-              <button id="button" type="submit" className={styles.button}>
+              <button id="button" type="submit" className={styles.sign_up_button}>
                 Sign up
               </button>
             )}

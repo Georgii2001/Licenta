@@ -140,9 +140,11 @@
   font-weight: bold;
   border-bottom: 2px solid rgb(255, 177, 33);
   margin-right: 15%;
+  font-size: 17px;
 }
 
 .page_title {
+  font-size: 17px;
   padding: 10px;
   margin-right: 10%;
 }
@@ -201,6 +203,46 @@
   margin-top: 5px;
   font-size: 22px;
   color: #585772;
+}
+
+.user_info_page_main {
+  margin: auto;
+  width: 200px;
+}
+
+.user_property {
+  font-size: 16px;
+  color: #505050;
+}
+
+.user_property:not(:last-child) {
+  margin-bottom: 15px;
+}
+
+.user_description_page_main {
+  display: inline-block;
+  border-radius: 20px;
+  background-color: rgb(225, 252, 227);
+  font-size: 16px;
+  color: #505050;
+  width: 100%;
+  padding: 15px;
+}
+
+.user_description_page_interests {
+  padding: 15px;
+  font-size: 16px;
+  color: #505050;
+}
+
+.interest_item {
+  background-color: rgb(225, 230, 253);
+  border: 2px solid rgb(225, 230, 253);
+  display: inline-block;
+  padding: .5em 1em;
+  border-radius: 20px;
+  margin-left: 10px;
+  margin-top: 10px;
 }
 
 @media all and (max-width: 1540px) {
@@ -273,10 +315,12 @@
 
 @media all and (max-width: 600px) {
   .page_title_active {
+    font-size: 14px;
     margin-right: 5%;
   }
 
   .page_title {
+    font-size: 14px;
     margin-right: 5%;
   }
 }

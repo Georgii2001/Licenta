@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../../../../../../css/CreateOffer.module.css";
+import styles from "../../../../../css/CreateOffer.module.css";
 
 const OfferInputField = (props) => {
   return (

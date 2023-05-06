@@ -1,6 +1,7 @@
 package backend.hobbiebackend.entities;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import java.sql.Timestamp;
 
 @Data
 @Entity
+@Builder
 @Table(name = "avatars")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,8 +29,9 @@ public class Avatars {
     String avatarName;
 
     @Column(name = "avatar_priority", nullable = false)
-    String avatarPriority;
-    @Column(name = "SYS_CREATION_DATE", insertable = false)
+    Integer avatarPriority;
+
+    @Column(name = "SYS_CREATION_DATE", insertable = false, updatable = false)
     private Timestamp creationDate;
 
     @Column(name = "SYS_UPDATE_DATE", insertable = false, updatable = false)

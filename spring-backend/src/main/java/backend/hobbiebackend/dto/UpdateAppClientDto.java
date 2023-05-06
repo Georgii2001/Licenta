@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateAppClientDto {
-    private Integer id;
+
+    String email;
     private String fullName;
     private GenderEnum gender;
     private String password;
-
+    String description;
 }

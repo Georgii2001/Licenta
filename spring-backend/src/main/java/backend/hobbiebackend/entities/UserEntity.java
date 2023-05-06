@@ -6,13 +6,14 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 @Data
+@Entity
+@Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@Table(name = "users")
 public class UserEntity extends BaseEntity implements Serializable, Cloneable {
 
     private static final long serialVersionUID = 2798509641422598279L;
@@ -33,6 +34,12 @@ public class UserEntity extends BaseEntity implements Serializable, Cloneable {
     @Column(nullable = false)
     private String password;
     private String avatar;
+
+    @Column(name = "SYS_CREATION_DATE", insertable = false, updatable = false)
+    private Timestamp creationDate;
+
+    @Column(name = "SYS_UPDATE_DATE", insertable = false, updatable = false)
+    private Timestamp updateDate;
 
     @Override
     public Object clone() throws CloneNotSupportedException {
