@@ -164,7 +164,7 @@ public class UserServiceImpl implements UserService {
         UserEntity user = userUtils.getUserEntity(username, id, null);
         final String mainAvatar = photoUtils.getEncodedFile(user.getAvatar(), username);
         List<String> userInterests = getUserInterests(user);
-        List<AvatarsDTO> userAvatars = getUserAvatars(username, user.getId());
+        List<AvatarsDTO> userAvatars = photoUtils.getUserAvatars(user.getUsername(), user.getId());
         return userMapper.mapUserToDTO(user, mainAvatar, userAvatars, userInterests, null);
     }
 
@@ -259,15 +259,6 @@ public class UserServiceImpl implements UserService {
     public List<String> getUserInterests(UserEntity user) {
         return userInterestsRepository.findByUserEntityId(user.getId()).stream()
                 .map(userInterest -> userInterest.getInterests().getInterestName())
-                .collect(Collectors.toList());
-    }
-
-    private List<AvatarsDTO> getUserAvatars(String username, Integer userId) {
-        return photoUtils.getSortedAvatars(userId).stream()
-                .map(avatar -> AvatarsDTO.builder()
-                        .avatarId(avatar.getAvatarsId())
-                        .avatarFile(photoUtils.getEncodedFile(avatar.getAvatarName(), username))
-                        .build())
                 .collect(Collectors.toList());
     }
 }

@@ -1,5 +1,6 @@
 package backend.hobbiebackend.utils;
 
+import backend.hobbiebackend.dto.AvatarsDTO;
 import backend.hobbiebackend.entities.Avatars;
 import backend.hobbiebackend.entities.UserEntity;
 import backend.hobbiebackend.handler.NotFoundException;
@@ -57,6 +58,15 @@ public class PhotoUtils {
         avatarsRepository.saveAndFlush(avatar);
 
         return finalAvatarName;
+    }
+
+    public List<AvatarsDTO> getUserAvatars(String username, Integer userId) {
+        return getSortedAvatars(userId).stream()
+                .map(avatar -> AvatarsDTO.builder()
+                        .avatarId(avatar.getAvatarsId())
+                        .avatarFile(getEncodedFile(avatar.getAvatarName(), username))
+                        .build())
+                .collect(Collectors.toList());
     }
 
     public List<Avatars> getSortedAvatars(Integer userId) {

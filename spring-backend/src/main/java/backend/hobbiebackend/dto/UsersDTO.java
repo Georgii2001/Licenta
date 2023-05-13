@@ -19,7 +19,6 @@ public class UsersDTO {
     String username;
     GenderEnum gender;
     String email;
-    String password;
     String avatarFile;
     String role;
     String description;

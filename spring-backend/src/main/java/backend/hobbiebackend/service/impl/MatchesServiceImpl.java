@@ -2,7 +2,6 @@ package backend.hobbiebackend.service.impl;
 
 import backend.hobbiebackend.dto.UsersDTO;
 import backend.hobbiebackend.entities.UserEntity;
-import backend.hobbiebackend.enums.UserRoleEnum;
 import backend.hobbiebackend.mapper.UserMapper;
 import backend.hobbiebackend.models.UserMatches;
 import backend.hobbiebackend.repostiory.UserInterestsRepository;
@@ -13,7 +12,9 @@ import backend.hobbiebackend.utils.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,7 +35,7 @@ public class MatchesServiceImpl implements MatchesService {
         List<UserMatches> userMatches = userInterestsRepository.countCommonInterestsByUserId(userEntity.getId());
 
         Map<Integer, Long> userMatchesMap = userMatches.stream()
-                .collect(Collectors.toMap(UserMatches::getUserId,UserMatches::getMatches));
+                .collect(Collectors.toMap(UserMatches::getUserId, UserMatches::getMatches));
 
         return userRepository.findAll().stream()
                 .filter(user -> !user.getUsername().equalsIgnoreCase(username))
