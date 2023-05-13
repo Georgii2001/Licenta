@@ -3,7 +3,6 @@ import axios from "../customAxiosConfig/CustomAxiosConfig";
 
 const GetPossibleMatchesService = () => {
   let username = AuthenticationService.getLoggedInUser();
-  const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
 
   try {
 

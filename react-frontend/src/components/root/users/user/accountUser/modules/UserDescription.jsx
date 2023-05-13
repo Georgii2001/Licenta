@@ -1,7 +1,6 @@
 import { React, useState, useRef } from "react";
 import styles from "../../../../../../css/Account.module.css";
 import editButtonImg from "../../../../../../img/editButton.png";
-import { useLocation } from "react-router-dom";
 import UpdateUserDataService from "../../../../../../api/users/UpdateUserDataService";
 
 const UserDescription = ({ email, description, refreshUserData }) => {

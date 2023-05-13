@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import BackgroundHome from "../fragments/background/BackgroundHome";
 import GetPossibleMatchesService from "../../../api/hobby/GetPossibleMatchesService";
 import AuthenticationService from "../../../api/authentication/AuthenticationService";
@@ -28,7 +28,6 @@ const UserHome = () => {
       });
     }
   };
-
 
   const updateCurrentIndex = (val) => {
     setCurrentIndex(val);

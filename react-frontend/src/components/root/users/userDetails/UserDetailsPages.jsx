@@ -5,6 +5,7 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import UserByIdDataService from "../../../../api/users/UserByIdDataService";
 import UserInfoPage from "./pages/UserInfoPage";
 import UserDescriptionPage from "./pages/UserDescriptionPage";
+import UserMediaPage from "./pages/UserMediaPage";
 
 const UserDetailsPages = ({ id }) => {
 
@@ -51,7 +52,7 @@ const UserDetailsPages = ({ id }) => {
             <br></br>
 
             <section className={styles.hobbie_lable}>
-              {currentPage === "Media" && <p></p>}
+              {currentPage === "Media" && <UserMediaPage avatars={user.avatarFiles} />}
               {currentPage === "Description" && <UserDescriptionPage description={user.description} interests={user.interests} />}
               {currentPage === "Contacts" && <UserInfoPage user={user} />}
             </section>
