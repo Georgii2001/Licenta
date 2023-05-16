@@ -1,7 +1,7 @@
 package backend.hobbiebackend.config;
 
 import backend.hobbiebackend.filter.JwtFilter;
-import backend.hobbiebackend.security.HobbieUserDetailsService;
+import backend.hobbiebackend.security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,21 +20,21 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
-    private final HobbieUserDetailsService hobbieUserDetailsService;
+    private final UserDetailsServiceImpl userDetailsService;
     private final PasswordEncoder passwordEncoder;
 
     private final JwtFilter jwtFilter;
 
     @Autowired
-    public SecurityConfiguration(JwtFilter jwtFilter, HobbieUserDetailsService hobbieUserDetailsService, PasswordEncoder passwordEncoder) {
-        this.hobbieUserDetailsService = hobbieUserDetailsService;
+    public SecurityConfiguration(JwtFilter jwtFilter, UserDetailsServiceImpl userDetailsServiceImpl, PasswordEncoder passwordEncoder) {
+        this.userDetailsService = userDetailsServiceImpl;
         this.jwtFilter = jwtFilter;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(hobbieUserDetailsService);
+        auth.userDetailsService(userDetailsService);
     }
 
     @Override

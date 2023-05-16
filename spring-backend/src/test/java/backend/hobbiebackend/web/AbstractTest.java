@@ -17,7 +17,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = {UserControllerTest.class, TestControllerTest.class, HobbyControllerTest.class})
+@SpringBootTest(classes = {UserControllerTest.class})
 @WebAppConfiguration
 public abstract class AbstractTest {
     protected MockMvc mvc;

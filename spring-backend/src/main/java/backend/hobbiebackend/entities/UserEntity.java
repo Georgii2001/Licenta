@@ -25,10 +25,6 @@ public class UserEntity extends BaseEntity implements Serializable, Cloneable {
     private String gender;
     String description;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "test_results_id", referencedColumnName = "id")
-    private Test testResults;
-
     @Column(nullable = false)
     private String role;
     @Column(nullable = false)

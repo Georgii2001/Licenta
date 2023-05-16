@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Header from "./components/root/fragments/header/Header";
 import Home from "./components/root/home/Home";
 import SignUp from "./components/root/users/signUp/SignUp";
-import RegisterBusiness from "./components/root/users/signUp/RegisterBusiness";
 import Login from "./components/root/users/login/Login";
 import UserHome from "./components/root/users/UsersHome";
 import AccountUser from "./components/root/users/user/accountUser/AccountUser";
@@ -31,7 +30,6 @@ function App() {
           <Route element={<ProtectedRoutesGuest />}>
             <Route path="/" element={<Home />} />
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/register-business" element={<RegisterBusiness />} />
             <Route path="/login" element={<Login />} />
             <Route path="/change-password" element={<PasswordChange />} />
             <Route path="/password/:id" element={<SetUpNewPassword />} />

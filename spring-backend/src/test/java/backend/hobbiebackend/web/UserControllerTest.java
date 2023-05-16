@@ -2,11 +2,8 @@ package backend.hobbiebackend.web;
 
 import backend.hobbiebackend.controller.UserController;
 import backend.hobbiebackend.dto.AppClientSignUpDto;
-import backend.hobbiebackend.dto.BusinessRegisterDto;
 import backend.hobbiebackend.dto.UpdateAppClientDto;
 import backend.hobbiebackend.dto.UpdateBusinessDto;
-import backend.hobbiebackend.entities.AppClient;
-import backend.hobbiebackend.entities.BusinessOwner;
 import backend.hobbiebackend.entities.UserEntity;
 import backend.hobbiebackend.enums.GenderEnum;
 import backend.hobbiebackend.enums.UserRoleEnum;
@@ -26,7 +23,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -34,12 +30,9 @@ import static org.mockito.Mockito.when;
 class UserControllerTest extends AbstractTest {
     @Autowired
     private UserController controller;
-    private BusinessRegisterDto businessRegisterDto;
     private UpdateAppClientDto updateAppClientDto;
     private UpdateBusinessDto updateBusinessDto;
     private AppClientSignUpDto appClientSignUpDto;
-    private BusinessOwner businessOwner;
-    private AppClient appClient;
 
     @MockBean
     private UserService userService;
@@ -56,8 +49,6 @@ class UserControllerTest extends AbstractTest {
         appClientSignUpDto.setEmail("testemail@gmail.com");
         appClientSignUpDto.setFullName("full name");
         appClientSignUpDto.setGender(GenderEnum.FEMALE);
-        appClient = modelMapper.map(appClientSignUpDto, AppClient.class);
-        appClient.setRole(UserRoleEnum.ADMIN.name());
 
         //update client
         updateAppClientDto = new UpdateAppClientDto();
@@ -65,18 +56,6 @@ class UserControllerTest extends AbstractTest {
         updateAppClientDto.setPassword("topsecret");
         updateAppClientDto.setFullName("full name");
         updateAppClientDto.setGender(GenderEnum.FEMALE);
-
-
-        // prepare data business
-        businessRegisterDto = new BusinessRegisterDto();
-        businessRegisterDto.setUsername("business");
-        businessRegisterDto.setPassword("topsecret");
-        businessRegisterDto.setEmail("test@gmail.com");
-        businessRegisterDto.setBusinessName("business name");
-        businessRegisterDto.setAddress("Business address");
-        businessOwner = modelMapper.map(businessRegisterDto, BusinessOwner.class);
-        businessOwner.setRole(UserRoleEnum.ADMIN.name());
-
 
         //update business
         updateBusinessDto = new UpdateBusinessDto();
@@ -109,73 +88,15 @@ class UserControllerTest extends AbstractTest {
     }
 
     @Test
-    public void register_business_should_work() throws Exception {
-        String uri = "/register";
-
-        String inputJson = super.mapToJson(businessRegisterDto);
-        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.post(uri)
-                .contentType(MediaType.APPLICATION_JSON_VALUE).content(inputJson)).andReturn();
-
-        int status = mvcResult.getResponse().getStatus();
-        assertEquals(201, status);
-    }
-
-    @Test
     public void update_user_should_work() throws Exception {
         String uri = "/user";
 
         String inputJson = super.mapToJson(updateAppClientDto);
-        appClient.setId(1);
 
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.put(uri)
                 .contentType(MediaType.APPLICATION_JSON_VALUE).content(inputJson)).andReturn();
 
         int status = mvcResult.getResponse().getStatus();
         assertEquals(201, status);
-    }
-
-    @Test
-    public void update_business_should_work() throws Exception {
-        String uri = "/business";
-
-        String inputJson = super.mapToJson(updateBusinessDto);
-        businessOwner.setId(updateBusinessDto.getId());
-
-        when(userService.findBusinessOwnerById(1)).thenReturn(businessOwner);
-        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.put(uri)
-                .contentType(MediaType.APPLICATION_JSON_VALUE).content(inputJson)).andReturn();
-
-        int status = mvcResult.getResponse().getStatus();
-        assertEquals(201, status);
-    }
-
-    @Test
-    public void delete_user_should_work_when_not_found() throws Exception {
-        String uri = "/user/1";
-        Integer id = 1;
-
-        when(userService.deleteUser(id)).thenReturn(false);
-
-        String inputJson = super.mapToJson(id);
-        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.delete(uri)
-                .contentType(MediaType.APPLICATION_JSON_VALUE).content(inputJson)).andReturn();
-
-        int status = mvcResult.getResponse().getStatus();
-        assertEquals(404, status);
-    }
-
-    @Test
-    public void delete_user_should_work() throws Exception {
-        String uri = "/user/1";
-        Integer id = 1;
-
-        when(userService.deleteUser(id)).thenReturn(true);
-
-        String inputJson = super.mapToJson(id);
-        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.delete(uri)
-                .contentType(MediaType.APPLICATION_JSON_VALUE).content(inputJson)).andReturn();
-
-        int status = mvcResult.getResponse().getStatus();
-        assertEquals(200, status);
     }
 }

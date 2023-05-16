@@ -52,16 +52,11 @@ const NavLinks = () => {
         </ul>
       )}
 
-      {!userLogged && !businessLogged && (
+      {!userLogged && (
         <ul className={styles.nav_links}>
           {location.pathname !== "/signup" && location.pathname !== "/" && (
             <li className={styles.nav_link}>
               <NavLink to="/signup">Sign up</NavLink>
-            </li>
-          )}
-          {location.pathname !== "/register-business" && (
-            <li className={styles.nav_link}>
-              <NavLink to="register-business">Register Bizz</NavLink>
             </li>
           )}
           {location.pathname !== "/login" && (

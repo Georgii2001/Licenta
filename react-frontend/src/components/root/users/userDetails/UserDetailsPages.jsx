@@ -45,16 +45,12 @@ const UserDetailsPages = ({ id }) => {
               <span onClick={() => changePage("Description")} className={currentPage === "Description" ? styles.page_title_active : styles.page_title}>
                 Description
               </span>
-              <span onClick={() => changePage("Contacts")} className={currentPage === "Contacts" ? styles.page_title_active : styles.page_title}>
-                Contacts
-              </span>
             </article>
             <br></br>
 
             <section className={styles.hobbie_lable}>
               {currentPage === "Media" && <UserMediaPage avatars={user.avatarFiles} />}
               {currentPage === "Description" && <UserDescriptionPage description={user.description} interests={user.interests} />}
-              {currentPage === "Contacts" && <UserInfoPage user={user} />}
             </section>
           </div>
         </div>

@@ -1,14 +1,12 @@
 package backend.hobbiebackend.controller;
 
 import backend.hobbiebackend.dto.*;
-import backend.hobbiebackend.entities.AppClient;
-import backend.hobbiebackend.entities.BusinessOwner;
 import backend.hobbiebackend.entities.UserEntity;
 import backend.hobbiebackend.enums.UserRoleEnum;
 import backend.hobbiebackend.handler.NotFoundException;
 import backend.hobbiebackend.jwt.JwtRequest;
 import backend.hobbiebackend.jwt.JwtResponse;
-import backend.hobbiebackend.security.HobbieUserDetailsService;
+import backend.hobbiebackend.security.UserDetailsServiceImpl;
 import backend.hobbiebackend.service.NotificationService;
 import backend.hobbiebackend.service.UserService;
 import backend.hobbiebackend.utils.JWTUtils;
@@ -35,7 +33,7 @@ public class UserController {
     private final NotificationService notificationService;
     private final JWTUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
-    private final HobbieUserDetailsService hobbieUserDetailsService;
+    private final UserDetailsServiceImpl userDetailsService;
 
     @PostMapping("/signup")
     @Operation(summary = "Create new client-user")
@@ -47,26 +45,10 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
-    @PostMapping("/register")
-    @Operation(summary = "Create new business-user")
-    public ResponseEntity<?> registerBusiness(@RequestBody BusinessRegisterDto business) {
-        if (this.userService.businessExists(business.getBusinessName()) || this.userService.userExists(business.getUsername(), business.getEmail())) {
-            throw new RuntimeException("Username or email address already in use.");
-        }
-        BusinessOwner businessOwner = this.userService.registerBusiness(business);
-        return new ResponseEntity<>(businessOwner, HttpStatus.CREATED);
-    }
-
     @GetMapping("/client")
     @Operation(summary = "Show client-user information", security = @SecurityRequirement(name = "bearerAuth"))
     public UsersDTO showUserDetails(@RequestParam(required = false) String username, @RequestParam(required = false) Integer id) {
         return this.userService.getUserMainDetails(username, id);
-    }
-
-    @GetMapping("/business")
-    @Operation(summary = "Show business-user information", security = @SecurityRequirement(name = "bearerAuth"))
-    public BusinessOwner showBusinessDetails(@RequestParam String username) {
-        return this.userService.findBusinessByUsername(username);
     }
 
     @PutMapping("/user")
@@ -97,31 +79,6 @@ public class UserController {
         return new ResponseEntity<>(userById, HttpStatus.CREATED);
     }
 
-    @PutMapping("/business")
-    @Operation(summary = "Update business-user, (use existing user id)", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<?> updateBusiness(@RequestBody UpdateBusinessDto business) {
-        BusinessOwner businessOwner = this.userService.findBusinessOwnerById(business.getId());
-        if (this.userService.businessExists(business.getBusinessName()) && (!businessOwner.getBusinessName().equals(business.getBusinessName()))) {
-            throw new RuntimeException("Business name already in use.");
-        }
-        businessOwner.setBusinessName(business.getBusinessName());
-        businessOwner.setPassword(this.passwordEncoder.encode(business.getPassword()));
-        businessOwner.setAddress(business.getAddress());
-        this.userService.saveUpdatedUser(businessOwner);
-
-        return new ResponseEntity<>(businessOwner, HttpStatus.CREATED);
-    }
-
-    @DeleteMapping("/user/{id}")
-    @Operation(summary = "Delete user", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<Integer> deleteUser(@PathVariable Integer id) {
-        boolean isRemoved = this.userService.deleteUser(id);
-        if (!isRemoved) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(id, HttpStatus.OK);
-    }
-
     @PostMapping("/authenticate")
     @Operation(summary = "Authenticate user and get JWT Token")
     public JwtResponse authenticate(@RequestBody JwtRequest jwtRequest) throws Exception {
@@ -136,7 +93,7 @@ public class UserController {
             throw new Exception("INVALID_CREDENTIALS", e);
         }
         final UserDetails userDetails
-                = hobbieUserDetailsService.loadUserByUsername(jwtRequest.getUsername());
+                = userDetailsService.loadUserByUsername(jwtRequest.getUsername());
 
         final String token =
                 jwtUtils.generateToken(userDetails);

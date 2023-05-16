@@ -1,6 +1,6 @@
 package backend.hobbiebackend.filter;
 
-import backend.hobbiebackend.security.HobbieUserDetailsService;
+import backend.hobbiebackend.security.UserDetailsServiceImpl;
 import backend.hobbiebackend.utils.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,7 +22,7 @@ public class JwtFilter extends OncePerRequestFilter {
     private JWTUtils jwtUtils;
 
     @Autowired
-    private HobbieUserDetailsService hobbieUserDetailsService;
+    private UserDetailsServiceImpl userDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
@@ -37,7 +37,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (null != userName && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails
-                    = hobbieUserDetailsService.loadUserByUsername(userName);
+                    = userDetailsService.loadUserByUsername(userName);
 
             if (jwtUtils.validateToken(token, userDetails)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken

@@ -1,6 +1,5 @@
 package backend.hobbiebackend.dto;
 
-import backend.hobbiebackend.entities.Test;
 import backend.hobbiebackend.enums.GenderEnum;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
