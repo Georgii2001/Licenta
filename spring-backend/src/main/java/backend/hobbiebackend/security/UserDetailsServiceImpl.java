@@ -31,7 +31,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private UserDetails mapToUserDetails(UserEntity userEntity) {
 
         List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + userEntity.getRole()));
-
         return new User(
                 userEntity.getUsername(),
                 userEntity.getPassword(),

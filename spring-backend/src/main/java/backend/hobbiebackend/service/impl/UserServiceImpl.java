@@ -1,12 +1,16 @@
 package backend.hobbiebackend.service.impl;
 
-import backend.hobbiebackend.dto.*;
-import backend.hobbiebackend.entities.*;
+import backend.hobbiebackend.dto.AppClientSignUpDto;
+import backend.hobbiebackend.dto.AvatarsDTO;
+import backend.hobbiebackend.dto.UpdateAppClientDto;
+import backend.hobbiebackend.dto.UsersDTO;
+import backend.hobbiebackend.entities.UserEntity;
 import backend.hobbiebackend.enums.GenderEnum;
 import backend.hobbiebackend.enums.UserRoleEnum;
 import backend.hobbiebackend.handler.NotFoundException;
 import backend.hobbiebackend.mapper.UserMapper;
-import backend.hobbiebackend.repostiory.*;
+import backend.hobbiebackend.repostiory.UserInterestsRepository;
+import backend.hobbiebackend.repostiory.UserRepository;
 import backend.hobbiebackend.service.UserService;
 import backend.hobbiebackend.utils.PhotoUtils;
 import backend.hobbiebackend.utils.UserUtils;
@@ -95,11 +99,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserEntity findUserByEmail(String email) {
         Optional<UserEntity> byEmail = this.userRepository.findByEmail(email);
-        if (byEmail.isPresent()) {
-            return byEmail.get();
-        } else {
-            return null;
-        }
+        return byEmail.orElse(null);
     }
 
     @Override

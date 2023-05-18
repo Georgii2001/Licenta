@@ -23,7 +23,7 @@ public class UserEntity extends BaseEntity implements Serializable, Cloneable {
     @Column(nullable = false, unique = true)
     private String email;
     private String gender;
-    String description;
+    private String description;
 
     @Column(nullable = false)
     private String role;

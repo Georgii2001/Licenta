@@ -2,7 +2,6 @@ package backend.hobbiebackend.controller;
 
 import backend.hobbiebackend.dto.UsersDTO;
 import backend.hobbiebackend.service.MatchesService;
-import backend.hobbiebackend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;

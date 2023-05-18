@@ -15,11 +15,11 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public void sendNotification(UserEntity userEntity) {
         SimpleMailMessage mail = new SimpleMailMessage();
-        String mailBody = "http://localhost:4200/password/" + userEntity.getId();
+        String mailBody = "..body";
         mail.setTo(userEntity.getEmail());
-        mail.setFrom("findyourhobbie@gmail.com");
-        mail.setSubject("Change your password");
-        mail.setText("Click the link to reset your password: " + mailBody);
+        mail.setFrom("georgiana@gmail.com");
+        mail.setSubject("sub");
+        mail.setText(mailBody);
 
         javaMailSender.send(mail);
     }
