@@ -9,7 +9,6 @@ import backend.hobbiebackend.enums.GenderEnum;
 import backend.hobbiebackend.enums.UserRoleEnum;
 import backend.hobbiebackend.handler.NotFoundException;
 import backend.hobbiebackend.mapper.UserMapper;
-import backend.hobbiebackend.repostiory.UserInterestsRepository;
 import backend.hobbiebackend.repostiory.UserRepository;
 import backend.hobbiebackend.service.UserService;
 import backend.hobbiebackend.utils.PhotoUtils;
@@ -37,7 +36,6 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final UserRepository userRepository;
     private final PhotoUtils photoUtils;
-    private final UserInterestsRepository userInterestsRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserUtils userUtils;
 
@@ -106,7 +104,7 @@ public class UserServiceImpl implements UserService {
     public UsersDTO getUserMainDetails(String username, Integer id) {
         UserEntity user = userUtils.getUserEntity(username, id, null);
         final String mainAvatar = photoUtils.getEncodedFile(user.getAvatar(), username);
-        List<String> userInterests = getUserInterests(user);
+        List<String> userInterests = userUtils.getUserInterests(user);
         List<AvatarsDTO> userAvatars = photoUtils.getUserAvatars(user.getUsername(), user.getId());
         return userMapper.mapUserToDTO(user, mainAvatar, userAvatars, userInterests, null);
     }
@@ -150,9 +148,5 @@ public class UserServiceImpl implements UserService {
         return usersDTO;
     }
 
-    public List<String> getUserInterests(UserEntity user) {
-        return userInterestsRepository.findByUserEntityId(user.getId()).stream()
-                .map(userInterest -> userInterest.getInterests().getInterestName())
-                .collect(Collectors.toList());
-    }
+
 }

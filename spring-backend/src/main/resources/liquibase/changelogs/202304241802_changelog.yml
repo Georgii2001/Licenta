@@ -3,7 +3,7 @@ databaseChangeLog:
       id: 202304241802_changelog#1
       author: Georgiana Voicea
       preConditions:
-        - onFail: CONTINUE
+        - onFail: MARK_RAN
         - and:
             not:
               - columnExists:

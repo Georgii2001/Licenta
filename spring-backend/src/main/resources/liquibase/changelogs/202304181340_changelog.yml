@@ -3,7 +3,7 @@ databaseChangeLog:
       id: 202304181340_changelog#1
       author: Georgiana Voicea
       preConditions:
-        - onFail: CONTINUE
+        - onFail: MARK_RAN
         - not:
             tableExists:
               tableName: interests
@@ -43,7 +43,7 @@ databaseChangeLog:
       id: 202304181340_changelog#2
       author: Georgiana Voicea
       preConditions:
-        - onFail: CONTINUE
+        - onFail: MARK_RAN
         - tableExists:
             tableName: interests
         - sqlCheck:
@@ -234,7 +234,7 @@ databaseChangeLog:
       id: 202304181340_changelog#3
       author: Georgiana Voicea
       preConditions:
-        - onFail: CONTINUE
+        - onFail: MARK_RAN
         - tableExists:
             tableName: interests
         - not:
@@ -282,7 +282,7 @@ databaseChangeLog:
       id: 202304181340_changelog#4
       author: Georgiana Voicea
       preConditions:
-        - onFail: CONTINUE
+        - onFail: MARK_RAN
         - not:
             tableExists:
               tableName: avatars
@@ -326,7 +326,7 @@ databaseChangeLog:
       id: 202304181340_changelog#5
       author: Georgiana Voicea
       preConditions:
-        - onFail: CONTINUE
+        - onFail: MARK_RAN
         - and:
             not:
               - columnExists:

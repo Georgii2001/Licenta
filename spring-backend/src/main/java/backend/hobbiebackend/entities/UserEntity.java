@@ -14,9 +14,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
-public class UserEntity extends BaseEntity implements Serializable, Cloneable {
-
-    private static final long serialVersionUID = 2798509641422598279L;
+public class UserEntity extends BaseEntity  {
 
     @Column(nullable = false, unique = true)
     private String username;
@@ -31,10 +29,10 @@ public class UserEntity extends BaseEntity implements Serializable, Cloneable {
     private String password;
     private String avatar;
 
-    @Column(name = "SYS_CREATION_DATE", insertable = false, updatable = false)
+    @Column(name = "sys_creation_date", insertable = false, updatable = false)
     private Timestamp creationDate;
 
-    @Column(name = "SYS_UPDATE_DATE", insertable = false, updatable = false)
+    @Column(name = "sys_update_date", insertable = false, updatable = false)
     private Timestamp updateDate;
 
     @Override

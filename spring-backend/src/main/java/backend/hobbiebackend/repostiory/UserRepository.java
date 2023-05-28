@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Integer> {
+
     Optional<UserEntity> findByUsername(String username);
 
     Optional<UserEntity> findByEmail(String email);
@@ -20,4 +21,9 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
 
     @Query("FROM UserEntity WHERE username !=:username and role = :role")
     Slice<UserEntity> findByRole(String role, String username, Pageable pageable);
+
+    List<UserEntity> findByIdIn(List<Integer> userIds);
+
+    @Query("FROM UserEntity WHERE COALESCE(:userIds) IS NULL OR id NOT IN (:userIds)")
+    List<UserEntity> findByIdNotIn(List<Integer> userIds);
 }

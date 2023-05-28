@@ -6,7 +6,6 @@ import styles from "../../../../../../css/Navbar.module.css";
 
 const NavLinks = () => {
   const userLogged = AuthenticationService.isUserLoggedIn();
-  const businessLogged = AuthenticationService.isBusinessLoggedIn();
   const location = useLocation();
 
   return (
@@ -17,7 +16,7 @@ const NavLinks = () => {
             <NavLink to="user-home">Home</NavLink>
           </li>
           <li className={styles.nav_link}>
-            <NavLink to="my-hobbies" className="nav-link">
+            <NavLink to="my-matches" className="nav-link">
               MyMatches
             </NavLink>
           </li>
@@ -25,26 +24,6 @@ const NavLinks = () => {
             <NavLink to="account-user">Account</NavLink>
           </li>
           <li className={styles.nav_link}
-            onClick={AuthenticationService.logout}
-          >
-            <NavLink to="/"> Logout</NavLink>
-          </li>
-        </ul>
-      )}
-
-      {businessLogged && (
-        <ul className={styles.nav_links}>
-          <li className={styles.nav_link}>
-            <NavLink to="/business-home">Home</NavLink>
-          </li>
-          <li className={styles.nav_link}>
-            <NavLink to="create-offer">Create offer</NavLink>
-          </li>
-          <li className={styles.nav_link}>
-            <NavLink to="account-business">Account</NavLink>
-          </li>
-          <li
-            className={styles.nav_link}
             onClick={AuthenticationService.logout}
           >
             <NavLink to="/"> Logout</NavLink>

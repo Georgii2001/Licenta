@@ -5,16 +5,20 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import UserByIdDataService from "../../../../api/users/UserByIdDataService";
 import UserDescriptionPage from "../commonPages/UserDescriptionPage";
 import UserMediaPage from "../commonPages/UserMediaPage";
+import UserInfoPage from "../commonPages/UserInfoPage";
+import BackgroundHome from "../../fragments/background/BackgroundHome";
+import { useLocation } from "react-router-dom";
 
-const UserDetailsPages = ({ id }) => {
+const MatchedUserDetails = () => {
 
+  const location = useLocation();
   const [user, setUser] = useState([]);
   const [currentPage, setCurrentPage] = useState("Media");
 
   useLayoutEffect(() => {
     let unmounted = false;
 
-    UserByIdDataService(id).then((response) => {
+    UserByIdDataService(location.state.id).then((response) => {
       if (!unmounted) {
         setUser(response.data);
       }
@@ -30,6 +34,7 @@ const UserDetailsPages = ({ id }) => {
 
   return (
     <>
+      <BackgroundHome />
       <section className={styles.user_details_container}>
         <div className={styles.user_details_content}>
           <div className={styles.username}>
@@ -43,15 +48,19 @@ const UserDetailsPages = ({ id }) => {
             <span onClick={() => changePage("Description")} className={currentPage === "Description" ? styles.page_title_active : styles.page_title}>
               Description
             </span>
+            <span onClick={() => changePage("Contacts")} className={currentPage === "Contacts" ? styles.page_title_active : styles.page_title}>
+              Description
+            </span>
           </article>
           <br></br>
 
           {currentPage === "Media" && <UserMediaPage avatars={user.avatarFiles} />}
           {currentPage === "Description" && <UserDescriptionPage description={user.description} interests={user.interests} />}
+          {currentPage === "Contacts" && <UserInfoPage user={user} />}
         </div>
       </section>
     </>
   );
 };
 
-export default UserDetailsPages;
+export default MatchedUserDetails;

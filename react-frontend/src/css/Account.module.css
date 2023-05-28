@@ -5,14 +5,6 @@
   box-shadow: -2px 0px 33px 0px rgba(0, 0, 0, 0.15);
 }
 
-.account_cover {
-  grid-area: cover;
-  height: auto;
-  margin: auto;
-  max-width: 100%;
-  max-height: 100%;
-}
-
 .account_content {
   margin-top: 20px;
   grid-area: content;
@@ -156,13 +148,13 @@
 
 .set_profile_photo_button:focus,
 .set_profile_photo_button:hover {
-  border-bottom: 5px solid rgb(37, 148, 43);
-  border-right: 5px solid rgb(37, 148, 43);
+  border-bottom: 5px solid rgb(40, 220, 70);
+  border-right: 5px solid rgb(40, 220, 70);
 }
 
 .set_profile_photo_button:active {
-  border-bottom: 5px solid rgb(37, 148, 43);
-  border-right: 5px solid rgb(37, 148, 43);
+  border-bottom: 5px solid rgb(40, 220, 70);
+  border-right: 5px solid rgb(40, 220, 70);
 }
 
 .remove_photo_button {
@@ -384,8 +376,11 @@
 }
 
 .textarea_style {
+  display: inline-block;
+  font-family: "Poppins", sans-serif;
+  padding: 5px;
   resize: none;
-  height: 100%;
+  width: 100%;
   font-size: 20px;
   background-color: rgb(225, 252, 227);
   border-radius: 20px;
@@ -393,6 +388,22 @@
 
 .textarea_style:focus {
   background-color: rgb(255, 255, 255);
+}
+
+.textarea_style::-webkit-scrollbar {
+  width: 12px;
+}
+
+.textarea_style::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px rgb(216, 216, 216);
+}
+
+.textarea_style::-webkit-scrollbar-thumb {
+  background: rgb(210, 210, 210);
+}
+
+.textarea_style::-webkit-scrollbar-thumb:hover {
+  background: rgb(210, 210, 210);
 }
 
 .edit_button_img {

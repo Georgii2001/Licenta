@@ -25,11 +25,11 @@ public class Interests {
     @Column(name = "interest_description", nullable = false)
     String interestDescription;
 
-    @Column(name = "SYS_CREATION_DATE", insertable = false)
-    private Timestamp creationDate;
+    @Column(name = "sys_creation_date", insertable = false)
+    Timestamp creationDate;
 
-    @Column(name = "SYS_UPDATE_DATE", insertable = false, updatable = false)
-    private Timestamp updateDate;
+    @Column(name = "sys_update_date", insertable = false, updatable = false)
+    Timestamp updateDate;
 }
 
 

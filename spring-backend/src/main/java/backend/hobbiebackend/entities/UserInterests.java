@@ -21,19 +21,19 @@ public class UserInterests {
     @Column(name = "user_interest_id", nullable = false, updatable = false)
     Integer userInterestId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "user_id")
     UserEntity userEntity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "interest_id")
     Interests interests;
 
-    @Column(name = "SYS_CREATION_DATE", insertable = false)
-    private Timestamp creationDate;
+    @Column(name = "sys_creation_date", insertable = false)
+    Timestamp creationDate;
 
-    @Column(name = "SYS_UPDATE_DATE", insertable = false, updatable = false)
-    private Timestamp updateDate;
+    @Column(name = "sys_update_date", insertable = false, updatable = false)
+    Timestamp updateDate;
 }
 
 

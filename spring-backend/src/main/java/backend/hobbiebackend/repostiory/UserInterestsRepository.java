@@ -5,11 +5,13 @@ import backend.hobbiebackend.models.UserMatches;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public interface UserInterestsRepository  extends JpaRepository<UserInterests, Integer> {
+@Repository
+public interface UserInterestsRepository extends JpaRepository<UserInterests, Integer> {
 
     List<UserInterests> findByUserEntityId(Integer id);
 

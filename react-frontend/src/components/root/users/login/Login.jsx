@@ -81,12 +81,9 @@ const Login = () => {
             credentials.username
           );
           navigate("/user-home");
-        } else if (response.data === "BUSINESS_USER") {
-          AuthenticationService.registerSuccessfulLoginBusiness(
-            credentials.username
-          );
-          navigate("/business-home");
-        }
+        } else if (response.data === "ADMIN_USER") {
+          
+        } 
       }
     }
   };

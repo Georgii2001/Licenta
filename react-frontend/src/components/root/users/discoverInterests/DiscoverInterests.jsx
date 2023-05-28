@@ -1,7 +1,7 @@
 import {React, useState, useEffect} from "react";
 import { Link } from "react-router-dom";
 import styles from "../../../../css/DiscoverInterests.module.css";
-import layout from "../../../../css/UserHome.module.css";
+import layout from "../../../../css/Background.module.css";
 import BackgroundHome from "../../fragments/background/BackgroundHome";
 import { useLocation } from "react-router-dom";
 import PostDiscoveryInterestsService from "../../../../api/users/PostDiscoveryInterestsService";
@@ -117,7 +117,7 @@ const DiscoverInterests = () => {
 
   return (
     <>
-      <main className={layout.hobbie_main}>
+      <main className={layout.main_area}>
         {currentQuestion === questions.length && (
           <div className={styles.test_form_end}>
             <section className={styles.test_end}>

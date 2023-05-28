@@ -6,26 +6,31 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "users_matches")
-public class UsersMatches extends BaseEntity implements Serializable, Cloneable {
+@Inheritance(strategy = InheritanceType.JOINED)
+public class UsersMatches extends BaseEntity {
 
-    private static final long serialVersionUID = 2798509641422598279L;
-
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private UserEntity user;
+    UserEntity user;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "user_matched_id", referencedColumnName = "id")
-    private UserEntity userMatched;
+    UserEntity userMatched;
 
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
+    @OneToOne
+    @JoinColumn(name = "matched_status_id", referencedColumnName = "id")
+    MatchesStatus matchesStatus;
+
+    @Column(name = "sys_creation_date", insertable = false)
+    Timestamp creationDate;
+
+    @Column(name = "sys_update_date", insertable = false, updatable = false)
+    Timestamp updateDate;
 }

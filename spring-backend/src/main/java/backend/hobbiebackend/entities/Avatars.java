@@ -31,11 +31,11 @@ public class Avatars {
     @Column(name = "avatar_priority", nullable = false)
     Integer avatarPriority;
 
-    @Column(name = "SYS_CREATION_DATE", insertable = false, updatable = false)
-    private Timestamp creationDate;
+    @Column(name = "sys_creation_date", insertable = false, updatable = false)
+    Timestamp creationDate;
 
-    @Column(name = "SYS_UPDATE_DATE", insertable = false, updatable = false)
-    private Timestamp updateDate;
+    @Column(name = "sys_update_date", insertable = false, updatable = false)
+    Timestamp updateDate;
 }
 
 
