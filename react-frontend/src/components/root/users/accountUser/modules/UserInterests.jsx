@@ -16,10 +16,10 @@ const UserInterests = ({ id, userInterests, refreshUserData }) => {
   const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
   const [unassignedInterests, setUnassignedInterests] = useState([]);
   const [saveInterestsList, setSaveInterestsList] = useState([]);
-  
+
   useLayoutEffect(() => {
     refreshUnassignedInterests();
-    
+
   }, []);
 
   const handleRemoveInterest = async (interest) => {
@@ -30,15 +30,15 @@ const UserInterests = ({ id, userInterests, refreshUserData }) => {
   }
 
   const saveUserInterests = async () => {
-    
+
     await PostUserInterestsService(saveInterestsList);
-    
+
     refreshUnassignedInterests();
     refreshUserData();
     setSaveInterestsList([]);
   }
 
-  const refreshUnassignedInterests = () =>{
+  const refreshUnassignedInterests = () => {
     InterestsService().then((response) => {
       setUnassignedInterests(response.data);
     });
