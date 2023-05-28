@@ -49,7 +49,7 @@ const MatchedUserDetails = () => {
               Description
             </span>
             <span onClick={() => changePage("Contacts")} className={currentPage === "Contacts" ? styles.page_title_active : styles.page_title}>
-              Description
+              Info
             </span>
           </article>
           <br></br>
