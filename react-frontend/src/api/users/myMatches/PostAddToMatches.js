@@ -4,8 +4,6 @@ import axios from "../../customAxiosConfig/CustomAxiosConfig";
 const PostAddToMatches = (matchedUserId, status) => {
     let username = AuthenticationService.getLoggedInUser();
 
-    console.log(matchedUserId)
-    console.log(status)
     try {
         return axios.post(`/add-to-matches`, null, {
             params: {

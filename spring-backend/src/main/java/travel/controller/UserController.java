@@ -12,15 +12,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import travel.dto.AppClientSignUpDto;
+import travel.dto.EmailResponseDTO;
 import travel.dto.UpdateAppClientDto;
 import travel.dto.UsersDTO;
 import travel.entities.UserEntity;
 import travel.enums.UserRoleEnum;
-import travel.handler.NotFoundException;
 import travel.jwt.JwtRequest;
 import travel.jwt.JwtResponse;
 import travel.security.UserDetailsServiceImpl;
-import travel.service.NotificationService;
 import travel.service.UserService;
 import travel.utils.JWTUtils;
 
@@ -32,7 +31,6 @@ public class UserController {
 
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
-    private final NotificationService notificationService;
     private final JWTUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
     private final UserDetailsServiceImpl userDetailsService;
@@ -60,16 +58,11 @@ public class UserController {
         userService.updatedUserEntity(user);
     }
 
-    @PostMapping("/notification")
-    @Operation(summary = "Send notification with password reset link", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<?> sendNotification(@RequestParam("email") String e) {
-        UserEntity userByEmail = this.userService.findUserByEmail(e);
-        if (userByEmail == null) {
-            throw new NotFoundException("User not found");
-        } else {
-            this.notificationService.sendNotification(userByEmail);
-        }
-        return new ResponseEntity<>(userByEmail, HttpStatus.OK);
+    @PostMapping("/send-invitation")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Send invitation to the new trip", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<EmailResponseDTO> sendInvitation(@RequestParam String username, @RequestParam Integer receiverId) {
+        return ResponseEntity.ok(userService.sendEmailInvitation(username, receiverId));
     }
 
     @PutMapping("/password")

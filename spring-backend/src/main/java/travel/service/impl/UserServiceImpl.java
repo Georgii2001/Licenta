@@ -1,9 +1,14 @@
 package travel.service.impl;
 
-import travel.dto.AppClientSignUpDto;
-import travel.dto.AvatarsDTO;
-import travel.dto.UpdateAppClientDto;
-import travel.dto.UsersDTO;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import travel.dto.*;
+import travel.email.models.EmailRequest;
+import travel.email.utils.EmailUtils;
 import travel.entities.UserEntity;
 import travel.enums.GenderEnum;
 import travel.enums.UserRoleEnum;
@@ -13,22 +18,13 @@ import travel.repostiory.UserRepository;
 import travel.service.UserService;
 import travel.utils.PhotoUtils;
 import travel.utils.UserUtils;
-import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import static travel.email.constants.TemplateNames.INVITE_TO_NEW_TRIP;
+
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
@@ -38,6 +34,7 @@ public class UserServiceImpl implements UserService {
     private final PhotoUtils photoUtils;
     private final PasswordEncoder passwordEncoder;
     private final UserUtils userUtils;
+    private final EmailUtils emailUtils;
 
     @Override
     public UserEntity register(AppClientSignUpDto userDTO) {
@@ -47,12 +44,12 @@ public class UserServiceImpl implements UserService {
 
         final String avatarName = userDTO.getAvatar().getOriginalFilename();
         user.setAvatar(avatarName);
-        userRepository.saveAndFlush(user);
+        userRepository.save(user);
 
-        user = userRepository.getOne(user.getId());
+        user = userRepository.findById(user.getId()).get();
         final String finalAvatarName = photoUtils.saveAvatarInDB(user, avatarName, 0);
         user.setAvatar(finalAvatarName);
-        userRepository.saveAndFlush(user);
+        userRepository.save(user);
 
         photoUtils.savePhoto(userDTO.getAvatar(), userDTO.getUsername(), finalAvatarName);
 
@@ -95,9 +92,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserEntity findUserByEmail(String email) {
-        Optional<UserEntity> byEmail = this.userRepository.findByEmail(email);
-        return byEmail.orElse(null);
+    public EmailResponseDTO sendEmailInvitation(String username, Integer receiverId) {
+        UserEntity senderUser = userUtils.getUserEntity(username, null, null);
+        UserEntity receiverUser = userUtils.getUserEntity(null, receiverId, null);
+
+        EmailRequest emailRequest = new EmailRequest();
+
+        emailRequest.setSender(senderUser);
+        emailRequest.setReceiver(receiverUser);
+
+        return new EmailResponseDTO(emailUtils.notifyUser(emailRequest, INVITE_TO_NEW_TRIP.name()));
     }
 
     @Override

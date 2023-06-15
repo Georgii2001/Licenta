@@ -6,6 +6,9 @@ import AuthenticationService from "../../../api/authentication/AuthenticationSer
 import { Link, useNavigate } from "react-router-dom";
 import TinderCard from "react-tinder-card";
 import styles from "../../../css/UserHome.module.css";
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+
+import 'react-notifications/lib/notifications.css';
 
 const UserHome = () => {
   const navigate = useNavigate();
@@ -16,7 +19,7 @@ const UserHome = () => {
   const currentIndexRef = useRef(currentIndex);
   const canSwipe = currentIndex >= 0;
   const [childRefs, setChildRefs] = useState([]);
-  const [currentUserId, setCurrentUserId] = useState([]);
+  const currentUserId = useRef("");
 
   const handleDetails = (value) => (event) => {
     event.preventDefault();
@@ -30,7 +33,6 @@ const UserHome = () => {
 
   const updateCurrentIndex = (val) => {
     setCurrentIndex(val);
-    console.log(currentIndexRef.current);
     currentIndexRef.current = val;
   }
 
@@ -39,20 +41,24 @@ const UserHome = () => {
     updateCurrentIndex(index - 1);
   }
 
-  const swipe = async (direction, userId) => {
+  const swipe = async (direction) => {
     if (canSwipe && currentIndex < possibleMatches.length) {
       await childRefs[currentIndex].current.swipe(direction);
     }
   }
 
-  const sendInfoToBe = async (direction, userId) => {
-    if (userId != currentUserId) {
-      if (direction == 'right') {
-        await PostAddToMatches(userId, "MATCHED");
-        setCurrentUserId(userId);
+  const sendInfoToBe = (direction, userId) => {
+    if (userId !== currentUserId.current) {
+      if (direction === 'right') {
+        currentUserId.current = userId;
+        PostAddToMatches(userId, "MATCHED").then((response) => {
+          if (response.data.messageStatus === "newMessageSent") {
+            NotificationManager.info("Check \"My Matches\" page!", "You have one new match!", 1000);
+          }
+        })
       } else {
-        await PostAddToMatches(userId, "NOT_MATCHED");
-        setCurrentUserId(userId);
+        currentUserId.current = userId;
+        PostAddToMatches(userId, "NOT_MATCHED");
       }
     }
   }
@@ -130,6 +136,7 @@ const UserHome = () => {
           <button className={styles.button_go} style={{ backgroundColor: !canSwipe && '#c3c4d3' }} onClick={() => swipe('right')}>Let's go!</button>
         </div>
       </div>
+      <NotificationContainer />
     </>
   );
 };

@@ -1,6 +1,7 @@
 package travel.service;
 
 import travel.dto.AppClientSignUpDto;
+import travel.dto.EmailResponseDTO;
 import travel.dto.UpdateAppClientDto;
 import travel.dto.UsersDTO;
 import travel.entities.UserEntity;
@@ -15,7 +16,7 @@ public interface UserService {
 
     UserEntity findUserById(Integer userId);
 
-    UserEntity findUserByEmail(String email);
+    EmailResponseDTO sendEmailInvitation(String username, Integer receiverId);
 
     UsersDTO getUserMainDetails(String username, Integer id);
 

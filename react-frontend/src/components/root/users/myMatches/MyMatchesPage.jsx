@@ -43,9 +43,9 @@ const MyMatchesPage = () => {
                   <div className={styles.no_matches_header}>
                     You have no matches yet
                     <Link to="/user-home">
-                        <div className={styles.no_matches_button}>
-                            Let`s find friends
-                        </div>
+                      <div className={styles.no_matches_button}>
+                        Let`s find friends
+                      </div>
                     </Link>
                   </div>
                   <div className={styles.my_matches_item_final}>
@@ -91,6 +91,40 @@ const MyMatchesPage = () => {
                     </div>
                   </div>
                 </div>
+              }
+              {matchedUsers && matchedUsers.length < 3 ?
+                <div>
+                  <div className={styles.my_matches_item_final}>
+                    <div className={styles.image_container_final} style={{ backgroundImage: "url(" + finalAvatarImg + ")" }}>
+                    </div>
+                    <div className={styles.username_block}>
+                      <div className={styles.username_redirect_final}>
+                        <div>Name</div>
+                      </div>
+                    </div>
+                    <div className={styles.send_email_button_container}>
+                      <div className={styles.send_email_button_final}>
+                        {isColumnBasedSmall ? "Mail" : "Send email"}
+                      </div>
+                    </div>
+                  </div>
+                  <div className={styles.my_matches_item_final}>
+                    <div className={styles.image_container_final} style={{ backgroundImage: "url(" + finalAvatarImg + ")" }}>
+                    </div>
+                    <div className={styles.username_block}>
+                      <div className={styles.username_redirect_final}>
+                        <div>Name</div>
+                      </div>
+                    </div>
+                    <div className={styles.send_email_button_container}>
+                      <div className={styles.send_email_button_final}>
+                        {isColumnBasedSmall ? "Mail" : "Send email"}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                :
+                null
               }
             </div>
           </section>

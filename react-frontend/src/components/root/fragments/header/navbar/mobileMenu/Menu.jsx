@@ -38,6 +38,9 @@ const Menu = () => {
               </NavLink>
             </li>
             <li className={styles.nav_link}>
+              <NavLink to="travel-ideas">Travel ideas</NavLink>
+            </li>
+            <li className={styles.nav_link}>
               <NavLink to="account-user">Account</NavLink>
             </li>
             <li className={styles.nav_link}

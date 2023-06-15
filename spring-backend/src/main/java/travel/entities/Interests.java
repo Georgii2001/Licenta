@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 
 @Data
 @Entity
@@ -22,14 +21,8 @@ public class Interests {
     @Column(name = "interest_name", nullable = false)
     String interestName;
 
-    @Column(name = "interest_description", nullable = false)
-    String interestDescription;
-
-    @Column(name = "sys_creation_date", insertable = false)
-    Timestamp creationDate;
-
-    @Column(name = "sys_update_date", insertable = false, updatable = false)
-    Timestamp updateDate;
+    @Column(name = "interest_code", nullable = false)
+    int interestCode;
 }
 
 

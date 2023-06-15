@@ -1,12 +1,16 @@
 package travel.controller;
 
-import travel.dto.UsersDTO;
-import travel.service.MatchesService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import travel.dto.EmailResponseDTO;
+import travel.dto.UsersDTO;
+import travel.service.MatchesService;
 
 import java.util.List;
 
@@ -29,9 +33,8 @@ public class MatchesController {
     }
 
     @PostMapping("/add-to-matches")
-    @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Add to matches", security = @SecurityRequirement(name = "bearerAuth"))
-    public void addToMatches(@RequestParam String username, @RequestParam Integer matchedUserId, @RequestParam String status) {
-        matchesService.addUserToMatches(username, matchedUserId, status);
+    public ResponseEntity<EmailResponseDTO> addToMatches(@RequestParam String username, @RequestParam Integer matchedUserId, @RequestParam String status) {
+        return ResponseEntity.ok(matchesService.addUserToMatches(username, matchedUserId, status));
     }
 }

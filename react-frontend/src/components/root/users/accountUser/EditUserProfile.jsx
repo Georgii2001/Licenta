@@ -71,6 +71,7 @@ const EditUserProfile = () => {
             </section>
             <section className={styles.checkbox_choice_section}>
               <input
+                className={styles.sign_up_checkbox}
                 onClick={() => setCheckBoxChecked("male")}
                 onChange={(e) => setInfo({ ...info, gender: "MALE" })}
                 checked={checked === "male"}
@@ -81,6 +82,7 @@ const EditUserProfile = () => {
                 Male
               </label>
               <input
+                className={styles.sign_up_checkbox}
                 onClick={() => setCheckBoxChecked("female")}
                 onChange={(e) => setInfo({ ...info, gender: "FEMALE" })}
                 checked={checked === "female"}
@@ -91,6 +93,7 @@ const EditUserProfile = () => {
                 Female
               </label>
               <input
+                className={styles.sign_up_checkbox}
                 onClick={() => setCheckBoxChecked("other")}
                 onChange={(e) => setInfo({ ...info, gender: "OTHER" })}
                 checked={checked === "other"}

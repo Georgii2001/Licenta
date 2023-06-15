@@ -1,7 +1,12 @@
 package travel.service.impl;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import travel.dto.AvatarsDTO;
+import travel.dto.EmailResponseDTO;
 import travel.dto.UsersDTO;
+import travel.email.models.EmailRequest;
+import travel.email.utils.EmailUtils;
 import travel.entities.MatchesStatus;
 import travel.entities.UserEntity;
 import travel.entities.UsersMatches;
@@ -16,11 +21,13 @@ import travel.repostiory.UserRepository;
 import travel.service.MatchesService;
 import travel.utils.PhotoUtils;
 import travel.utils.UserUtils;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static travel.constants.Constants.MATCHED_STATUS;
+import static travel.email.constants.EmailConstants.MESSAGE_WAS_ALREADY_SENT;
+import static travel.email.constants.TemplateNames.USER_HAS_NEW_MATCHES;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +40,7 @@ public class MatchesServiceImpl implements MatchesService {
     private final UserInterestsRepository userInterestsRepository;
     private final MatchesStatusRepository matchesStatusRepository;
     private final UserMatchesRepository userMatchesRepository;
+    private final EmailUtils emailUtils;
 
     @Override
     public List<UsersDTO> getAllUsersMatchesForClient(String username) {
@@ -65,7 +73,7 @@ public class MatchesServiceImpl implements MatchesService {
     }
 
     @Override
-    public void addUserToMatches(String username, Integer matchedUserId, String status) {
+    public EmailResponseDTO addUserToMatches(String username, Integer matchedUserId, String status) {
         MatchesStatus matchesStatus = obtainStatusFromDB(status);
 
         UserEntity userEntity = userUtils.getUserEntity(username, null, null);
@@ -81,9 +89,24 @@ public class MatchesServiceImpl implements MatchesService {
             usersMatches.setMatchesStatus(matchesStatus);
 
             userMatchesRepository.saveAndFlush(usersMatches);
+
+            List<UsersMatches> matchedUserList = userMatchesRepository
+                    .findByUserIdEqualsAndUserMatchedIdEquals(matchedUserId, userEntity.getId());
+
+            if(!matchedUserList.isEmpty() &&
+                    matchedUserList.get(0).getMatchesStatus().getMatchesStatusName().equalsIgnoreCase(MATCHED_STATUS)) {
+
+                EmailRequest emailRequest = new EmailRequest();
+
+                emailRequest.setSender(userEntity);
+                emailRequest.setReceiver(matchedUserList.get(0).getUser());
+
+                return new EmailResponseDTO(emailUtils.notifyUser(emailRequest, USER_HAS_NEW_MATCHES.name()));
+            }
         } else {
             throw new AlreadyExistsException("You can find this user on my matches page!!!");
         }
+        return new EmailResponseDTO(MESSAGE_WAS_ALREADY_SENT);
     }
 
     private MatchesStatus obtainStatusFromDB(String status) {

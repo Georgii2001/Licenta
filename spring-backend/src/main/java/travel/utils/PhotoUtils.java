@@ -1,16 +1,16 @@
 package travel.utils;
 
-import travel.dto.AvatarsDTO;
-import travel.entities.Avatars;
-import travel.entities.UserEntity;
-import travel.handler.NotFoundException;
-import travel.repostiory.AvatarsRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import travel.constants.Constants;
+import travel.dto.AvatarsDTO;
+import travel.entities.Avatars;
+import travel.entities.UserEntity;
+import travel.handler.NotFoundException;
+import travel.repostiory.AvatarsRepository;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,11 +50,11 @@ public class PhotoUtils {
                 .avatarName(avatarName)
                 .avatarPriority(priority)
                 .build();
-        avatarsRepository.saveAndFlush(avatar);
+        avatarsRepository.save(avatar);
 
         final String finalAvatarName = avatar.getAvatarsId() + Constants.UNDERSCORE + avatarName;
         avatar.setAvatarName(finalAvatarName);
-        avatarsRepository.saveAndFlush(avatar);
+        avatarsRepository.save(avatar);
 
         return finalAvatarName;
     }
