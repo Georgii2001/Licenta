@@ -1,0 +1,144 @@
+databaseChangeLog:
+  - changeSet:
+      id: 202306121741_changelog#1
+      author: Georgiana Voicea
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              tableName: notifications
+      changes:
+        - createTable:
+            tableName: notifications
+            columns:
+              - column:
+                  name: notification_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: NOTIFICATION_ID_PKEY
+              - column:
+                  name: user_sender_id
+                  type: INT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: USER_SENDER_ID_FKEY
+                    references: users(id)
+              - column:
+                  name: user_receiver_id
+                  type: INT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: USER_RECEIVER_ID_FKEY
+                    references: users(id)
+              - column:
+                  name: notification_type
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sys_creation_date
+                  type: TIMESTAMP
+                  defaultValueComputed: NOW()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sys_update_date
+                  type: TIMESTAMP
+                  defaultValueComputed: NOW() ON UPDATE NOW()
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 202306121741_changelog#2
+      author: Georgiana Voicea
+      preConditions:
+        - onFail: MARK_RAN
+        - tableExists:
+            tableName: interests
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM interests WHERE interest_id>30
+      changes:
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Meticulous planners
+              - column:
+                  name: interest_code
+                  value: 90
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Flexible adaptors
+              - column:
+                  name: interest_code
+                  value: 91
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Impulsive travelers
+              - column:
+                  name: interest_code
+                  value: 92
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Photography
+              - column:
+                  name: interest_code
+                  value: 100
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Music
+              - column:
+                  name: interest_code
+                  value: 101
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Cycling
+              - column:
+                  name: interest_code
+                  value: 102
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Sport
+              - column:
+                  name: interest_code
+                  value: 103
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Museum visiting
+              - column:
+                  name: interest_code
+                  value: 104
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Tech
+              - column:
+                  name: interest_code
+                  value: 105
