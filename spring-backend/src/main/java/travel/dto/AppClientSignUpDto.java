@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Builder
 public class AppClientSignUpDto {
     private String username;
-    private String fullName;
+    private String displayName;
     private GenderEnum gender;
     private String email;
     private String password;

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class UpdateAppClientDto {
 
     String email;
-    private String fullName;
+    private String displayName;
     private GenderEnum gender;
     private String password;
     String description;

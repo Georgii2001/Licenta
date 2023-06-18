@@ -38,7 +38,7 @@ const MatchedUserDetails = () => {
       <section className={styles.user_details_container}>
         <div className={styles.user_details_content}>
           <div className={styles.username}>
-            {user.username}
+            {user.displayName}
           </div>
           <br></br>
           <article className={styles.user_details_pages_horizontal}>

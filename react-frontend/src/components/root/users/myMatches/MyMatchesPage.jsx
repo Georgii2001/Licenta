@@ -36,7 +36,7 @@ const MyMatchesPage = () => {
             <div className={styles.matches_content}>
               {matchedUsers && matchedUsers.length ?
                 matchedUsers.map(matchedUser =>
-                  <MyMatches key={matchedUser.id} avatarFile={matchedUser.avatarFile} username={matchedUser.username} id={matchedUser.id} />
+                  <MyMatches key={matchedUser.id} avatarFile={matchedUser.avatarFile} displayName={matchedUser.displayName} id={matchedUser.id} />
                 )
                 :
                 <div>

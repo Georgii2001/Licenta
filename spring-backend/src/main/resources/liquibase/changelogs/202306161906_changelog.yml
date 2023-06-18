@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 202306161906_changelog#1
+      author: Georgiana Voicea
+      preConditions:
+        - onFail: MARK_RAN
+        - and:
+            not:
+              - columnExists:
+                  tableName: users
+                  columnName: display_name
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: display_name
+                  type: VARCHAR(100)
+                  afterColumn: email
+                  constraints:
+                    nullable: false

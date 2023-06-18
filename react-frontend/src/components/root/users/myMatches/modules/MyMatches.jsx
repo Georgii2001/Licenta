@@ -9,7 +9,7 @@ import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 import 'react-notifications/lib/notifications.css';
 
-const MyMatches = ({ avatarFile, username, id }) => {
+const MyMatches = ({ avatarFile, displayName, id }) => {
 
     const navigate = useNavigate();
     const isColumnBasedSmall = useMediaQuery("(max-width: 385px)");
@@ -43,7 +43,7 @@ const MyMatches = ({ avatarFile, username, id }) => {
                 <div className={styles.username_block}>
                     <div className={styles.username_redirect} onClick={handleDetails(id)}>
                         <Tooltip title={<h3>Tap to see more details</h3>}>
-                            <div>{username}</div>
+                            <div>{displayName}</div>
                         </Tooltip>
                     </div>
                 </div>

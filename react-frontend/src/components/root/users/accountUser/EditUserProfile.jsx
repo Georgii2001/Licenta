@@ -15,6 +15,7 @@ const EditUserProfile = () => {
   const [checked, setCheckBoxChecked] = useState("other");
   const [info, setInfo] = useState({
     email: location.state.email,
+    displayName: "",
     gender: "OTHER",
     password: "",
     repeatpassword: "",
@@ -24,6 +25,10 @@ const EditUserProfile = () => {
 
   const validate = () => {
     const errors = {};
+
+   if (info.displayName != "" && info.displayName.length < 5) {
+      errors.displayName = "Minimum 5 char";
+    }
     
     if (!info.password) {
       errors.password = "Password is required";
@@ -63,6 +68,22 @@ const EditUserProfile = () => {
 
         <form id="userInfo" onSubmit={submitHandler}>
   
+        <section className={styles.form_field}>
+            <input
+              id="displayName"
+              name="displayName"
+              type="text"
+              onChange={(e) => setInfo({ ...info, displayName: e.target.value })}
+            />
+
+            <label htmlFor="displayName" className={styles.label_name}>
+              <span className={styles.content_name}>Full Name</span>
+              {errors.displayName && (
+                <small className={styles.errors}>{errors.displayName}</small>
+              )}
+            </label>
+          </section>
+
           <section className={styles.form_field_radio}>
             <section className={styles.name_section}>
               <label id="gender" className={styles.label_name}>
@@ -114,7 +135,7 @@ const EditUserProfile = () => {
               onChange={(e) => setInfo({ ...info, password: e.target.value })}
             />
 
-            <label htmlFor="name" className={styles.label_name}>
+            <label htmlFor="password" className={styles.label_name}>
               <span className={styles.content_name}>Password</span>
               {errors.password && (
                 <small className={styles.errors}>Invalid password</small>

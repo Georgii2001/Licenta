@@ -47,15 +47,14 @@ class UserControllerTest extends AbstractTest {
         appClientSignUpDto.setUsername("user");
         appClientSignUpDto.setPassword("topsecret");
         appClientSignUpDto.setEmail("testemail@gmail.com");
-        appClientSignUpDto.setFullName("full name");
+        appClientSignUpDto.setDisplayName("Display name");
         appClientSignUpDto.setGender(GenderEnum.FEMALE);
 
         //update client
         updateAppClientDto = new UpdateAppClientDto();
         updateAppClientDto.setEmail("test@gmail.com");
         updateAppClientDto.setPassword("topsecret");
-        updateAppClientDto.setFullName("full name");
-        updateAppClientDto.setGender(GenderEnum.FEMALE);
+           updateAppClientDto.setGender(GenderEnum.FEMALE);
 
         //update business
         updateBusinessDto = new UpdateBusinessDto();

@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntity register(AppClientSignUpDto userDTO) {
-        UserEntity user = this.modelMapper.map(userDTO, UserEntity.class);
+        UserEntity user = modelMapper.map(userDTO, UserEntity.class);
         user.setRole(UserRoleEnum.USER.name());
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 
@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
         user.setAvatar(avatarName);
         userRepository.save(user);
 
-        user = userRepository.findById(user.getId()).get();
+        user = userUtils.getUserEntity(null, user.getId(), null);
         final String finalAvatarName = photoUtils.saveAvatarInDB(user, avatarName, 0);
         user.setAvatar(finalAvatarName);
         userRepository.save(user);
@@ -60,9 +60,9 @@ public class UserServiceImpl implements UserService {
     public void updatedUserEntity(UpdateAppClientDto user) {
         UserEntity userEntity = userUtils.getUserEntity(null, null, user.getEmail());
 
-        final String username = user.getFullName();
+        final String username = user.getDisplayName();
         if (username != null && !username.isEmpty()) {
-            userEntity.setUsername(username);
+            userEntity.setDisplayName(username);
         }
 
         final GenderEnum gender = user.getGender();
@@ -79,6 +79,8 @@ public class UserServiceImpl implements UserService {
         if (description != null && !description.isEmpty()) {
             userEntity.setDescription(description);
         }
+
+        userRepository.save(userEntity);
     }
 
     @Override

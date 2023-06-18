@@ -106,7 +106,7 @@ const UserHome = () => {
               <div className={styles.card}>
                 <div className={styles.card_image_container} style={{ backgroundImage: "url(data:image/png;base64," + user.avatarFile + ")" }}>
                 </div>
-                <div className={styles.card_title}>{user.username}</div>
+                <div className={styles.card_title}>{user.displayName}</div>
                 <div className={styles.card_matches}>You have <b>{user.userMatchCount}</b> matches</div>
                 <div className={styles.card_description}>{user.gender}</div>
                 <Link to="#" onClick={handleDetails(user.id)} id={user.id}>

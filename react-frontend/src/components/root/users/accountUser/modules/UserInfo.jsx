@@ -49,10 +49,11 @@ const UserInfo = ({ user }) => {
                 <hr className={styles.account_hr}></hr>
                 <br></br>
                 <div className={styles.user_info_style}>
-                    <div className={styles.user_property}> Username: {user.username} </div>
-                    <div className={styles.user_property}> Email: {user.email}</div>
-                    <div className={styles.user_property}> Gender: {user.gender} </div>
-                    <div className={styles.user_property}> Password: **** </div>
+                    <div className={styles.user_property}> <b>Username:</b> {user.username} </div>
+                    <div className={styles.user_property}> <b>Full Name:</b> {user.displayName} </div>
+                    <div className={styles.user_property}> <b>Email:</b> {user.email}</div>
+                    <div className={styles.user_property}> <b>Gender:</b> {user.gender} </div>
+                    <div className={styles.user_property}> <b>Password:</b> **** </div>
                 </div>
                 <br></br>
                 <article>
