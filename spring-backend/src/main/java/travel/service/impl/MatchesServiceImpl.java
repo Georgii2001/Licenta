@@ -13,7 +13,6 @@ import travel.entities.UsersMatches;
 import travel.handler.AlreadyExistsException;
 import travel.handler.NotFoundException;
 import travel.mapper.UserMapper;
-import travel.models.UserMatches;
 import travel.repostiory.MatchesStatusRepository;
 import travel.repostiory.UserInterestsRepository;
 import travel.repostiory.UserMatchesRepository;
@@ -42,34 +41,88 @@ public class MatchesServiceImpl implements MatchesService {
     private final UserMatchesRepository userMatchesRepository;
     private final EmailUtils emailUtils;
 
-    @Override
+
     public List<UsersDTO> getAllUsersMatchesForClient(String username) {
 
-        UserEntity userEntity = userUtils.getUserEntity(username, null, null);
-        final Integer userId = userEntity.getId();
+        Optional<UserEntity> user = userRepository.findByUsername(username);
+        if (user.isEmpty()) {
+            throw new NotFoundException("Can not find user with this username");
+        }
 
-        List<UserMatches> userMatches = userInterestsRepository.countCommonInterestsByUserId(userId);
+        List<Integer> myUserInterests = userInterestsRepository.findByUserEntityId(user.get().getId())
+                .stream().map(interest -> interest.getInterests().getInterestCode()).collect(Collectors.toList());
 
-        Map<Integer, Long> userMatchesMap = userMatches.stream()
-                .collect(Collectors.toMap(UserMatches::getUserId, UserMatches::getMatches));
+        List<Integer> allUserIds = userRepository.findAll()
+                .stream()
+                .filter(u -> u != user.get())
+                .map(UserEntity::getId)
+                .collect(Collectors.toList());
 
-        List<UsersMatches> usersMatches = userMatchesRepository.findByUserEquals(userEntity);
+        Map<Integer, Double> covarianceValues = new HashMap<>();
+        for (int userId : allUserIds) {
+            List<Integer> userInterests = userInterestsRepository.findByUserEntityId(userId)
+                    .stream().map(interest -> interest.getInterests().getInterestCode())
+                    .collect(Collectors.toList());
+            double covariance = calculateCovariance(userInterests, myUserInterests);
+            covarianceValues.put(userId, covariance);
+
+        }
+
+        List<Integer> sortedDescendantUserIds = new ArrayList<>(covarianceValues.keySet());
+        sortedDescendantUserIds.sort((u1, u2) -> {
+            double covariance1 = covarianceValues.get(u1);
+            double covariance2 = covarianceValues.get(u2);
+            return Double.compare(covariance2, covariance1);
+        });
+
+
+        List<UsersMatches> usersMatches = userMatchesRepository.findByUserEquals(user.get());
         List<Integer> matchedIds = usersMatches.stream()
                 .distinct()
                 .map(userMatch -> userMatch.getUserMatched().getId())
-                .filter(i -> !Objects.equals(i, userId))
+                .filter(i -> !Objects.equals(i, user.get().getId()))
                 .collect(Collectors.toList());
 
-        return userRepository.findByIdNotIn(matchedIds).stream()
-                .filter(user -> !user.getUsername().equalsIgnoreCase(username))
-                .map(user -> {
-                    final String avatar = photoUtils.getEncodedFile(user.getAvatar(), user.getUsername());
-                    List<AvatarsDTO> userAvatars = photoUtils.getUserAvatars(user.getUsername(), user.getId());
-                    List<String> userInterests = userUtils.getUserInterests(user);
-                    return userMapper.mapUserToDTO(user, avatar, userAvatars, userInterests, userMatchesMap.getOrDefault(user.getId(), 0L));
+        return sortedDescendantUserIds.stream()
+                .filter(userId -> !matchedIds.contains(userId))
+                .filter(userId -> !Objects.equals(userId, user.get().getId()))
+                .map(u -> {
+                    UserEntity userEntity = userRepository.findById(u).get();
+                    final String avatar = photoUtils.getEncodedFile(userEntity.getAvatar(), userEntity.getUsername());
+                    List<AvatarsDTO> userAvatars = photoUtils.getUserAvatars(userEntity.getUsername(), userEntity.getId());
+                    List<String> userInterests = userUtils.getUserInterests(userEntity);
+                    return userMapper.mapUserToDTO(userEntity, avatar, userAvatars, userInterests, null);
                 })
-                .sorted(Comparator.comparing(UsersDTO::getUserMatchCount))
                 .collect(Collectors.toList());
+
+    }
+
+    private static double calculateCovariance(List<Integer> userInterests, List<Integer> myUserInterests) {
+
+        final double mean1 = userInterests.stream()
+                .mapToInt(Integer::intValue)
+                .average()
+                .orElse(0.0);
+
+
+        final double mean2 = myUserInterests.stream()
+                .mapToInt(Integer::intValue)
+                .average()
+                .orElse(0.0);
+
+        double covariance = 0.0;
+        final int n = Math.min(userInterests.size(), myUserInterests.size());
+
+        for (int i = 0; i < n; i++) {
+            double deviation1 = userInterests.get(i) - mean1;
+            double deviation2 = myUserInterests.get(i) - mean2;
+
+            covariance += deviation1 * deviation2;
+        }
+
+        covariance /= n;
+
+        return covariance;
     }
 
     @Override
@@ -93,7 +146,7 @@ public class MatchesServiceImpl implements MatchesService {
             List<UsersMatches> matchedUserList = userMatchesRepository
                     .findByUserIdEqualsAndUserMatchedIdEquals(matchedUserId, userEntity.getId());
 
-            if(!matchedUserList.isEmpty() &&
+            if (!matchedUserList.isEmpty() &&
                     matchedUserList.get(0).getMatchesStatus().getMatchesStatusName().equalsIgnoreCase(MATCHED_STATUS)) {
 
                 EmailRequest emailRequest = new EmailRequest();

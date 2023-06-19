@@ -70,7 +70,7 @@ const UserHome = () => {
       try {
         const response = await GetPossibleMatchesService();
         if (!unmounted) {
-          setPossibleMatches(response.data);
+          setPossibleMatches(response.data.reverse());
           setCurrentIndex(response.data.length - 1);
           setChildRefs(() =>
             Array(response.data.length)
@@ -106,9 +106,7 @@ const UserHome = () => {
               <div className={styles.card}>
                 <div className={styles.card_image_container} style={{ backgroundImage: "url(data:image/png;base64," + user.avatarFile + ")" }}>
                 </div>
-                <div className={styles.card_title}>{user.displayName}</div>
-                <div className={styles.card_matches}>You have <b>{user.userMatchCount}</b> matches</div>
-                <div className={styles.card_description}>{user.gender}</div>
+                <div className={styles.card_title}>{user.displayName}</div>                <div className={styles.card_description}>{user.gender}</div>
                 <Link to="#" onClick={handleDetails(user.id)} id={user.id}>
                   <div className={styles.card_user_details}>Tap to see more</div>
                 </Link>
@@ -122,7 +120,6 @@ const UserHome = () => {
           <div className={styles.final_card}>
             <div className={styles.final_card_image_container}>You have no matches. Try later.</div>
             <div className={styles.final_card_title}>Name</div>
-            <div className={styles.final_card_matches}>You have <b>x</b> matches</div>
             <div className={styles.final_card_description}>Gender</div>
             <div className={styles.final_card_user_details}><br></br></div>
           </div>

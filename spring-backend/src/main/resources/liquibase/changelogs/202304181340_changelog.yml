@@ -49,7 +49,7 @@ databaseChangeLog:
                   value: Hotel
               - column:
                   name: interest_code
-                  value: 10
+                  value: 40
         - insert:
             tableName: interests
             columns:
@@ -58,7 +58,7 @@ databaseChangeLog:
                   value: Hostel
               - column:
                   name: interest_code
-                  value: 11
+                  value: 20
         - insert:
             tableName: interests
             columns:
@@ -67,7 +67,7 @@ databaseChangeLog:
                   value: Airbnb
               - column:
                   name: interest_code
-                  value: 12
+                  value: 30
         - insert:
             tableName: interests
             columns:
@@ -76,7 +76,7 @@ databaseChangeLog:
                   value: Couchsurfing
               - column:
                   name: interest_code
-                  value: 13
+                  value: 10
         - insert:
             tableName: interests
             columns:
@@ -85,7 +85,7 @@ databaseChangeLog:
                   value: Resort
               - column:
                   name: interest_code
-                  value: 14
+                  value: 50
         - insert:
             tableName: interests
             columns:
@@ -94,7 +94,7 @@ databaseChangeLog:
                   value: Expensive trips
               - column:
                   name: interest_code
-                  value: 20
+                  value: 51
         - insert:
             tableName: interests
             columns:
@@ -112,7 +112,7 @@ databaseChangeLog:
                   value: Restaurants
               - column:
                   name: interest_code
-                  value: 30
+                  value: 41
         - insert:
             tableName: interests
             columns:
@@ -121,7 +121,7 @@ databaseChangeLog:
                   value: Street Food
               - column:
                   name: interest_code
-                  value: 31
+                  value: 11
         - insert:
             tableName: interests
             columns:
@@ -130,7 +130,7 @@ databaseChangeLog:
                   value: Cooking
               - column:
                   name: interest_code
-                  value: 32
+                  value: 31
         - insert:
             tableName: interests
             columns:
@@ -139,7 +139,7 @@ databaseChangeLog:
                   value: Big cities
               - column:
                   name: interest_code
-                  value: 40
+                  value: 22
         - insert:
             tableName: interests
             columns:
@@ -148,7 +148,7 @@ databaseChangeLog:
                   value: Mountains
               - column:
                   name: interest_code
-                  value: 41
+                  value: 32
         - insert:
             tableName: interests
             columns:
@@ -157,7 +157,7 @@ databaseChangeLog:
                   value: Sea
               - column:
                   name: interest_code
-                  value: 42
+                  value: 52
         - insert:
             tableName: interests
             columns:
@@ -166,7 +166,7 @@ databaseChangeLog:
                   value: Nature
               - column:
                   name: interest_code
-                  value: 43
+                  value: 12
         - insert:
             tableName: interests
             columns:
@@ -175,7 +175,7 @@ databaseChangeLog:
                   value: Relax
               - column:
                   name: interest_code
-                  value: 50
+                  value: 53
         - insert:
             tableName: interests
             columns:
@@ -184,7 +184,7 @@ databaseChangeLog:
                   value: Culture
               - column:
                   name: interest_code
-                  value: 51
+                  value: 13
         - insert:
             tableName: interests
             columns:
@@ -193,7 +193,7 @@ databaseChangeLog:
                   value: Fun
               - column:
                   name: interest_code
-                  value: 52
+                  value: 23
         - insert:
             tableName: interests
             columns:
@@ -202,7 +202,7 @@ databaseChangeLog:
                   value: Walking
               - column:
                   name: interest_code
-                  value: 60
+                  value: 14
         - insert:
             tableName: interests
             columns:
@@ -211,7 +211,7 @@ databaseChangeLog:
                   value: Public transport
               - column:
                   name: interest_code
-                  value: 61
+                  value: 24
         - insert:
             tableName: interests
             columns:
@@ -220,7 +220,7 @@ databaseChangeLog:
                   value: Taxi
               - column:
                   name: interest_code
-                  value: 62
+                  value: 42
         - insert:
             tableName: interests
             columns:
@@ -229,7 +229,7 @@ databaseChangeLog:
                   value: Car
               - column:
                   name: interest_code
-                  value: 63
+                  value: 54
         - insert:
             tableName: interests
             columns:
@@ -238,7 +238,7 @@ databaseChangeLog:
                   value: Europe
               - column:
                   name: interest_code
-                  value: 70
+                  value: 25
         - insert:
             tableName: interests
             columns:
@@ -247,7 +247,7 @@ databaseChangeLog:
                   value: Asia
               - column:
                   name: interest_code
-                  value: 71
+                  value: 15
         - insert:
             tableName: interests
             columns:
@@ -256,7 +256,7 @@ databaseChangeLog:
                   value: Australia
               - column:
                   name: interest_code
-                  value: 72
+                  value: 43
         - insert:
             tableName: interests
             columns:
@@ -265,7 +265,7 @@ databaseChangeLog:
                   value: Africa
               - column:
                   name: interest_code
-                  value: 73
+                  value: 33
         - insert:
             tableName: interests
             columns:
@@ -274,7 +274,7 @@ databaseChangeLog:
                   value: America
               - column:
                   name: interest_code
-                  value: 74
+                  value: 55
         - insert:
             tableName: interests
             columns:
@@ -283,7 +283,7 @@ databaseChangeLog:
                   value: City break
               - column:
                   name: interest_code
-                  value: 80
+                  value: 44
         - insert:
             tableName: interests
             columns:
@@ -292,7 +292,7 @@ databaseChangeLog:
                   value: Backpacking
               - column:
                   name: interest_code
-                  value: 81
+                  value: 16
         - insert:
             tableName: interests
             columns:
@@ -301,7 +301,7 @@ databaseChangeLog:
                   value: Volunteer
               - column:
                   name: interest_code
-                  value: 82
+                  value: 17
         - insert:
             tableName: interests
             columns:
@@ -310,7 +310,7 @@ databaseChangeLog:
                   value: Work and travel
               - column:
                   name: interest_code
-                  value: 83
+                  value: 26
   - changeSet:
       id: 202304181340_changelog#3
       author: Georgiana Voicea

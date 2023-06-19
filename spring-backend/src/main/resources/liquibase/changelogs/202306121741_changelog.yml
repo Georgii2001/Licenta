@@ -69,7 +69,7 @@ databaseChangeLog:
                   value: Meticulous planners
               - column:
                   name: interest_code
-                  value: 90
+                  value: 56
         - insert:
             tableName: interests
             columns:
@@ -78,7 +78,7 @@ databaseChangeLog:
                   value: Flexible adaptors
               - column:
                   name: interest_code
-                  value: 91
+                  value: 34
         - insert:
             tableName: interests
             columns:
@@ -87,7 +87,7 @@ databaseChangeLog:
                   value: Impulsive travelers
               - column:
                   name: interest_code
-                  value: 92
+                  value: 18
         - insert:
             tableName: interests
             columns:
@@ -96,7 +96,7 @@ databaseChangeLog:
                   value: Photography
               - column:
                   name: interest_code
-                  value: 100
+                  value: 27
         - insert:
             tableName: interests
             columns:
@@ -105,7 +105,7 @@ databaseChangeLog:
                   value: Music
               - column:
                   name: interest_code
-                  value: 101
+                  value: 45
         - insert:
             tableName: interests
             columns:
@@ -114,7 +114,7 @@ databaseChangeLog:
                   value: Cycling
               - column:
                   name: interest_code
-                  value: 102
+                  value: 35
         - insert:
             tableName: interests
             columns:
@@ -123,7 +123,7 @@ databaseChangeLog:
                   value: Sport
               - column:
                   name: interest_code
-                  value: 103
+                  value: 19
         - insert:
             tableName: interests
             columns:
@@ -132,7 +132,7 @@ databaseChangeLog:
                   value: Museum visiting
               - column:
                   name: interest_code
-                  value: 104
+                  value: 36
         - insert:
             tableName: interests
             columns:
@@ -141,4 +141,4 @@ databaseChangeLog:
                   value: Tech
               - column:
                   name: interest_code
-                  value: 105
+                  value: 57
