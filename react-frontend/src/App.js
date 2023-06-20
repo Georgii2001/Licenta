@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Header from "./components/root/fragments/header/Header";
 import Home from "./components/root/home/Home";
 import TravelIdeas from "./components/root/home/TravelIdeas";
+import Forum from "./components/root/home/Forum";
 import SignUp from "./components/root/users/signUp/SignUp";
 import Login from "./components/root/users/login/Login";
 import UserHome from "./components/root/users/UsersHome";
@@ -39,8 +40,12 @@ function App() {
             <Route path="/discover-interests" element={<DiscoverInterests />} />
             <Route path="/my-matches" element={<MyMatchesPage />} />
             <Route path="/user-details" element={<UserDetails />} />
-            <Route path="/matched-user-details" element={<MatchedUserDetails />}/>
+            <Route
+              path="/matched-user-details"
+              element={<MatchedUserDetails />}
+            />
             <Route path="/travel-ideas" element={<TravelIdeas />} />
+            <Route path="/forum" element={<Forum />} />
           </Route>
         </Routes>
       </div>

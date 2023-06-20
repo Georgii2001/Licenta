@@ -21,6 +21,9 @@ const NavLinks = () => {
             </NavLink>
           </li>
           <li className={styles.nav_link}>
+            <NavLink to="forum">Forum</NavLink>
+          </li>
+          <li className={styles.nav_link}>
             <NavLink to="travel-ideas">Travel ideas</NavLink>
           </li>
           <li className={styles.nav_link}>
