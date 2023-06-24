@@ -46,13 +46,7 @@
     transform: translateX(-50%);
 }
 
-@media (max-width: 768px) {
-    .forum_button {
-        width: 100%;
-        left: 0;
-        transform: translateX(0);
-    }
-}
+
 .forum_subtitle {
     font-size: 18px;
     margin-bottom: 8px;

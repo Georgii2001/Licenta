@@ -94,8 +94,7 @@ public class PhotoUtils {
             throw new NotFoundException("File not found in directory");
         }
     }
-
-    private String getPathMyPhotos(String username) {
+   private String getPathMyPhotos(String username) {
         return Constants.USER_PHOTOS_PATH + username + Constants.SEPARATOR;
     }
 }

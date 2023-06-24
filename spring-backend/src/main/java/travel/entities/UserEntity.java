@@ -21,15 +21,16 @@ public class UserEntity extends BaseEntity  {
     private String email;
     @Column(name="display_name")
     private String displayName;
+    @Column
     private String gender;
+    @Column
     private String description;
-
     @Column(nullable = false)
     private String role;
     @Column(nullable = false)
     private String password;
+    @Column
     private String avatar;
-
     @Column(name = "sys_creation_date", insertable = false, updatable = false)
     private Timestamp creationDate;
 
