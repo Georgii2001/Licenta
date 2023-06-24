@@ -17,6 +17,7 @@ public interface UserService {
     UserEntity findUserById(Integer userId);
 
     EmailResponseDTO sendEmailInvitation(String username, Integer receiverId);
+    UserEntity sendPasswordEmail(String email);
 
     UsersDTO getUserMainDetails(String username, Integer id);
 

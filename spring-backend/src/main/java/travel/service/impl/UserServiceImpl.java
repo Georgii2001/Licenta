@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import travel.dto.*;
@@ -19,7 +21,10 @@ import travel.service.UserService;
 import travel.utils.PhotoUtils;
 import travel.utils.UserUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static travel.email.constants.TemplateNames.INVITE_TO_NEW_TRIP;
@@ -35,6 +40,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserUtils userUtils;
     private final EmailUtils emailUtils;
+    private final JavaMailSender javaMailSender;
 
     @Override
     public UserEntity register(AppClientSignUpDto userDTO) {
@@ -104,6 +110,24 @@ public class UserServiceImpl implements UserService {
         emailRequest.setReceiver(receiverUser);
 
         return new EmailResponseDTO(emailUtils.notifyUser(emailRequest, INVITE_TO_NEW_TRIP.name()));
+    }
+
+    @Override
+    public UserEntity sendPasswordEmail(String email) {
+        Optional<UserEntity> user = userRepository.findByEmail(email);
+        if (user.isEmpty()) {
+            throw new NotFoundException("User not found");
+        }
+
+        SimpleMailMessage mail = new SimpleMailMessage();
+        String mailBody = "http://localhost:4200/password/" + user.get().getId();
+        mail.setTo(user.get().getEmail());
+        mail.setFrom("travel.with.me.enjoytheworld@gmail.com");
+        mail.setSubject("Change your password");
+        mail.setText("Click the link to reset your password: " + mailBody);
+
+        javaMailSender.send(mail);
+        return user.get();
     }
 
     @Override

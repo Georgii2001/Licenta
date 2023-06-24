@@ -106,6 +106,13 @@ public class UserController {
         }
         return null;
     }
+
+    @PostMapping("/notification")
+    @Operation(summary = "Send notification with password reset link", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<?> sendNotification(@RequestParam("email") String email) {
+        UserEntity user = this.userService.sendPasswordEmail(email);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
 }
 
 
