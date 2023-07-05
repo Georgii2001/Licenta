@@ -43,8 +43,8 @@ public class InviteToNewTrip implements TemplateStrategy {
         Template template = freemarkerConfig.getTemplate(INVITE_TO_NEW_TRIP.getFtlName());
 
         Map<String, String> data = new HashMap<>();
-        data.put(RECEIVER, emailRequest.getReceiver().getUsername());
-        data.put(SENDER, emailRequest.getSender().getUsername());
+        data.put(RECEIVER, emailRequest.getReceiver().getDisplayName());
+        data.put(SENDER, emailRequest.getSender().getDisplayName());
         data.put(SENDER_EMAIL, emailRequest.getSender().getEmail());
 
         return FreeMarkerTemplateUtils.processTemplateIntoString(template, data);

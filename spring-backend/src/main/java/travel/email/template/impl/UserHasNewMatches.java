@@ -43,7 +43,7 @@ public class UserHasNewMatches implements TemplateStrategy {
         Template template = freemarkerConfig.getTemplate(USER_HAS_NEW_MATCHES.getFtlName());
 
         Map<String, String> data = new HashMap<>();
-        data.put(RECEIVER, emailRequest.getReceiver().getUsername());
+        data.put(RECEIVER, emailRequest.getReceiver().getDisplayName());
 
         return FreeMarkerTemplateUtils.processTemplateIntoString(template, data);
     }
