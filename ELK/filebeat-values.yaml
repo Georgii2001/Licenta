@@ -1,0 +1,47 @@
+daemonset:
+  enabled: true
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "200Mi"
+  limits:
+    memory: "400Mi"
+
+filebeatConfig:
+  filebeat.yml: |-
+    filebeat.autodiscover:
+      providers:
+        - type: kubernetes
+          node: ${NODE_NAME}
+          hints.enabled: true
+          hints.default_config:
+            type: container
+            paths:
+              - /var/log/containers/*${data.kubernetes.container.id}.log
+            multiline.pattern: '^\s|^Caused by:|^\tat '
+            multiline.negate: false
+            multiline.match: after
+
+    processors:
+      - add_kubernetes_metadata: {}
+      - add_cloud_metadata: {}
+      - add_host_metadata: {}
+
+    output.elasticsearch:
+      hosts: ["https://elasticsearch-master:9200"]
+      username: "elastic"
+      password: ${ELASTIC_PASSWORD}
+      ssl.verification_mode: none
+      
+extraEnvs:
+  - name: NODE_NAME
+    valueFrom:
+      fieldRef:
+        fieldPath: spec.nodeName
+  - name: ELASTIC_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: elasticsearch-master-credentials
+        key: password
+

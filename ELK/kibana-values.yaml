@@ -1,0 +1,20 @@
+replicas: 1
+resources:
+  requests:
+    cpu: "1"
+    memory: "2048Mi"
+  limits:
+    memory: "2048Mi"
+
+# Kibana poate citi config și din variabile de mediu
+extraEnvs:
+  - name: ELASTICSEARCH_HOSTS
+    value: '["https://elasticsearch-master:9200"]'
+  - name: ELASTICSEARCH_SERVICEACCOUNTTOKEN
+    valueFrom:
+      secretKeyRef:
+        name: kibana-service-token
+        key: token
+  - name: ELASTICSEARCH_SSL_VERIFICATIONMODE
+    value: "none"
+
