@@ -1,5 +1,6 @@
 package travel.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import travel.dto.UserAvatarDto;
 import travel.entities.Avatars;
 import travel.entities.UserEntity;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AvatarServiceImpl implements AvatarService {
@@ -24,8 +26,17 @@ public class AvatarServiceImpl implements AvatarService {
 
     @Override
     public void saveUserAvatar(String username, UserAvatarDto userAvatar) {
+        log.info("saveUserAvatar: Saving avatar for user: {}", username);
+
+        if (userAvatar.getAvatar() == null || userAvatar.getAvatar().isEmpty()) {
+            log.error("Avatar file is empty for user: {}", username);
+            throw new IllegalArgumentException("Avatar file must not be empty");
+        }
+
         UserEntity userEntity = userUtils.getUserEntity(username, null, null);
         final Integer nextAvatarPriority = avatarsRepository.findNextAvatarPriority(userEntity.getId());
+
+        log.debug("Next avatar priority for user {}: {}", username, nextAvatarPriority);
         final String finalAvatarName =
                 photoUtils.saveAvatarInDB(userEntity,userAvatar.getAvatar().getOriginalFilename(),nextAvatarPriority);
         photoUtils.savePhoto(userAvatar.getAvatar(), username, finalAvatarName);
@@ -33,6 +44,7 @@ public class AvatarServiceImpl implements AvatarService {
 
     @Override
     public void deleteUserAvatar(String username, Integer avatarId) {
+        log.info("deleteUserAvatar: Deleting avatar with ID {} for user: {}", avatarId, username);
         UserEntity userEntity = userUtils.getUserEntity(username, null, null);
         final Integer userId = userEntity.getId();
         avatarsRepository.deleteUserAvatar(userId, avatarId);
@@ -48,6 +60,7 @@ public class AvatarServiceImpl implements AvatarService {
 
     @Override
     public void changeUserMainAvatar(String username, Integer avatarId) {
+        log.info("changeUserMainAvatar: Changing main avatar to ID {} for user: {}", avatarId, username);
         UserEntity userEntity = userUtils.getUserEntity(username, null, null);
 
         List<Avatars> avatars = photoUtils.getSortedAvatars(userEntity.getId());

@@ -1,6 +1,7 @@
 package travel.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import travel.dto.AvatarsDTO;
 import travel.dto.EmailResponseDTO;
@@ -28,6 +29,7 @@ import static travel.constants.Constants.MATCHED_STATUS;
 import static travel.email.constants.EmailConstants.MESSAGE_WAS_ALREADY_SENT;
 import static travel.email.constants.TemplateNames.USER_HAS_NEW_MATCHES;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MatchesServiceImpl implements MatchesService {
@@ -43,11 +45,13 @@ public class MatchesServiceImpl implements MatchesService {
 
 
     public List<UsersDTO> getAllUsersMatchesForClient(String username) {
-
+        log.info("getAllUsersMatchesForClient: Getting all users matches for client with username: {}", username);
         Optional<UserEntity> user = userRepository.findByUsername(username);
         if (user.isEmpty()) {
+            log.error("Can not find user with username: {}", username);
             throw new NotFoundException("Can not find user with this username");
         }
+
 
         List<Integer> myUserInterests = userInterestsRepository.findByUserEntityId(user.get().getId())
                 .stream().map(interest -> interest.getInterests().getInterestCode()).collect(Collectors.toList());
@@ -83,6 +87,7 @@ public class MatchesServiceImpl implements MatchesService {
                 .filter(i -> !Objects.equals(i, user.get().getId()))
                 .collect(Collectors.toList());
 
+        log.debug("Found {} matched user ids for user: {}", matchedIds.size(), username);
         return sortedDescendantUserIds.stream()
                 .filter(userId -> !matchedIds.contains(userId))
                 .filter(userId -> !Objects.equals(userId, user.get().getId()))
@@ -98,7 +103,6 @@ public class MatchesServiceImpl implements MatchesService {
     }
 
     private static double calculateCovariance(List<Integer> userInterests, List<Integer> myUserInterests) {
-
         final double mean1 = userInterests.stream()
                 .mapToInt(Integer::intValue)
                 .average()
@@ -119,7 +123,6 @@ public class MatchesServiceImpl implements MatchesService {
 
             covariance += deviation1 * deviation2;
         }
-
         covariance /= n;
 
         return covariance;
@@ -127,6 +130,7 @@ public class MatchesServiceImpl implements MatchesService {
 
     @Override
     public EmailResponseDTO addUserToMatches(String username, Integer matchedUserId, String status) {
+        log.info("addUserToMatches: Adding user with username: {} to matches with userId: {} and status: {}", username, matchedUserId, status);
         MatchesStatus matchesStatus = obtainStatusFromDB(status);
 
         UserEntity userEntity = userUtils.getUserEntity(username, null, null);
@@ -134,6 +138,7 @@ public class MatchesServiceImpl implements MatchesService {
                 .findByUserIdEqualsAndUserMatchedIdEquals(userEntity.getId(), matchedUserId);
 
         if (usersMatchesList.isEmpty()) {
+            log.debug("addUserToMatches: User with username: {} is not already matched with userId: {}", username, matchedUserId);
             UsersMatches usersMatches = new UsersMatches();
             UserEntity userMatchedEntity = userUtils.getUserEntity(null, matchedUserId, null);
 
@@ -157,15 +162,18 @@ public class MatchesServiceImpl implements MatchesService {
                 return new EmailResponseDTO(emailUtils.notifyUser(emailRequest, USER_HAS_NEW_MATCHES.name()));
             }
         } else {
+            log.warn("User with username: {} is already matched with userId: {}", username, matchedUserId);
             throw new AlreadyExistsException("You can find this user on my matches page!!!");
         }
         return new EmailResponseDTO(MESSAGE_WAS_ALREADY_SENT);
     }
 
     private MatchesStatus obtainStatusFromDB(String status) {
+        log.info("obtainStatusFromDB: Obtaining matches status from DB with status name: {}", status);
         MatchesStatus matchesStatus = matchesStatusRepository.findByMatchesStatusNameEquals(status);
 
         if (matchesStatus == null) {
+            log.error("Matches status with name: {} does not exist in DB", status);
             throw new NotFoundException("Sent matches status does not exists!!!");
         }
         return matchesStatus;
@@ -173,6 +181,7 @@ public class MatchesServiceImpl implements MatchesService {
 
     @Override
     public List<UsersDTO> getAllMyMatches(String email) {
+        log.info("getAllMyMatches: Getting all my matches for email: {}", email);
         UserEntity userEntity = userUtils.getUserEntity(email, null, null);
         List<UsersMatches> usersMatches = userMatchesRepository.getAllMatchedUserMatches(userEntity);
         final Integer userId = userEntity.getId();
@@ -198,6 +207,7 @@ public class MatchesServiceImpl implements MatchesService {
             usersDTOS.add(userMapper.mapUserToDTO(user, avatar, userAvatars, userInterests, null));
         });
 
+        log.debug("Found {} matches for user with email: {}", usersDTOS.size(), email);
         return usersDTOS;
     }
 }

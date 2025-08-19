@@ -1,6 +1,7 @@
 package travel.utils;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class PhotoUtils {
@@ -28,11 +30,13 @@ public class PhotoUtils {
     public void savePhoto(MultipartFile avatar, String username, String avatarFileName) {
         final String pathname = getPathMyPhotos(username) + avatarFileName;
         File filePath = new File(pathname);
+        log.debug("Saving photo to path: {}", pathname);
         createMyFolder(filePath);
 
         try {
             avatar.transferTo(filePath);
         } catch (Exception e) {
+            log.error("Error while saving photo: {}", e.getMessage());
             throw new RuntimeException("Photos wasn't uploaded.");
         }
     }
@@ -45,6 +49,7 @@ public class PhotoUtils {
     }
 
     public String saveAvatarInDB(UserEntity userEntity, String avatarName, Integer priority) {
+       log.debug("Saving avatar in DB for user: {}, avatarName: {}, priority: {}", userEntity.getUsername(), avatarName, priority);
         Avatars avatar = Avatars.builder()
                 .userEntity(userEntity)
                 .avatarName(avatarName)
@@ -78,6 +83,7 @@ public class PhotoUtils {
         final String pathname = getPathMyPhotos(username);
         File directory = new File(pathname);
         try {
+            log.debug("Encoding file: {} from directory: {}", fileName, pathname);
             if (directory.exists() && directory.isDirectory()) {
                 File[] files = directory.listFiles();
                 assert files != null;
@@ -91,6 +97,7 @@ public class PhotoUtils {
             return null;
 
         } catch (IOException e) {
+            log.error("Error while encoding file: {}", e.getMessage());
             throw new NotFoundException("File not found in directory");
         }
     }

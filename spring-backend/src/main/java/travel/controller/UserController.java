@@ -3,6 +3,7 @@ package travel.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,6 +40,7 @@ public class UserController {
     @Operation(summary = "Create new client-user")
     public ResponseEntity<?> signup(@Valid @ModelAttribute AppClientSignUpDto userDTO) {
         if (userService.userExists(userDTO.getUsername(), userDTO.getEmail())) {
+
             throw new RuntimeException("Username or email address already in use.");
         }
         UserEntity user = userService.register(userDTO);
