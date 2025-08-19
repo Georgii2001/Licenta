@@ -1,23 +1,23 @@
 package backend.hobbiebackend.controller;
 
+import backend.hobbiebackend.dto.AppClientSignUpDto;
+import backend.hobbiebackend.dto.BusinessRegisterDto;
+import backend.hobbiebackend.dto.UpdateAppClientDto;
+import backend.hobbiebackend.dto.UpdateBusinessDto;
+import backend.hobbiebackend.entities.AppClient;
+import backend.hobbiebackend.entities.BusinessOwner;
+import backend.hobbiebackend.entities.UserEntity;
+import backend.hobbiebackend.enums.UserRoleEnum;
 import backend.hobbiebackend.handler.NotFoundException;
-import backend.hobbiebackend.model.dto.AppClientSignUpDto;
-import backend.hobbiebackend.model.dto.BusinessRegisterDto;
-import backend.hobbiebackend.model.dto.UpdateAppClientDto;
-import backend.hobbiebackend.model.dto.UpdateBusinessDto;
-import backend.hobbiebackend.model.entities.AppClient;
-import backend.hobbiebackend.model.entities.BusinessOwner;
-import backend.hobbiebackend.model.entities.UserEntity;
-import backend.hobbiebackend.model.entities.enums.UserRoleEnum;
-import backend.hobbiebackend.model.jwt.JwtRequest;
-import backend.hobbiebackend.model.jwt.JwtResponse;
+import backend.hobbiebackend.jwt.JwtRequest;
+import backend.hobbiebackend.jwt.JwtResponse;
 import backend.hobbiebackend.security.HobbieUserDetailsService;
 import backend.hobbiebackend.service.NotificationService;
 import backend.hobbiebackend.service.UserService;
 import backend.hobbiebackend.utility.JWTUtility;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,7 +28,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
@@ -37,26 +37,14 @@ public class UserController {
     private final AuthenticationManager authenticationManager;
     private final HobbieUserDetailsService hobbieUserDetailsService;
 
-    @Autowired
-    public UserController(UserService userService, PasswordEncoder passwordEncoder, NotificationService notificationService, JWTUtility jwtUtility, AuthenticationManager authenticationManager, HobbieUserDetailsService hobbieUserDetailsService) {
-        this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
-        this.notificationService = notificationService;
-        this.jwtUtility = jwtUtility;
-        this.authenticationManager = authenticationManager;
-        this.hobbieUserDetailsService = hobbieUserDetailsService;
-    }
-
     @PostMapping("/signup")
-    @CrossOrigin(origins = "http://localhost:4200")
     @Operation(summary = "Create new client-user")
-    public ResponseEntity<?> signup(@RequestBody AppClientSignUpDto user) {
-        System.out.println(user);
-        if (this.userService.userExists(user.getUsername(), user.getEmail())) {
+    public ResponseEntity<?> signup(@RequestBody AppClientSignUpDto userDTO) {
+        if (userService.userExists(userDTO.getUsername(), userDTO.getEmail())) {
             throw new RuntimeException("Username or email address already in use.");
         }
-        AppClient client = this.userService.register(user);
-        return new ResponseEntity<AppClient>(client, HttpStatus.CREATED);
+        UserEntity user = userService.register(userDTO);
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
     @PostMapping("/register")
@@ -86,7 +74,7 @@ public class UserController {
     public ResponseEntity<?> updateUser(@RequestBody UpdateAppClientDto user) {
         AppClient client = this.userService.findAppClientById(user.getId());
         client.setPassword(this.passwordEncoder.encode(user.getPassword()));
-        client.setGender(user.getGender());
+        client.setGender(user.getGender().name());
         client.setFullName(user.getFullName());
         this.userService.saveUpdatedUserClient(client);
         return new ResponseEntity<AppClient>(client, HttpStatus.CREATED);
@@ -106,7 +94,7 @@ public class UserController {
 
     @PutMapping("/password")
     @Operation(summary = "Update password, (use existing user id)", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<?> setUpNewPassword(@RequestParam Long id, String password) {
+    public ResponseEntity<?> setUpNewPassword(@RequestParam Integer id, String password) {
         UserEntity userById = this.userService.findUserById(id);
         userById.setPassword(this.passwordEncoder.encode(password));
         this.userService.saveUserWithUpdatedPassword(userById);
@@ -125,12 +113,12 @@ public class UserController {
         businessOwner.setAddress(business.getAddress());
         this.userService.saveUpdatedUser(businessOwner);
 
-        return new ResponseEntity<BusinessOwner>(businessOwner, HttpStatus.CREATED);
+        return new ResponseEntity<>(businessOwner, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/user/{id}")
     @Operation(summary = "Delete user", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<Long> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<Integer> deleteUser(@PathVariable Integer id) {
         boolean isRemoved = this.userService.deleteUser(id);
         if (!isRemoved) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -160,15 +148,12 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    @CrossOrigin(origins = "http://localhost:4200")
     @Operation(summary = "Login based on user role after authentication", security = @SecurityRequirement(name = "bearerAuth"))
     public String logInUser(@RequestParam String username) {
         UserEntity userByUsername = this.userService.findUserByUsername(username);
-        if (userByUsername.getRoles().stream()
-                .anyMatch(u -> u.getRole().equals(UserRoleEnum.USER))) {
+        if (userByUsername.getRole().equals(UserRoleEnum.USER.name())) {
             return "USER";
-        } else if (userByUsername.getRoles().stream()
-                .anyMatch(u -> u.getRole().equals(UserRoleEnum.BUSINESS_USER))) {
+        } else if (userByUsername.getRole().equals(UserRoleEnum.BUSINESS_USER.name())) {
             return "BUSINESS_USER";
         }
         return null;

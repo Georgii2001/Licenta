@@ -1,23 +1,16 @@
 package backend.hobbiebackend.service.impl;
 
-import backend.hobbiebackend.model.entities.UserEntity;
+import backend.hobbiebackend.entities.UserEntity;
 import backend.hobbiebackend.service.NotificationService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
 @Service
+@RequiredArgsConstructor
 public class NotificationServiceImpl implements NotificationService {
     private final JavaMailSender javaMailSender;
-
-    @Autowired
-    public NotificationServiceImpl(JavaMailSender javaMailSender) {
-        this.javaMailSender = javaMailSender;
-    }
 
     @Override
     public void sendNotification(UserEntity userEntity) {

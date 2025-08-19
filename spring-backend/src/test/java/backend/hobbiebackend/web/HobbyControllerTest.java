@@ -1,11 +1,12 @@
 package backend.hobbiebackend.web;
 
 import backend.hobbiebackend.controller.HobbyController;
-import backend.hobbiebackend.model.dto.HobbyInfoDto;
-import backend.hobbiebackend.model.dto.HobbyInfoUpdateDto;
-import backend.hobbiebackend.model.entities.*;
-import backend.hobbiebackend.model.entities.enums.CategoryNameEnum;
-import backend.hobbiebackend.model.entities.enums.LocationEnum;
+import backend.hobbiebackend.dto.HobbyInfoDto;
+import backend.hobbiebackend.dto.HobbyInfoUpdateDto;
+import backend.hobbiebackend.entities.AppClient;
+import backend.hobbiebackend.entities.Hobby;
+import backend.hobbiebackend.enums.CategoryNameEnum;
+import backend.hobbiebackend.enums.LocationEnum;
 import backend.hobbiebackend.service.HobbyService;
 import backend.hobbiebackend.service.UserService;
 import org.junit.Before;
@@ -21,15 +22,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -97,7 +94,7 @@ public class HobbyControllerTest extends AbstractTest {
                 "\n" +
                 "How fast your skills improve depend on every individual and on your purpose, you can ride for pleasure in the nature in all types of terrain or choose an equestrian sport and train professionally.\n" +
                 "\n");
-        hobbyInfoUpdateDto.setId(1L);
+        hobbyInfoUpdateDto.setId(1);
         hobbyInfoUpdateDto.setSlogan("slogan");
         hobbyInfoUpdateDto.setProfileImgUrl("url");
         hobbyInfoUpdateDto.setGalleryImgUrl1("url");
@@ -111,11 +108,7 @@ public class HobbyControllerTest extends AbstractTest {
         hobbyInfoUpdateDto.setContactInfo("How fast your skills improve depend on every individual and on your purpose.");
 
         ModelMapper modelMapper = new ModelMapper();
-        Category category = new Category(CategoryNameEnum.ACTIVE);
-        Location location = new Location(LocationEnum.ZURICH);
         hobby = modelMapper.map(hobbyInfoDto, Hobby.class);
-        hobby.setCategory(category);
-        hobby.setLocation(location);
         AppClient client = new AppClient();
         client.setUsername("user");
         String username = "user";
@@ -150,7 +143,7 @@ public class HobbyControllerTest extends AbstractTest {
     @Test
     public void hobby_details_should_work() throws Exception {
         String uri = "/hobbies/1";
-        Long id = 1L;
+        Integer id = 1;
         String inputJson = super.mapToJson(id);
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri)
                 .contentType(MediaType.APPLICATION_JSON_VALUE).content(inputJson)).andReturn();
@@ -164,7 +157,7 @@ public class HobbyControllerTest extends AbstractTest {
     @Test
     public void delete_hobby_should_work() throws Exception {
         String uri = "/hobbies/1";
-        long id = 1L;
+        final int id = 1;
         when(service.deleteHobby(id)).thenReturn(true);
         String inputJson = super.mapToJson(id);
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.delete(uri)
@@ -177,7 +170,7 @@ public class HobbyControllerTest extends AbstractTest {
     @Test
     public void delete_hobby_should_work_when_not_found() throws Exception {
         String uri = "/hobbies/1";
-        long id = 1L;
+        final int id = 1;
         when(service.deleteHobby(id)).thenReturn(false);
 
         String inputJson = super.mapToJson(id);

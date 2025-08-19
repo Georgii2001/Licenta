@@ -1,7 +1,7 @@
 package backend.hobbiebackend.security;
 
-import backend.hobbiebackend.model.entities.UserEntity;
-import backend.hobbiebackend.model.repostiory.UserRepository;
+import backend.hobbiebackend.entities.UserEntity;
+import backend.hobbiebackend.repostiory.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class HobbieUserDetailsService implements UserDetailsService {
@@ -31,8 +30,8 @@ public class HobbieUserDetailsService implements UserDetailsService {
 
     private UserDetails mapToUserDetails(UserEntity userEntity) {
 
-        List<GrantedAuthority> authorities = userEntity.getRoles().stream()
-                .map(ur -> new SimpleGrantedAuthority("ROLE_" + ur.getRole().name())).collect(Collectors.toList());
+        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + userEntity.getRole()));
+
         return new User(
                 userEntity.getUsername(),
                 userEntity.getPassword(),

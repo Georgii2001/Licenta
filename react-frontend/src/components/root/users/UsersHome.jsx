@@ -50,31 +50,31 @@ const UserHome = () => {
   return (
     <>
       <BackgroundHome />
-      <main className={styles.hobbie_main}>
-        <section className={styles.hobbie_container_home}>
+      <main className={styles.users_main}>
+        <section className={styles.users_container_home}>
           {state.length !== undefined && (
             <section className={styles.cards}>
-              {state.map((hobby) => (
+              {state.map((user) => (
                 <div
-                  data-testid={hobby.id}
-                  key={hobby.id}
+                  data-testid={user.id}
+                  key={user.id}
                   className={styles.rapper}
                 >
                   <Link
                     to="#"
-                    onClick={handleSort(hobby.id)}
+                    onClick={handleSort(user.id)}
                     className={styles.card}
-                    id={hobby.id}
+                    id={user.id}
                   >
                     <section className={styles.card_image_container}>
-                      <img src={hobby.profileImgUrl} alt="hobby" />
+                      <img src={`data:image/png;base64,${user.avatarFile}`} alt="user" />
                     </section>
 
                     <section className={styles.card_content}>
-                      <p className={styles.card_title}>{hobby.name}</p>
+                      <p className={styles.card_title}>{user.username}</p>
                       <div className={styles.card_info}>
-                        <p className={styles.text_medium}> Find out more...</p>
-                        <p className={styles.card_price}>{hobby.price} CHF</p>
+                        {/* <p className={styles.text_medium}> Find out more...</p> */}
+                        <p className={styles.card_price}>{user.gender}</p>
                       </div>
                     </section>
                   </Link>
