@@ -1,35 +1,59 @@
 import React from "react";
 import Background from "../../fragments/background/Background";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import SignUpAppClientService from "../../../../api/signup/SignUpAppClientService";
 import styles from "../../../../css/Forms.module.css";
 import LoadingDotsDark from "../login/animation/LoadingDotsDark";
 
 const SignUp = () => {
+
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [checked, setCheckBoxChecked] = useState("other");
-  const [error, setError] = useState(false);
-  const [imageUrl, setImageUrl] = useState("");
+  const [error, setError] = useState({});
+  const [avatarUrl, setAvatarUrl] = useState("");
   const [info, setInfo] = useState({
     username: "",
+    displayName: "",
     gender: "OTHER",
     email: "",
     password: "",
     repeatpassword: "",
-    image: null,
+    avatar: null,
   });
 
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({
+    username: "",
+    displayName: "",
+    email: "",
+    password: "",
+    repeatpassword: ""
+  });
+
+  const avatarInput = useRef(null);
+
+  const handleClick = event => {
+    avatarInput.current.click();
+  };
 
   const validate = () => {
     const errors = {};
+
+    const regEx = new RegExp("^(.*\\s+.*)+$");
 
     if (!info.username) {
       errors.username = "Required";
     } else if (info.username.length < 5) {
       errors.username = "Minimum 5 char";
+    } else if (regEx.test(info.username)) {
+      errors.username = "No spaces allowed";
+    }
+
+    if (!info.displayName) {
+      errors.displayName = "Required";
+    } else if (info.displayName.length < 5) {
+      errors.displayName = "Minimum 5 char";
     }
 
     if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(info.email)) {
@@ -60,12 +84,13 @@ const SignUp = () => {
 
       const formData = new FormData();
       formData.append("username", info.username);
+      formData.append("displayName", info.displayName)
       formData.append("gender", info.gender);
       formData.append("email", info.email);
       formData.append("password", info.password);
       formData.append("repeatpassword", info.repeatpassword);
-      formData.append("image", info.image);
-      await SignUpAppClientService(info)
+      formData.append("avatar", info.avatar);
+      await SignUpAppClientService(formData)
         .then((response) => {
           if (response.status === 201) {
             navigate("/login");
@@ -80,12 +105,61 @@ const SignUp = () => {
     }
   };
 
+  const validateUsername = (value) => {
+    const regEx = new RegExp("^(.*\\s+.*)+$");
+
+    if (!value) {
+      setErrors({ ...errors, username: "Required" });
+    } else if (value.length < 5) {
+      setErrors({ ...errors, username: "Minimum 5 char" });
+    } else if (regEx.test(value)) {
+      setErrors({ ...errors, username: "No spaces allowed" });
+    } else {
+      setErrors({ ...errors, username: "" });
+    }
+  }
+
+  const validateDisplayName = (value) => {
+    if (!value) {
+      setErrors({ ...errors, displayName: "Required" });
+    } else if (value.length < 5) {
+      setErrors({ ...errors, displayName: "Minimum 5 char" });
+    } else {
+      setErrors({ ...errors, displayName: "" });
+    }
+  }
+
+  const validateEmail = (value) => {
+    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
+      setErrors({ ...errors, email: "Invalid email address" });
+    } else {
+      setErrors({ ...errors, email: "" });
+    }
+  }
+
+  const validatePassword = (value) => {
+    if (!value) {
+      setErrors({ ...errors, password: "Required" });
+    } else {
+      setErrors({ ...errors, password: "" });
+    }
+  }
+
+  const validateRepeatPassword = (value) => {
+    if (!value) {
+      setErrors({ ...errors, repeatpassword: "Repeate" });
+    } else if (info.password !== value) {
+      setErrors({ ...errors, repeatpassword: "Passwords don't match" });
+    } else {
+      setErrors({ ...errors, repeatpassword: "" });
+    }
+  }
 
   return (
     <>
       <main className={styles.form_style}>
         <h2>Sign up</h2>
-        {error && (
+        {error.displayName && (
           <div className={styles.errors}>
             This username or email already exist.
           </div>
@@ -95,14 +169,31 @@ const SignUp = () => {
           <section className={styles.form_field}>
             <input
               id="name"
-              onChange={(e) => setInfo({ ...info, username: e.target.value })}
+              onChange={(e) => setInfo({ ...info, username: e.target.value.trim() })}
               type="text"
               name="name"
+              onBlur={(e) => validateUsername(e.target.value.trim())}
             />
             <label htmlFor="name" className={styles.label_name}>
               <span className={styles.content_name}>Username</span>
               {errors.username && (
                 <small className={styles.errors}>{errors.username}</small>
+              )}
+            </label>
+          </section>
+
+          <section className={styles.form_field}>
+            <input
+              id="displayName"
+              onChange={(e) => setInfo({ ...info, displayName: e.target.value.trim() })}
+              type="text"
+              name="displayName"
+              onBlur={(e) => validateDisplayName(e.target.value.trim())}
+            />
+            <label htmlFor="displayName" className={styles.label_name}>
+              <span className={styles.content_name}>Full Name</span>
+              {errors.displayName && (
+                <small className={styles.errors}>{errors.displayName}</small>
               )}
             </label>
           </section>
@@ -115,6 +206,7 @@ const SignUp = () => {
 
           <section className={styles.checkbox_choice_section}>
             <input
+              className={styles.sign_up_checkbox}
               onClick={() => setCheckBoxChecked("male")}
               onChange={(e) => setInfo({ ...info, gender: "MALE" })}
               checked={checked === "male"}
@@ -125,6 +217,7 @@ const SignUp = () => {
               Male
             </label>
             <input
+              className={styles.sign_up_checkbox}
               onClick={() => setCheckBoxChecked("female")}
               onChange={(e) => setInfo({ ...info, gender: "FEMALE" })}
               checked={checked === "female"}
@@ -135,6 +228,7 @@ const SignUp = () => {
               Female
             </label>
             <input
+              className={styles.sign_up_checkbox}
               onClick={() => setCheckBoxChecked("other")}
               onChange={(e) => setInfo({ ...info, gender: "OTHER" })}
               checked={checked === "other"}
@@ -151,7 +245,8 @@ const SignUp = () => {
               id="email"
               name="email"
               type="email"
-              onChange={(e) => setInfo({ ...info, email: e.target.value })}
+              onChange={(e) => setInfo({ ...info, email: e.target.value.trim() })}
+              onBlur={(e) => validateEmail(e.target.value.trim())}
             />
             <label htmlFor="email" className={styles.label_name}>
               <span className={styles.content_name}>Email</span>
@@ -167,6 +262,7 @@ const SignUp = () => {
               name="password"
               type="password"
               onChange={(e) => setInfo({ ...info, password: e.target.value })}
+              onBlur={(e) => validatePassword(e.target.value)}
             />
 
             <label htmlFor="password" className={styles.label_name}>
@@ -182,9 +278,8 @@ const SignUp = () => {
               id="repassword"
               name="repassword"
               type="password"
-              onChange={(e) =>
-                setInfo({ ...info, repeatpassword: e.target.value })
-              }
+              onChange={(e) => setInfo({ ...info, repeatpassword: e.target.value })}
+              onBlur={(e) => validateRepeatPassword(e.target.value)}
             />
 
             <label htmlFor="repassword" className={styles.label_name}>
@@ -199,36 +294,37 @@ const SignUp = () => {
 
           <section className={styles.form_field}>
             <div className={styles.upload_wrapper}>
-              <span>{info.image ?
-                  <img src={imageUrl} className={styles.uploaded_image} />
-                  : <span className={styles.file_name}>No photo chosen</span>}
+              <span>{info.avatar ?
+                <img src={avatarUrl} className={styles.uploaded_avatar} />
+                : <span className={styles.file_name}>No photo chosen</span>}
               </span>
-              <button className={styles.upload_button}>
-                <span>Choose a profile photo</span>
-                <input
-                  id="image"
-                  name="image"
-                  type="file"
-                  onChange={(e) => {
-                    const file = e.target.files[0];
-                    setInfo({ ...info, image: file });
+              <div className={styles.upload_button} onClick={handleClick}>
+                Choose a profile photo
+              </div>
+              <input
+                id="avatar"
+                name="avatar"
+                type="file"
+                ref={avatarInput}
+                style={{ display: "none" }}
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  setInfo({ ...info, avatar: file });
 
-                    const reader = new FileReader();
-                    reader.onload = () => {
-                      setImageUrl(reader.result);
-                    };
-                    reader.readAsDataURL(file);
-                  }}
-                />
-              </button>
+                  const reader = new FileReader();
+                  reader.onload = () => {
+                    setAvatarUrl(reader.result);
+                  };
+                  reader.readAsDataURL(file);
+                }}
+              />
             </div>
           </section>
-          
           <section className={styles.form_field}>
             {loading && <LoadingDotsDark />}
 
             {!loading && (
-              <button id="button" type="submit" className={styles.button}>
+              <button id="button" type="submit" className={styles.sign_up_button}>
                 Sign up
               </button>
             )}

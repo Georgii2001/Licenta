@@ -1,0 +1,85 @@
+.forum_container {
+    width: 50%;
+    margin: auto;
+    display: block;
+    box-shadow: -2px 0px 33px 0px rgba(0, 0, 0, 0.15);
+}
+
+.forum_title {
+    font-size: 24px;
+    margin-bottom: 16px;
+    text-align: center;
+    color: grey;
+    position: relative;
+    top: 20px;
+    margin-top: 20px;
+}
+
+.forum_input_container {
+    margin-bottom: 16px;
+    margin-top: 20px;
+    grid-area: content;
+    height: auto;
+    background-color: #fefefe;
+    padding: 30px;
+    margin: auto;
+}
+
+.forum_input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+}
+
+.forum_button {
+    background-color: rgb(254, 252, 252);
+    display: flex;
+    padding: 0.5em 1em;
+    border-radius: 15px;
+    font-size: 16px;
+    border: 2px solid rgb(0, 0, 0);
+    cursor: pointer;
+    margin: 0;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+
+.forum_subtitle {
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.forum_post {
+    margin-bottom: 16px;
+}
+
+.forum_post_header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.forum_avatar {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    border-radius: 50%;
+}
+
+.forum_author {
+    font-weight: bold;
+}
+
+.forum_timestamp {
+    color: #777;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.forum_divider {
+    border: none;
+    border-top: 1px solid #ccc;
+}

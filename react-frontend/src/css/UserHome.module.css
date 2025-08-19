@@ -1,178 +1,233 @@
-.hobby_details_page {
-  width: 100%;
-  height: 100%;
-}
-
-.hobbie_main {
-  height: auto;
-  width: 100%;
-  margin-bottom: 2%;
-}
-
-.hobbie_container_home {
-  padding: 50px;
-  width: 60%;
-  height: 100%;
-  margin: 0px auto;
-  box-shadow: -2px 0px 33px 0px rgba(0, 0, 0, 0.15);
-  position: relative;
-  background-color: transparent;
-  grid-template-columns: 1fr repeat(9, minmax(auto, 100px)) 1fr;
-  grid-gap: 20px;
-}
-
-.intro {
-  font-size: 14px;
-}
-
-.cards {
-  width: 100%;
-  grid-column: 2 / span 11;
-  display: grid;
-  grid-template-columns: repeat(12, minmax(auto, 60px));
-  position: relative;
-  grid-gap: 25px;
-}
-
-.rapper {
-  flex: 1 1 auto;
-  background: gold;
-  overflow: auto;
-  grid-column-end: span 4;
+.card_container {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  margin-top: 10vh;
+}
+
+.swipe {
+  position: absolute;
+  top: 125px;
+  cursor: grab;
 }
 
 .card {
-  grid-column-end: span 4;
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
-  transition: all 0.5 ease 0s;
-  background: linear-gradient(to right, #494969, #696989);
-  width: auto;
-  box-shadow: -2px 0px 33px 0px rgb(0 0 0 / 15%);
-  /* padding: 10px; */
+  position: relative;
+  border: 4px solid rgb(85, 85, 85);
+  background-color: #ffffff;
+  border-radius: 25px;
 }
 
 .card_image_container {
-  padding-top: 56.25%;
-  overflow: hidden;
   position: relative;
-}
-.card_image_container img {
-  width: 100%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.text_medium {
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 400;
-  color: white;
-}
-
-.card_content {
-  padding: 20px;
-}
-
-.card_content p {
-  margin-top: 0px;
-  margin-bottom: 0px;
+  background-size: 350px;
+  height: 350px;
+  width: 350px;
+  display: flex;
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
+  justify-content: center;
+  align-items: center;
 }
 
 .card_title {
-  font-size: 16px;
-  line-height: 20px;
-  font-weight: 400;
-  color: white;
+  position: relative;
+  top: 10%;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  user-select: none;
+  background-color: rgb(85, 85, 85);
+  color: #ffffff;
 }
-.card_info {
+
+.card_matches {
+  font-size: 15px;
+  text-align: center;
+  user-select: none;
+  background-color: rgb(85, 85, 85);
+  color: #ffffff;
+}
+
+.card_description {
+  font-size: 12px;
+  text-align: center;
+  user-select: none;
+  background-color: rgb(85, 85, 85);
+  color: #ffffff;
+}
+
+.card_user_details {
+  position: relative;
+  user-select: none;
+  text-align: center;
+}
+
+.final_card_no_swipe{
+  position: absolute;
+  top: 125px;
+  z-index: -1;
+}
+
+.final_card {
+  position: relative;
+  border: 4px dashed rgb(146, 146, 146);
+  border-radius: 25px;
+}
+
+.final_card_image_container {
+  position: relative;
+  height: 350px;
+  width: 350px;
   display: flex;
-  align-self: end;
+  justify-content: center;
   align-items: center;
-}
-.card_price {
-  margin-left: auto;
-  padding: 5px, 20px;
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 400;
-  color: white;
+  color:rgb(146, 146, 146);
+  user-select: none;
+  font-size: 20px;
 }
 
-.card:hover {
-  transform: translateY(-7px);
+.final_card_title {
+  position: relative;
+  top: 10%;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  user-select: none;
+  margin-right: -4px;
+  margin-left: -4px;
+  background-color: rgb(146, 146, 146);
+  color: #ffffff;
 }
 
-.introduction_home {
-  margin: auto;
-  align-items: center;
-}
-.intro_text {
-  margin: auto;
-  padding-bottom: 30px;
-  margin-bottom: 100px;
-}
-.intro_text h1 {
-  font-size: 44px;
-  font-weight: 900;
-  background: linear-gradient(to right, #494969, #696989);
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+.final_card_matches {
+  font-size: 15px;
+  text-align: center;
+  user-select: none;
+  background-color: rgb(146, 146, 146);
+  margin-right: -4px;
+  margin-left: -4px;
+  color: #ffffff;
 }
 
-.intro_text p {
-  width: 400px;
-  margin: auto;
-  margin-top: 5px;
-  font-size: 14px;
-  color: #585772;
+.final_card_description {
+  font-size: 12px;
+  text-align: center;
+  user-select: none;
+  background-color: rgb(146, 146, 146);
+  margin-right: -4px;
+  margin-left: -4px;
+  color: #ffffff;
 }
 
-/* .cta */
-.buttuns {
-  padding: 20px 0px 0px 0px;
-  width: 280px;
-  margin: auto;
-}
-/* .cta_second */
-.btn {
-  border: 2px solid #c36cbb;
-  background: #c36cbb;
-  color: white;
-  width: 150px;
-  height: 50px;
-  cursor: pointer;
-  font-family: "Poppins", sans-serif;
-  font-size: 16px;
+.final_card_user_details {
+  position: relative;
+  user-select: none;
+  text-align: center;
 }
 
-/* .cta_second_s */
+.buttons_container {
+  display: flex;
+  justify-content: center;
+  margin-top: 10vh;
+}
+
+.buttons {
+  position: absolute;
+  top: 550px;
+  justify-content: center;
+  margin-top: 10vh;
+}
+
+.buttons button:hover {
+  transform: scale(1.15);
+}
+
+.button_go {
+  flex-shrink: 0;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  background-color: #22af41;
+  transition: 200ms;
+  font-weight: bolder;
+  width: 250px;
+  box-shadow: 0px 0px 30px 0px rgba(0,0,0,0.10);
+  margin: 5px 40px 0 40px;
+}
+
+.button_pass {
+  flex-shrink: 0;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  background-color: #ca1c1c;
+  transition: 200ms;
+  font-weight: bolder;
+  width: 250px;
+  box-shadow: 0px 0px 30px 0px rgba(0,0,0,0.10);
+  margin: 5px 40px 0 40px;
+}
+
 .link {
-  color: #c36cbb;
-  background: #c36cbb;
-  width: 150px;
-  height: 50px;
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.link:hover {
+  background-color: #0069d9;
   cursor: pointer;
-  font-family: "Poppins", sans-serif;
+}
+
+.btn {
+  text-decoration: none;
+  color: #fff;
   font-size: 16px;
-  border: 2px solid #c36cbb;
+  font-weight: 500;
 }
-@media all and (min-width: 1024px) {
-  .hobbie_container_home {
-    position: relative;
-    top: 80%;
-  }
+
+.matchButtons {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
 }
-@media all and (max-width: 1400px) {
-  .hobbie_container_home {
-    width: 100%;
-  }
+
+.rightButton,
+.leftButton {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 60px;
+  font-size: 24px;
+  top: 150px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: white;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  margin: 0 20px;
 }
+
+.leftButton {
+  left: 150px;
+  background-color: #f25a4a;
+}
+
+.rightButton {
+  left: 1200px;
+  background-color: #3bd37a;
+}
+
 @media all and (min-width: 850px) {
   .intro_text {
     position: relative;
@@ -184,35 +239,12 @@
   }
 }
 
-@media all and (max-width: 950px) {
-  .hobbie_container_home {
-    width: 100%;
-    padding: 20px;
-  }
-}
-
 @media all and (max-width: 767px) {
   .intro_text {
     margin-top: 30px;
     font-size: small;
     width: 100%;
     padding-left: 10%;
-  }
-
-  .hobbie_main {
-    margin: 0%;
-    margin-bottom: 5%;
-  }
-
-  .hobbie_container_home {
-    margin: 0;
-    padding: 0;
-    box-shadow: none;
-  }
-
-  .hobbie_home_content {
-    background-color: transparent;
-    margin: 0;
   }
 
   .rapper {
@@ -225,14 +257,4 @@
     font-size: 14px;
   }
 
-  .cards {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-row-gap: 20px;
-  }
-
-  .card_price {
-    font-size: auto;
-    padding-left: 5px;
-  }
 }

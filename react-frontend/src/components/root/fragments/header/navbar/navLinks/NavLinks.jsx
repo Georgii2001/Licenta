@@ -6,7 +6,6 @@ import styles from "../../../../../../css/Navbar.module.css";
 
 const NavLinks = () => {
   const userLogged = AuthenticationService.isUserLoggedIn();
-  const businessLogged = AuthenticationService.isBusinessLoggedIn();
   const location = useLocation();
 
   return (
@@ -14,21 +13,23 @@ const NavLinks = () => {
       {userLogged && (
         <ul className={styles.nav_links}>
           <li className={styles.nav_link}>
-            <NavLink to="/user-home">Home</NavLink>
+            <NavLink to="user-home">Home</NavLink>
           </li>
           <li className={styles.nav_link}>
-            <NavLink to="/test">Discover</NavLink>
-          </li>
-          <li className={styles.nav_link}>
-            <NavLink to="my-hobbies" className="nav-link">
+            <NavLink to="my-matches" className="nav-link">
               MyMatches
             </NavLink>
           </li>
           <li className={styles.nav_link}>
+            <NavLink to="forum">Forum</NavLink>
+          </li>
+          <li className={styles.nav_link}>
+            <NavLink to="travel-ideas">Travel ideas</NavLink>
+          </li>
+          <li className={styles.nav_link}>
             <NavLink to="account-user">Account</NavLink>
           </li>
-          <li
-            className={styles.nav_link}
+          <li className={styles.nav_link}
             onClick={AuthenticationService.logout}
           >
             <NavLink to="/"> Logout</NavLink>
@@ -36,36 +37,11 @@ const NavLinks = () => {
         </ul>
       )}
 
-      {businessLogged && (
-        <ul className={styles.nav_links}>
-          <li className={styles.nav_link}>
-            <NavLink to="/business-home">Home</NavLink>
-          </li>
-          <li className={styles.nav_link}>
-            <NavLink to="create-offer">Create offer</NavLink>
-          </li>
-          <li className={styles.nav_link}>
-            <NavLink to="account-business">Account</NavLink>
-          </li>
-          <li
-            className={styles.nav_link}
-            onClick={AuthenticationService.logout}
-          >
-            <NavLink to="/"> Logout</NavLink>
-          </li>
-        </ul>
-      )}
-
-      {!userLogged && !businessLogged && (
+      {!userLogged && (
         <ul className={styles.nav_links}>
           {location.pathname !== "/signup" && location.pathname !== "/" && (
             <li className={styles.nav_link}>
               <NavLink to="/signup">Sign up</NavLink>
-            </li>
-          )}
-          {location.pathname !== "/register-business" && (
-            <li className={styles.nav_link}>
-              <NavLink to="register-business">Register Bizz</NavLink>
             </li>
           )}
           {location.pathname !== "/login" && (

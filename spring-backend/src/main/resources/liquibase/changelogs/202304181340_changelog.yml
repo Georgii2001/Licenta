@@ -1,0 +1,421 @@
+databaseChangeLog:
+  - changeSet:
+      id: 202304181340_changelog#1
+      author: Georgiana Voicea
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              tableName: interests
+      changes:
+        - createTable:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: INTEREST_ID_PKEY
+              - column:
+                  name: interest_name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: interest_code
+                  type: BIGINT
+                  constraints:
+                    nullable: true
+
+  - changeSet:
+      id: 202304181340_changelog#2
+      author: Georgiana Voicea
+      preConditions:
+        - onFail: MARK_RAN
+        - tableExists:
+            tableName: interests
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM interests
+      changes:
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Hotel
+              - column:
+                  name: interest_code
+                  value: 40
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Hostel
+              - column:
+                  name: interest_code
+                  value: 20
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Airbnb
+              - column:
+                  name: interest_code
+                  value: 30
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Couchsurfing
+              - column:
+                  name: interest_code
+                  value: 10
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Resort
+              - column:
+                  name: interest_code
+                  value: 50
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Expensive trips
+              - column:
+                  name: interest_code
+                  value: 51
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Cheap trips
+              - column:
+                  name: interest_code
+                  value: 21
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Restaurants
+              - column:
+                  name: interest_code
+                  value: 41
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Street Food
+              - column:
+                  name: interest_code
+                  value: 11
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Cooking
+              - column:
+                  name: interest_code
+                  value: 31
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Big cities
+              - column:
+                  name: interest_code
+                  value: 22
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Mountains
+              - column:
+                  name: interest_code
+                  value: 32
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Sea
+              - column:
+                  name: interest_code
+                  value: 52
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Nature
+              - column:
+                  name: interest_code
+                  value: 12
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Relax
+              - column:
+                  name: interest_code
+                  value: 53
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Culture
+              - column:
+                  name: interest_code
+                  value: 13
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Fun
+              - column:
+                  name: interest_code
+                  value: 23
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Walking
+              - column:
+                  name: interest_code
+                  value: 14
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Public transport
+              - column:
+                  name: interest_code
+                  value: 24
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Taxi
+              - column:
+                  name: interest_code
+                  value: 42
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Car
+              - column:
+                  name: interest_code
+                  value: 54
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Europe
+              - column:
+                  name: interest_code
+                  value: 25
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Asia
+              - column:
+                  name: interest_code
+                  value: 15
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Australia
+              - column:
+                  name: interest_code
+                  value: 43
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Africa
+              - column:
+                  name: interest_code
+                  value: 33
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: America
+              - column:
+                  name: interest_code
+                  value: 55
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: City break
+              - column:
+                  name: interest_code
+                  value: 44
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Backpacking
+              - column:
+                  name: interest_code
+                  value: 16
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Volunteer
+              - column:
+                  name: interest_code
+                  value: 17
+        - insert:
+            tableName: interests
+            columns:
+              - column:
+                  name: interest_name
+                  value: Work and travel
+              - column:
+                  name: interest_code
+                  value: 26
+  - changeSet:
+      id: 202304181340_changelog#3
+      author: Georgiana Voicea
+      preConditions:
+        - onFail: MARK_RAN
+        - tableExists:
+            tableName: interests
+        - not:
+            tableExists:
+              tableName: user_interests
+      changes:
+        - createTable:
+            tableName: user_interests
+            columns:
+              - column:
+                  name: user_interest_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: USER_INTEREST_ID_PKEY
+              - column:
+                  name: user_id
+                  type: INT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: USER_ID_FKEY
+                    references: users(id)
+              - column:
+                  name: interest_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: INTEREST_ID_FKEY
+                    references: interests(interest_id)
+
+  - changeSet:
+      id: 202304181340_changelog#4
+      author: Georgiana Voicea
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              tableName: avatars
+      changes:
+        - createTable:
+            tableName: avatars
+            columns:
+              - column:
+                  name: avatars_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: AVATARS_ID_PKEY
+              - column:
+                  name: user_id
+                  type: INT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: USER_AVATARS_ID_FKEY
+                    references: users(id)
+              - column:
+                  name: avatar_name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 202304181340_changelog#5
+      author: Georgiana Voicea
+      preConditions:
+        - onFail: MARK_RAN
+        - and:
+            not:
+              - columnExists:
+                  tableName: users
+                  columnName: description
+              - columnExists:
+                  tableName: users
+                  columnName: sys_creation_date
+              - columnExists:
+                  tableName: users
+                  columnName: sys_update_date
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: description
+                  type: VARCHAR(2000)
+                  afterColumn: username
+                  constraints:
+                    nullable: true
+              - column:
+                  name: sys_creation_date
+                  type: TIMESTAMP
+                  defaultValueComputed: NOW()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sys_update_date
+                  type: TIMESTAMP
+                  defaultValueComputed: NOW() ON UPDATE NOW()
+                  constraints:
+                    nullable: false

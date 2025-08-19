@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 202304241802_changelog#1
+      author: Georgiana Voicea
+      preConditions:
+        - onFail: MARK_RAN
+        - and:
+            not:
+              - columnExists:
+                  tableName: avatars
+                  columnName: avatar_priority
+      changes:
+        - addColumn:
+            tableName: avatars
+            columns:
+              - column:
+                  name: avatar_priority
+                  type: INT
+                  afterColumn: avatar_name
+                  constraints:
+                    nullable: false

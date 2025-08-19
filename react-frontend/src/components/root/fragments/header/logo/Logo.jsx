@@ -7,51 +7,23 @@ import { NavLink } from "react-router-dom";
 
 const Logo = () => {
   const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
-  const isBusinessLoggedIn = AuthenticationService.isBusinessLoggedIn();
   const navigate = useNavigate();
 
   return (
     <section className={styles.logo_container}>
-      {!isBusinessLoggedIn && !isUserLoggedIn && (
-        <NavLink onClick={() => navigate("/")} to="/" className="">
+      {!isUserLoggedIn && (
+        <NavLink onClick={() => navigate("/")} to="/" >
           <img className={styles.imgHeader} src={logo} alt="logo" />
         </NavLink>
       )}
 
-      {isBusinessLoggedIn && (
-        <NavLink
-          onClick={() => navigate("/business-home")}
-          to="/business-home"
-          className=""
-        >
-          <img className={styles.imgHeader} src={logo} alt="logo" />
-        </NavLink>
-      )}
-      {isBusinessLoggedIn && (
-        <NavLink
-          onClick={() => navigate("/business-home")}
-          to="/business-home"
-          className=""
-        >
-          <h4 className={styles.logo}></h4>
-        </NavLink>
-      )}
-
       {isUserLoggedIn && (
-        <NavLink
-          onClick={() => navigate("/user-home")}
-          to="/user-home"
-          className=""
-        >
+        <NavLink onClick={() => navigate("/user-home")} to="/user-home" >
           <img className={styles.imgHeader} src={logo} alt="logo" />
         </NavLink>
       )}
       {isUserLoggedIn && (
-        <NavLink
-          onClick={() => navigate("/user-home")}
-          to="/user-home"
-          className=""
-        >
+        <NavLink onClick={() => navigate("/user-home")} to="/user-home" >
           <h4 className={styles.logo}></h4>
         </NavLink>
       )}

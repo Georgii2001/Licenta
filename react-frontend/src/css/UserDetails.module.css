@@ -1,0 +1,175 @@
+@import url("https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap");
+
+.hobbie_main {
+  margin: auto 100px;
+  min-height: 80%;
+  padding-bottom: 5%;
+}
+
+.username {
+  font-size: 28px;
+  text-align: center;
+  border: 3px solid rgb(10, 50, 190);
+  border-radius: 15px;
+  color: rgb(10, 50, 190);
+}
+
+.user_details_container {
+  padding: 60px;
+  width: 90%;
+  height: auto;
+  margin: auto auto auto auto;
+  box-shadow: -2px 0px 33px 0px rgba(0, 0, 0, 0.15);
+  position: relative;
+}
+
+.user_details_content {
+  height: 100%;
+  width: 100%;
+  background-color: #fefefe;
+  display: flex;
+  flex-wrap: 2 1;
+}
+
+.user_details_pages_horizontal {
+  color: rgb(135, 158, 187);
+  display: flex;
+  justify-content: space-around;
+  width: 200px;
+  margin: auto;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.page_title_active {
+  color: black;
+  position: relative;
+  transform: translateX(3px);
+  background: linear-gradient(to right, #494969, #696989);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+  border-bottom: 2px solid rgb(255, 177, 33);
+  margin-right: 15%;
+  font-size: 17px;
+}
+
+.page_title {
+  font-size: 17px;
+  padding: 10px;
+  margin-right: 10%;
+}
+
+.buttons {
+  display: flex;
+  height: 30px;
+  width: 100%;
+  padding-left: 10px;
+  border-left: 4px solid rgb(255, 177, 33);
+  background: linear-gradient(to right, #494969, #696989);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-top: 20px;
+  position: relative;
+}
+
+.btn {
+  color: rgb(255, 177, 33);
+  left: 2px;
+  border-bottom: 1px solid rgb(177, 177, 177);
+  margin-right: 40px;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+}
+
+.error_message {
+  margin: auto;
+  width: 50%;
+  align-items: center;
+}
+
+.error_text p {
+  margin-top: 5px;
+  font-size: 22px;
+  color: #585772;
+}
+
+.user_info_page_main {
+  margin: auto;
+  width: 300px;
+}
+
+.user_property {
+  font-size: 16px;
+  color: #505050;
+}
+
+.user_property:not(:last-child) {
+  margin-bottom: 15px;
+}
+
+.user_description_page_main {
+  display: inline-block;
+  border-radius: 20px;
+  background-color: rgb(225, 252, 227);
+  font-size: 16px;
+  color: #505050;
+  width: 100%;
+  padding: 15px;
+}
+
+.user_description_page_interests {
+  padding: 15px;
+  font-size: 16px;
+  color: #505050;
+}
+
+.interest_item {
+  background-color: rgb(225, 230, 253);
+  border: 2px solid rgb(225, 230, 253);
+  display: inline-block;
+  padding: .5em 1em;
+  border-radius: 20px;
+  margin-top: 10px;
+}
+
+.interest_item:not(:last-child) {
+  margin-right: 10px;
+}
+
+@media all and (max-width: 1540px) {
+
+  .user_details_content {
+    display: block;
+  }
+}
+
+@media all and (max-width: 930px) {
+
+  .buttons {
+    position: relative;
+    left: 5%;
+    margin-bottom: 5%;
+  }
+
+  .btn_background {
+    height: auto;
+    background-color: white;
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+  }
+}
+
+@media all and (max-width: 600px) {
+  .page_title_active {
+    font-size: 14px;
+    margin-right: 5%;
+  }
+
+  .page_title {
+    font-size: 14px;
+    margin-right: 5%;
+  }
+}

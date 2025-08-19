@@ -1,0 +1,114 @@
+databaseChangeLog:
+  - changeSet:
+      id: 202305051636_changelog#1
+      author: Georgiana Voicea
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              tableName: matches_status
+      changes:
+        - createTable:
+            tableName: matches_status
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: MATCHES_STATUS_ID_PKEY
+              - column:
+                  name: matches_status_name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sys_creation_date
+                  type: TIMESTAMP
+                  defaultValueComputed: NOW()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sys_update_date
+                  type: TIMESTAMP
+                  defaultValueComputed: NOW() ON UPDATE NOW()
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 202304181340_changelog#2
+      author: Georgiana Voicea
+      preConditions:
+        - onFail: MARK_RAN
+        - tableExists:
+            tableName: matches_status
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM matches_status
+      changes:
+        - insert:
+            tableName: matches_status
+            columns:
+              - column:
+                  name: matches_status_name
+                  value: MATCHED
+        - insert:
+            tableName: matches_status
+            columns:
+              - column:
+                  name: matches_status_name
+                  value: NOT_MATCHED
+  - changeSet:
+      id: 202305051636_changelog#3
+      author: Georgiana Voicea
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              tableName: users_matches
+      changes:
+        - createTable:
+            tableName: users_matches
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: USER_MATCHES_ID_PKEY
+              - column:
+                  name: user_id
+                  type: INT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: BASE_USER_ID_FKEY
+                    references: users(id)
+              - column:
+                  name: user_matched_id
+                  type: INT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: USER_MATCHED_ID_FKEY
+                    references: users(id)
+              - column:
+                  name: matched_status_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: MATCHED_STATUS_ID_FKEY
+                    references: matches_status(id)
+              - column:
+                  name: sys_creation_date
+                  type: TIMESTAMP
+                  defaultValueComputed: NOW()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sys_update_date
+                  type: TIMESTAMP
+                  defaultValueComputed: NOW() ON UPDATE NOW()
+                  constraints:
+                    nullable: false

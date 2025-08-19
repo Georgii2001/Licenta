@@ -81,12 +81,9 @@ const Login = () => {
             credentials.username
           );
           navigate("/user-home");
-        } else if (response.data === "BUSINESS_USER") {
-          AuthenticationService.registerSuccessfulLoginBusiness(
-            credentials.username
-          );
-          navigate("/business-home");
-        }
+        } else if (response.data === "ADMIN_USER") {
+          
+        } 
       }
     }
   };
@@ -156,12 +153,12 @@ const Login = () => {
           </p>
           {loading && <LoadingDotsDark className={styles.dots} />}  
           {!loading && (
-            <button className={styles.button} onClick={loginClicked}>
+            <button className={styles.login_button} onClick={loginClicked}>
               Login
             </button>
           )}
         </form>
-      </main>
+      </main> 
       <Background />
     </>
   );
