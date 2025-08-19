@@ -1,0 +1,31 @@
+replicaCount: 1
+
+image:
+  repository: java-app
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  port: 8080
+
+mysql:
+  image: mysql:8.0
+  rootPassword: georgii2001
+  database: hobbie_backend_db
+  persistence:
+    enabled: true
+    size: 1Gi
+
+frontend:
+  image: react-frontend:latest
+  replicaCount: 1
+  servicePort: 80
+  pullPolicy: IfNotPresent
+
+
+resources: {}
+autoscaling:
+  enabled: false
+nodeSelector: {}
+tolerations: []
+affinity: {}
