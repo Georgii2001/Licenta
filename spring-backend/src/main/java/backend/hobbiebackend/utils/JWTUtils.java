@@ -1,4 +1,4 @@
-package backend.hobbiebackend.utility;
+package backend.hobbiebackend.utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Component
-public class JWTUtility implements Serializable {
+public class JWTUtils implements Serializable {
 
     private static final long serialVersionUID = 234234523523L;
 

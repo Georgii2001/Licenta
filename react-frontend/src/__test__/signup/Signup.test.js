@@ -21,13 +21,11 @@ afterEach(() => {
 
 it("input should be initially empty", () => {
   const username = screen.getByLabelText("Username");
-  const fullname = screen.getByLabelText("Full Name");
   const email = screen.getByLabelText("Email");
   const password = screen.getByLabelText("Password");
   const repassword = screen.getByLabelText("Confirm Password");
 
   expect(username.value).toBe("");
-  expect(fullname.value).toBe("");
   expect(email.value).toBe("");
   expect(password.value).toBe("");
   expect(repassword.value).toBe("");
@@ -44,16 +42,12 @@ it("should have checkbox with one checked box by default", () => {
 
 it("change value of input element works correctly", () => {
   const username = screen.getByLabelText("Username");
-  const fullname = screen.getByLabelText("Full Name");
   const email = screen.getByLabelText("Email");
   const password = screen.getByLabelText("Password");
   const repassword = screen.getByLabelText("Confirm Password");
 
   userEvent.type(username, "patofil");
   expect(username.value).toBe("patofil");
-
-  userEvent.type(fullname, "Chris Brown");
-  expect(fullname.value).toBe("Chris Brown");
 
   userEvent.type(email, "n66@gmail.com");
   expect(email.value).toBe("n66@gmail.com");
@@ -79,13 +73,11 @@ it("click on gender box should change the tick", () => {
 
 it("should show error message on invalid input", () => {
   const username = screen.getByLabelText("Username");
-  const fullname = screen.getByLabelText("Full Name");
   const email = screen.getByLabelText("Email");
   const password = screen.getByLabelText("Password");
   const repassword = screen.getByLabelText("Confirm Password");
 
   userEvent.type(username, "pat");
-  userEvent.type(fullname, "C");
   userEvent.type(email, "n66gmail.com");
   userEvent.type(password, "");
   userEvent.type(repassword, "n66");
@@ -94,13 +86,11 @@ it("should show error message on invalid input", () => {
 
   userEvent.click(submitBtnElement);
   const errorUsername = screen.getByText(/Minimum 5 char/i);
-  const errorFullName = screen.getByText(/2 to 20 char/i);
   const errorEmail = screen.getByText(/Invalid email address/i);
   const errorPassword = screen.getByText(/Required/i);
   const errorRepassword = screen.getByText(/Passwords don't match/i);
 
   expect(errorUsername).toBeInTheDocument();
-  expect(errorFullName).toBeInTheDocument();
   expect(errorEmail).toBeInTheDocument();
   expect(errorPassword).toBeInTheDocument();
   expect(errorRepassword).toBeInTheDocument();
@@ -109,7 +99,6 @@ it("should show error message on invalid input", () => {
 it("should sign up user successfully", async () => {
   const info = {
     username: "user",
-    fullName: "Chris Brown",
     gender: "MALE",
     email: "chris@gmail.com",
     password: "123",
@@ -123,7 +112,6 @@ it("should sign up user successfully", async () => {
   expect(mockAxios.post).toHaveBeenCalledWith(`/signup`, info);
   expect(result).toEqual({
     username: "user",
-    fullName: "Chris Brown",
     gender: "MALE",
     email: "chris@gmail.com",
     password: "123",

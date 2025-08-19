@@ -1,9 +1,8 @@
 import React from "react";
-import Footer from "../../../fragments/footer/Footer";
+
 import Background from "../../../fragments/background/Background";
 import { useState } from "react";
 import styles from "../../../../../css/Forms.module.css";
-import style from "../../../../../css/Footer.module.css";
 import UserEmailDataService from "../../../../../api/users/UserEmailDataService";
 import LoadingDotsDark from "../animation/LoadingDotsDark";
 
@@ -103,7 +102,6 @@ const PasswordChange = () => {
           )}
         </form>
       </main>
-      <Footer class={style.footer_cover} />
       <Background />
     </>
   );
