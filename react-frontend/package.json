@@ -2,6 +2,7 @@
   "name": "hobbie",
   "version": "0.1.0",
   "private": true,
+  "homepage": "/",
   "dependencies": {
     "@ionic/react": "^6.0.2",
     "@react-mock/state": "^0.1.8",
@@ -17,13 +18,10 @@
     "formik": "^2.2.9",
     "jest-mock-axios": "^4.5.0",
     "npm": "^8.7.0",
-    "react": "^17.0.2",
+    "react": "^18.2.0",
     "react-confirm-alert": "^2.7.0",
-    "react-dom": "^17.0.2",
-    "react-native-animated-ellipsis": "^2.0.0",
-    "react-native-ionicons": "^4.6.5",
-    "react-native-web": "^0.17.5",
-    "react-router": "5.2.0",
+    "react-dom": "^18.2.0",
+    "react-router": "^5.2.0",
     "react-router-dom": "^6.0.0-beta.0",
     "react-scripts": "^5.0.1",
     "styled-components": "^5.3.3",
@@ -32,7 +30,7 @@
   },
   "scripts": {
     "start": "set PORT=4200 && react-scripts start",
-    "build": "cross-env NODE_ENV=production webpack --config build/webpack.config.js",
+    "build": "react-scripts build",
     "test": "react-scripts test --transformIgnorePatterns 'node_modules/(?!(jest-)?(@ionic/react|@ionic/react-router|@ionic/core|@stencil/core|ionicons|react-confirm-alert)/)'",
     "eject": "react-scripts eject"
   },
@@ -58,6 +56,7 @@
     "@babel/preset-env": "^7.16.11",
     "@types/jsdom": "^11.12.0",
     "axios-mock-adapter": "^1.20.0",
-    "cross-env": "^7.0.3"
+    "cross-env": "^7.0.3",
+    "webpack-cli": "^6.0.1"
   }
 }
