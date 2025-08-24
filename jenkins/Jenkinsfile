@@ -138,20 +138,20 @@ pipeline {
                     if( env.DEPLOY_ENV ){
                         if( env.DEPLOY_ENV == 'dev' ) {
                             sh '''
-                                cd spring-backend/
                                 export VERSION=$(cat app.version)
+                                cd spring-backend/
                                 . Scripts/docker-image-build.sh
                             '''
                         }else if( env.DEPLOY_ENV == 'test' || env.DEPLOY_ENV == 'prodlike' ) {
                             sh '''
-                                spring-backend/
                                 export VERSION=$(cat app.version)
+                                cd spring-backend/
                                 . Scripts/docker-image-build.sh
                             '''
                         }else if( env.DEPLOY_ENV == 'prod' ){
                             sh '''
-                                spring-backend/
                                 export VERSION=$(cat app.version)
+                                cd spring-backend/
                                 . Scripts/docker-image-build.sh
                             '''                    
                         }
