@@ -131,36 +131,33 @@ pipeline {
             }
         }
 
-        // stage('Build image') {
-        //     steps {
-        //         script {
-        //             if( env.DEPLOY_ENV ){
-        //                 if( env.DEPLOY_ENV == 'dev' ) {
-        //                     sh '''
-        //                         export VERSION=$(cat app.version)
-        //                         export current_env=${DEPLOY_ENV}
-        //                         . Scripts/export.sh
-        //                         . Scripts/docker-image-build.sh
-        //                     '''
-        //                 }else if( env.DEPLOY_ENV == 'test' || env.DEPLOY_ENV == 'prodlike' ) {
-        //                     sh '''
-        //                         export VERSION=$(cat app.version)
-        //                         export current_env=${DEPLOY_ENV}
-        //                         . Scripts/export.sh
-        //                         . Scripts/docker-image-build.sh
-        //                     '''
-        //                 }else if( env.DEPLOY_ENV == 'prod' ){
-        //                     sh '''
-        //                         export VERSION=$(cat app.version)
-        //                         export current_env=${DEPLOY_ENV}
-        //                         . Scripts/export.sh
-        //                         . Scripts/docker-image-build.sh
-        //                     '''                    
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Build image') {
+            steps {
+                script {
+                    if( env.DEPLOY_ENV ){
+                        if( env.DEPLOY_ENV == 'dev' ) {
+                            sh '''
+                                cd spring-backend/
+                                export VERSION=$(cat app.version)
+                                . Scripts/docker-image-build.sh
+                            '''
+                        }else if( env.DEPLOY_ENV == 'test' || env.DEPLOY_ENV == 'prodlike' ) {
+                            sh '''
+                                spring-backend/
+                                export VERSION=$(cat app.version)
+                                . Scripts/docker-image-build.sh
+                            '''
+                        }else if( env.DEPLOY_ENV == 'prod' ){
+                            sh '''
+                                spring-backend/
+                                export VERSION=$(cat app.version)
+                                . Scripts/docker-image-build.sh
+                            '''                    
+                        }
+                    }
+                }
+            }
+        }
 
         // stage('Deploy App') {
         //     steps {
