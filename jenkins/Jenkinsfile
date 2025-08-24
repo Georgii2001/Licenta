@@ -93,6 +93,7 @@ pipeline {
                         sh '''
                           bash -c '
                             set -e
+                            git remote set-url origin https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/Georgii2001/Licenta.git
                             VERSION=$(git tag --sort=-creatordate | head -n 1)
                         
                             if [ -z "$VERSION" ]; then
