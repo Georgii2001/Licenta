@@ -91,51 +91,42 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: '28f5568a-14c1-4840-9c82-7231585af68b',
                     passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                         sh '''
-                        #!/bin/bash
-
-                        #get highest tag number
-                        #VERSION=`git describe --abbrev=0`
-                        VERSION=`git describe --tags $(git rev-list --tags --max-count=1)`
-
-                        if [ -z $VERSION ];then
-                            NEW_TAG="1.0"
-                            echo "No tag present."
-                            echo "Creating tag: $NEW_TAG"
-                            git tag $NEW_TAG
-                            git push --tags
-                            echo "Tag created and pushed: $NEW_TAG"
-                            exit 0;
-                        fi
-
-                        #replace . with space so can split into an array
-                        VERSION_BITS=(${VERSION//./ })
-
-                        #get number parts and increase last one by 1
-                        VNUM1=${VERSION_BITS[0]}
-                        VNUM2=${VERSION_BITS[1]}
-                        VNUM2=$((VNUM2+1))
-
-                        #create new tag
-                        NEW_TAG="${VNUM1}.${VNUM2}"
-
-                        #get current hash and see if it already has a tag
-                        GIT_COMMIT=`git rev-parse HEAD`
-                        CURRENT_COMMIT_TAG=`git describe --contains $GIT_COMMIT 2>/dev/null`
-
-                        #only tag if no tag already (would be better if the git describe command above could have a silent option)
-                        if [ -z "$CURRENT_COMMIT_TAG" ]; then
-                            echo "Updating $VERSION to $NEW_TAG"
-                            git tag $NEW_TAG
-                            git push --tags
-                            echo "Tag created and pushed: $NEW_TAG"
-                        else
-                            echo "This commit is already tagged as: $CURRENT_COMMIT_TAG"
-                        fi
-                        FINAL=`git describe --abbrev=0 --tags`
-                        echo $FINAL > app.version
-                        export VERSION=$NEW_VERSION
+                          bash -c '
+                            set -e
+                            VERSION=$(git tag --sort=-creatordate | head -n 1)
+                        
+                            if [ -z "$VERSION" ]; then
+                                NEW_TAG="1.0"
+                                echo "No tag present. Creating tag: $NEW_TAG"
+                                git tag $NEW_TAG
+                                git push origin $NEW_TAG
+                                echo $NEW_TAG > $WORKSPACE/app.version
+                                exit 0
+                            fi
+                        
+                            VNUM1=$(echo "$VERSION" | cut -d. -f1)
+                            VNUM2=$(echo "$VERSION" | cut -d. -f2)
+                            VNUM2=$((VNUM2+1))
+                            NEW_TAG="${VNUM1}.${VNUM2}"
+                        
+                            GIT_COMMIT=$(git rev-parse HEAD)
+                            CURRENT_COMMIT_TAG=$(git describe --contains $GIT_COMMIT 2>/dev/null || true)
+                        
+                            if [ -z "$CURRENT_COMMIT_TAG" ]; then
+                                echo "Updating $VERSION to $NEW_TAG"
+                                git tag $NEW_TAG
+                                git push origin $NEW_TAG
+                                echo "Tag created and pushed: $NEW_TAG"
+                            else
+                                echo "This commit is already tagged as: $CURRENT_COMMIT_TAG"
+                            fi
+                        
+                            FINAL=$(git describe --abbrev=0 --tags)
+                            echo $FINAL > $WORKSPACE/app.version
+                            export VERSION=$NEW_VERSION
+                          '
                 '''
-                        sh 'cat app.version'
+                        sh 'cat $WORKSPACE/app.version'
                     }
             }
         }
