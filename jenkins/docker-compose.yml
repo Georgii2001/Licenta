@@ -2,6 +2,7 @@ version: "3.9"
 
 services:
   jenkins:
+    network_mode: "host"
     build: .
     container_name: jenkins
     ports:
@@ -10,7 +11,11 @@ services:
 
     volumes:
       - ~/my_projects/jenkins_data:/var/jenkins_home
-      - ~/.kube:/root/.kube:ro   # acces la config-ul kubectl/helm
+      - ./kubeconfig-minikube.yaml:/var/jenkins_home/.kube/config
+      - ~/.aws:/var/jenkins_home/.aws:ro
+      - /usr/bin/docker:/usr/bin/docker 
+      - /var/run/docker.sock:/var/run/docker.sock 
+      - ~/.minikube:/var/jenkins_home/.minikube:ro
 
 volumes:
   jenkins_home:

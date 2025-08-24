@@ -138,7 +138,7 @@ pipeline {
                     if( env.DEPLOY_ENV ){
                         if( env.DEPLOY_ENV == 'dev' ) {
                             sh '''
-                                export VERSION=$(cat app.version)
+                                export VERSION=$(cat $WORKSPACE/app.version)
                                 cd spring-backend/
                                 . Scripts/docker-image-build.sh
                             '''
@@ -160,86 +160,67 @@ pipeline {
             }
         }
 
-        // stage('Deploy App') {
-        //     steps {
-        //         wrap([$class: 'BuildUser']) {
-        //             script {
-        //                 if( env.DEPLOY_ENV ){
-        //                     if( env.DEPLOY_ENV == 'dev') {
-        //                         sh '''#!/bin/bash
-        //                         if [[ "$IMAGE_TAG" == "" ]]
-        //                         then
-        //                             export VERSION=$(cat app.version)
-        //                         else
-        //                             export VERSION=$IMAGE_TAG
-        //                         fi
-        //                         export current_env=$DEPLOY_ENV
-        //                         . Scripts/export.sh
-        //                  # Debugging pentru variabila CLUSTER
-        //                         echo "Valoarea lui CLUSTER: '$CLUSTER'"
-        //                         echo "$CLUSTER" | od -c
+        stage('Deploy App') {
+            steps {
+                    script {
+                        if( env.DEPLOY_ENV ){
+                            if( env.DEPLOY_ENV == 'dev') {
+                                sh '''#!/bin/bash
+                                export VERSION=$(cat $WORKSPACE/app.version)
+                                . Scripts/container-deployment.sh 
+                                '''
+                            }else if( env.DEPLOY_ENV == 'test' || env.DEPLOY_ENV == 'prodlike' ) {
+                                sh '''#!/bin/bash
+                                if [[ "$IMAGE_TAG" == "" ]]
+                                then
+                                    export VERSION=$(cat app.version)
+                                else
+                                    export VERSION=$IMAGE_TAG
+                                fi
+                                export current_env=$DEPLOY_ENV
+                                . Scripts/export.sh
+                         # Debugging pentru variabila CLUSTER
+                                echo "Valoarea lui CLUSTER: '$CLUSTER'"
+                                echo "$CLUSTER" | od -c
 
-        //                 # Eliminare spații suplimentare
-        //                         CLUSTER=$(echo "$CLUSTER" | tr -d '\n' | xargs)
-        //                         if [[ -n "$CLUSTER" ]]
-        //                         then
-        //                             export SMARTPAY_CLUSTER=$CLUSTER
-        //                         fi   
-        //                         . Scripts/container-deployment.sh 
-        //                         '''
-        //                     }else if( env.DEPLOY_ENV == 'test' || env.DEPLOY_ENV == 'prodlike' ) {
-        //                         sh '''#!/bin/bash
-        //                         if [[ "$IMAGE_TAG" == "" ]]
-        //                         then
-        //                             export VERSION=$(cat app.version)
-        //                         else
-        //                             export VERSION=$IMAGE_TAG
-        //                         fi
-        //                         export current_env=$DEPLOY_ENV
-        //                         . Scripts/export.sh
-        //                  # Debugging pentru variabila CLUSTER
-        //                         echo "Valoarea lui CLUSTER: '$CLUSTER'"
-        //                         echo "$CLUSTER" | od -c
+                        # Eliminare spații suplimentare
+                                CLUSTER=$(echo "$CLUSTER" | tr -d '\n' | xargs)
+                                if [[ -n "$CLUSTER" ]]
+                                then
+                                    export SMARTPAY_CLUSTER=$CLUSTER
+                                fi   
+                                . Scripts/container-deployment.sh 
+                                '''
+                            }else if( env.DEPLOY_ENV == 'prod'){
+                                sh '''#!/bin/bash
+                                if [[ "$IMAGE_TAG" == "" ]]
+                                then
+                                    export VERSION=$(cat app.version)
+                                else
+                                    export VERSION=$IMAGE_TAG
+                                fi
+                                export current_env=$DEPLOY_ENV
+                                . Scripts/export.sh
+                         # Debugging pentru variabila CLUSTER
+                                echo "Valoarea lui CLUSTER: '$CLUSTER'"
+                                echo "$CLUSTER" | od -c
 
-        //                 # Eliminare spații suplimentare
-        //                         CLUSTER=$(echo "$CLUSTER" | tr -d '\n' | xargs)
-        //                         if [[ -n "$CLUSTER" ]]
-        //                         then
-        //                             export SMARTPAY_CLUSTER=$CLUSTER
-        //                         fi   
-        //                         . Scripts/container-deployment.sh 
-        //                         '''
-        //                     }else if( env.DEPLOY_ENV == 'prod'){
-        //                         sh '''#!/bin/bash
-        //                         if [[ "$IMAGE_TAG" == "" ]]
-        //                         then
-        //                             export VERSION=$(cat app.version)
-        //                         else
-        //                             export VERSION=$IMAGE_TAG
-        //                         fi
-        //                         export current_env=$DEPLOY_ENV
-        //                         . Scripts/export.sh
-        //                  # Debugging pentru variabila CLUSTER
-        //                         echo "Valoarea lui CLUSTER: '$CLUSTER'"
-        //                         echo "$CLUSTER" | od -c
-
-        //                 # Eliminare spații suplimentare
-        //                         CLUSTER=$(echo "$CLUSTER" | tr -d '\n' | xargs)
-        //                         if [[ -n "$CLUSTER" ]]
-        //                         then
-        //                             export SMARTPAY_CLUSTER=$CLUSTER
-        //                         fi   
-        //                         . Scripts/container-deployment.sh 
-        //                         '''                    
-        //                     } else {
-        //                         echo "You do not have permissions to deploy"
-        //                         currentBuild.result = 'ABORTED'
-        //                         error("Aborting the job.")
-        //                     }
-        //                 }
-        //             }
-        //         }    
-        //     }
-        // }
+                        # Eliminare spații suplimentare
+                                CLUSTER=$(echo "$CLUSTER" | tr -d '\n' | xargs)
+                                if [[ -n "$CLUSTER" ]]
+                                then
+                                    export SMARTPAY_CLUSTER=$CLUSTER
+                                fi   
+                                . Scripts/container-deployment.sh 
+                                '''                    
+                            } else {
+                                echo "You do not have permissions to deploy"
+                                currentBuild.result = 'ABORTED'
+                                error("Aborting the job.")
+                            }
+                        }
+                    }   
+            }
+        }
     }
 }
