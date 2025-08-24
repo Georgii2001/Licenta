@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "backend-with-db.fullname" . }}-backend
+  name: {{ include "travelwithme-backend.fullname" . }}-backend
   labels:
-    {{- include "backend-with-db.labels" . | nindent 4 }}
+    {{- include "travelwithme-backend.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      app: {{ include "backend-with-db.fullname" . }}-backend
+      app: {{ include "travelwithme-backend.fullname" . }}-backend
   template:
     metadata:
       labels:
-        app: {{ include "backend-with-db.fullname" . }}-backend
+        app: {{ include "travelwithme-backend.fullname" . }}-backend
     spec:
       initContainers:
         - name: wait-for-mysql

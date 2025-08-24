@@ -7,4 +7,4 @@ spec:
     - port: 3306
       protocol: TCP
   selector:
-    app: {{ include "backend-with-db.fullname" . }}-mysql
+    app: {{ include "travelwithme-mysql.fullname" . }}

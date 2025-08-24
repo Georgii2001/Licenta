@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "backend-with-db.fullname" . }}-frontend
+  name: {{ include "travelwithme-frontend.fullname" . }}
   labels:
-    {{- include "backend-with-db.labels" . | nindent 4 }}
+    {{- include "travelwithme-frontend.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.frontend.replicaCount }}
   selector:
     matchLabels:
-      app: {{ include "backend-with-db.fullname" . }}-frontend
+      app: {{ include "travelwithme-frontend.fullname" . }}
   template:
     metadata:
       labels:
-        app: {{ include "backend-with-db.fullname" . }}-frontend
+        app: {{ include "travelwithme-frontend.fullname" . }}
     spec:
       containers:
         - name: frontend
           image: "{{ .Values.frontend.image }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.frontend.pullPolicy }}
           ports:
             - containerPort: {{ .Values.frontend.servicePort }}

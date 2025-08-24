@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     app: travelwithme-backend
-  name: {{ include "backend-with-db.fullname" . }}-backend
+  name: {{ include "travelwithme-backend.fullname" . }}-backend
 spec:
   ports:
     - name: http
@@ -11,4 +11,4 @@ spec:
       targetPort: {{ .Values.service.port }}
       protocol: TCP
   selector:
-    app: {{ include "backend-with-db.fullname" . }}-backend
+    app: {{ include "travelwithme-backend.fullname" . }}-backend

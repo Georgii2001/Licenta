@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "backend-with-db.fullname" . }}-mysql-pvc
+  name: {{ include "travelwithme-mysql.fullname" . }}-pvc
 spec:
   accessModes:
     - ReadWriteOnce

@@ -1,0 +1,15 @@
+grafana:
+  initChownData:
+    enabled: true
+  persistence:
+    enabled: false
+    type: pvc
+    accessModes:
+      - ReadWriteOnce
+    size: 5Gi
+    finalizers:
+      - kubernetes.io/pvc-protection
+  securityContext:
+    runAsUser: 472
+    runAsGroup: 472
+    fsGroup: 472

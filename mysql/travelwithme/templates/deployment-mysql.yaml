@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "backend-with-db.fullname" . }}-mysql
+  name: {{ include "travelwithme-mysql.fullname" . }}
   labels:
-    {{- include "backend-with-db.labels" . | nindent 4 }}
+    {{- include "travelwithme-mysql.labels" . | nindent 4 }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ include "backend-with-db.fullname" . }}-mysql
+      app: {{ include "travelwithme-mysql.fullname" . }}
   template:
     metadata:
       labels:
-        app: {{ include "backend-with-db.fullname" . }}-mysql
+        app: {{ include "travelwithme-mysql.fullname" . }}
     spec:
       containers:
         - name: mysql
@@ -31,4 +31,4 @@ spec:
       volumes:
         - name: mysql-storage
           persistentVolumeClaim:
-            claimName: {{ include "backend-with-db.fullname" . }}-mysql-pvc
+            claimName: {{ include "travelwithme-mysql.fullname" . }}-pvc

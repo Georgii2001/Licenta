@@ -1,0 +1,26 @@
+FROM jenkins/jenkins:lts
+
+USER root
+
+# Install kubectl (set explicit version)
+ENV KUBECTL_VERSION=v1.30.0
+RUN curl -LO https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl \
+    && install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl \
+    && rm kubectl
+
+# Install helm
+RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+RUN apt-get update && \
+    apt-get install -y wget apt-transport-https gnupg && \
+    wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | apt-key add - && \
+    echo "deb https://packages.adoptium.net/artifactory/deb bookworm main" | tee /etc/apt/sources.list.d/adoptium.list && \
+    apt-get update && \
+    apt-get install -y temurin-11-jdk maven && \
+    apt-get clean
+
+ENV JAVA_HOME=/usr/lib/jvm/temurin-11-jdk-amd64
+ENV PATH="${JAVA_HOME}/bin:${PATH}"
+
+
+USER jenkins

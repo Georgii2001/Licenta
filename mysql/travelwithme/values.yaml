@@ -1,0 +1,16 @@
+replicaCount: 1
+
+mysql:
+  image: mysql:8.0
+  rootPassword: georgii2001
+  database: hobbie_backend_db
+  persistence:
+    enabled: true
+    size: 1Gi
+
+resources: {}
+autoscaling:
+  enabled: false
+nodeSelector: {}
+tolerations: []
+affinity: {}
