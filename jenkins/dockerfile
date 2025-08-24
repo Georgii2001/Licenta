@@ -11,16 +11,13 @@ RUN curl -LO https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubect
 # Install helm
 RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
+# Install JDK 11, Maven, and Git
 RUN apt-get update && \
-    apt-get install -y wget apt-transport-https gnupg && \
+    apt-get install -y wget apt-transport-https gnupg git && \
     wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | apt-key add - && \
     echo "deb https://packages.adoptium.net/artifactory/deb bookworm main" | tee /etc/apt/sources.list.d/adoptium.list && \
     apt-get update && \
     apt-get install -y temurin-11-jdk maven && \
     apt-get clean
-
-ENV JAVA_HOME=/usr/lib/jvm/temurin-11-jdk-amd64
-ENV PATH="${JAVA_HOME}/bin:${PATH}"
-
 
 USER jenkins

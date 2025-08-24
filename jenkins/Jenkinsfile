@@ -22,7 +22,7 @@ pipeline {
     parameters {
         choice(name:'DEPLOY_ENV', choices: ['dev', 'test','prod'], description: 'Please choose on which environtment you want to deploy to.')
         gitParameter branchFilter: 'origin/(.*)',
-                    defaultValue: 'developKubernetes',
+                    defaultValue: 'developKuberneties',
                     name: 'BRANCH_NAME', 
                     type: 'PT_BRANCH',
                     quickFilterEnabled: true,
@@ -53,20 +53,20 @@ pipeline {
                             if( env.DEPLOY_ENV == 'dev') {
                                 withMaven(maven: 'jenkins-maven', jdk: 'jdk_11') {
                                     sh '''
-                                        mvn clean install -s $SMARTPAY_NEXUS_SETTINGS
+                                        mvn clean install
                                         '''                    
                                 }                      
                             }else if( env.DEPLOY_ENV == 'test' ) {
                                 withMaven(maven: 'jenkins-maven', jdk: 'jdk_11') {
                                     sh '''
-                                        mvn clean install -s $SMARTPAY_NEXUS_SETTINGS
+                                        mvn clean install
                                         '''                    
                                 }                      
                             }else if( env.DEPLOY_ENV == 'prod' ){
                                 if( params.BRANCH_NAME == 'master' ) {
                                     withMaven(maven: 'jenkins-maven', jdk: 'jdk_11') {
                                         sh '''
-                                            mvn clean install -s $SMARTPAY_NEXUS_SETTINGS
+                                            mvn clean install
                                             '''                    
                                     }
                                 }else{
@@ -138,7 +138,6 @@ pipeline {
         }
 
         // stage('Build image') {
-        //     when { expression { env.IMAGE_TAG == "" } }
         //     steps {
         //         script {
         //             if( env.DEPLOY_ENV ){
