@@ -3,4 +3,3 @@ docker build -t $ECR/travelwithme-backend:"${VERSION}" .
 docker push $ECR/travelwithme-backend:"${VERSION}"
 docker rmi -f $ECR/travelwithme-backend:"${VERSION}"
 rm target/*.jar
-rm target/travelwithme-backend-*.jar
