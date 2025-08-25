@@ -166,6 +166,7 @@ pipeline {
                         if( env.DEPLOY_ENV ){
                             if( env.DEPLOY_ENV == 'dev') {
                                 sh '''#!/bin/bash
+                                cd sprint-backend/
                                 export VERSION=$(cat $WORKSPACE/app.version)
                                 . Scripts/container-deployment.sh 
                                 '''
