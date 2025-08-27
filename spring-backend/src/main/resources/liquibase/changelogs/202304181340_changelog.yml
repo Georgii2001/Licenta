@@ -335,7 +335,7 @@ databaseChangeLog:
                     primaryKeyName: USER_INTEREST_ID_PKEY
               - column:
                   name: user_id
-                  type: INT
+                  type: BIGINT
                   constraints:
                     nullable: false
                     foreignKeyName: USER_ID_FKEY
@@ -370,7 +370,7 @@ databaseChangeLog:
                     primaryKeyName: AVATARS_ID_PKEY
               - column:
                   name: user_id
-                  type: INT
+                  type: BIGINT
                   constraints:
                     nullable: false
                     foreignKeyName: USER_AVATARS_ID_FKEY

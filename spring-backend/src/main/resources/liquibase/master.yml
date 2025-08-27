@@ -1,5 +1,7 @@
 databaseChangeLog:
   - include:
+      file: liquibase/changelogs/202308261000_changelog.yml
+  - include:
       file: liquibase/changelogs/202304181340_changelog.yml
   - include:
       file: liquibase/changelogs/202304241802_changelog.yml

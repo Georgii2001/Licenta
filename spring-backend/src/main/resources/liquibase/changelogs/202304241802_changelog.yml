@@ -15,7 +15,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: avatar_priority
-                  type: INT
+                  type: BIGINT
                   afterColumn: avatar_name
                   constraints:
                     nullable: false
