@@ -227,14 +227,6 @@
                     <username>root</username>
                     <password>georgii2001</password>
                 </configuration>
-                <executions>
-                    <execution>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>update</goal>
-                        </goals>
-                    </execution>
-                </executions>
                 <dependencies>
                     <dependency>
                         <groupId>mysql</groupId>

@@ -22,7 +22,7 @@ pipeline {
     parameters {
         choice(name:'DEPLOY_ENV', choices: ['dev', 'test','prod'], description: 'Please choose on which environtment you want to deploy to.')
         gitParameter branchFilter: 'origin/(.*)',
-                    defaultValue: 'developKubernetes',
+                    defaultValue: 'developKuberneties',
                     name: 'BRANCH_NAME', 
                     type: 'PT_BRANCH',
                     quickFilterEnabled: true,
@@ -53,20 +53,23 @@ pipeline {
                             if( env.DEPLOY_ENV == 'dev') {
                                 withMaven(maven: 'jenkins-maven', jdk: 'jdk_11') {
                                     sh '''
-                                        mvn clean install -s $SMARTPAY_NEXUS_SETTINGS
+                                        cd spring-backend/
+                                        mvn clean install -DskipTests
                                         '''                    
                                 }                      
                             }else if( env.DEPLOY_ENV == 'test' ) {
                                 withMaven(maven: 'jenkins-maven', jdk: 'jdk_11') {
                                     sh '''
-                                        mvn clean install -s $SMARTPAY_NEXUS_SETTINGS
+                                        cd spring-backend/
+                                        mvn clean install -DskipTests
                                         '''                    
                                 }                      
                             }else if( env.DEPLOY_ENV == 'prod' ){
                                 if( params.BRANCH_NAME == 'master' ) {
                                     withMaven(maven: 'jenkins-maven', jdk: 'jdk_11') {
                                         sh '''
-                                            mvn clean install -s $SMARTPAY_NEXUS_SETTINGS
+                                            cd spring-backend/
+                                            mvn clean install -DskipTests
                                             '''                    
                                     }
                                 }else{
@@ -88,167 +91,137 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: '28f5568a-14c1-4840-9c82-7231585af68b',
                     passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                         sh '''
-                        #!/bin/bash
-
-                        #get highest tag number
-                        #VERSION=`git describe --abbrev=0`
-                        VERSION=`git describe --tags $(git rev-list --tags --max-count=1)`
-
-                        if [ -z $VERSION ];then
-                            NEW_TAG="1.0"
-                            echo "No tag present."
-                            echo "Creating tag: $NEW_TAG"
-                            git tag $NEW_TAG
-                            git push --tags
-                            echo "Tag created and pushed: $NEW_TAG"
-                            exit 0;
-                        fi
-
-                        #replace . with space so can split into an array
-                        VERSION_BITS=(${VERSION//./ })
-
-                        #get number parts and increase last one by 1
-                        VNUM1=${VERSION_BITS[0]}
-                        VNUM2=${VERSION_BITS[1]}
-                        VNUM2=$((VNUM2+1))
-
-                        #create new tag
-                        NEW_TAG="${VNUM1}.${VNUM2}"
-
-                        #get current hash and see if it already has a tag
-                        GIT_COMMIT=`git rev-parse HEAD`
-                        CURRENT_COMMIT_TAG=`git describe --contains $GIT_COMMIT 2>/dev/null`
-
-                        #only tag if no tag already (would be better if the git describe command above could have a silent option)
-                        if [ -z "$CURRENT_COMMIT_TAG" ]; then
-                            echo "Updating $VERSION to $NEW_TAG"
-                            git tag $NEW_TAG
-                            git push --tags
-                            echo "Tag created and pushed: $NEW_TAG"
-                        else
-                            echo "This commit is already tagged as: $CURRENT_COMMIT_TAG"
-                        fi
-                        FINAL=`git describe --abbrev=0 --tags`
-                        echo $FINAL > app.version
-                        export VERSION=$NEW_VERSION
+                          bash -c '
+                            set -e
+                            git remote set-url origin https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/Georgii2001/Licenta.git
+                            VERSION=$(git tag --sort=-creatordate | head -n 1)
+                        
+                            if [ -z "$VERSION" ]; then
+                                NEW_TAG="1.0"
+                                echo "No tag present. Creating tag: $NEW_TAG"
+                                git tag $NEW_TAG
+                                git push origin $NEW_TAG
+                                echo $NEW_TAG > $WORKSPACE/app.version
+                                exit 0
+                            fi
+                        
+                            VNUM1=$(echo "$VERSION" | cut -d. -f1)
+                            VNUM2=$(echo "$VERSION" | cut -d. -f2)
+                            VNUM2=$((VNUM2+1))
+                            NEW_TAG="${VNUM1}.${VNUM2}"
+                        
+                            GIT_COMMIT=$(git rev-parse HEAD)
+                            CURRENT_COMMIT_TAG=$(git describe --contains $GIT_COMMIT 2>/dev/null || true)
+                        
+                            if [ -z "$CURRENT_COMMIT_TAG" ]; then
+                                echo "Updating $VERSION to $NEW_TAG"
+                                git tag $NEW_TAG
+                                git push origin $NEW_TAG
+                                echo "Tag created and pushed: $NEW_TAG"
+                            else
+                                echo "This commit is already tagged as: $CURRENT_COMMIT_TAG"
+                            fi
+                        
+                            FINAL=$(git describe --abbrev=0 --tags)
+                            echo $FINAL > $WORKSPACE/app.version
+                            export VERSION=$NEW_VERSION
+                          '
                 '''
-                        sh 'cat app.version'
+                        sh 'cat $WORKSPACE/app.version'
                     }
             }
         }
 
-        // stage('Build image') {
-        //     when { expression { env.IMAGE_TAG == "" } }
-        //     steps {
-        //         script {
-        //             if( env.DEPLOY_ENV ){
-        //                 if( env.DEPLOY_ENV == 'dev' ) {
-        //                     sh '''
-        //                         export VERSION=$(cat app.version)
-        //                         export current_env=${DEPLOY_ENV}
-        //                         . Scripts/export.sh
-        //                         . Scripts/docker-image-build.sh
-        //                     '''
-        //                 }else if( env.DEPLOY_ENV == 'test' || env.DEPLOY_ENV == 'prodlike' ) {
-        //                     sh '''
-        //                         export VERSION=$(cat app.version)
-        //                         export current_env=${DEPLOY_ENV}
-        //                         . Scripts/export.sh
-        //                         . Scripts/docker-image-build.sh
-        //                     '''
-        //                 }else if( env.DEPLOY_ENV == 'prod' ){
-        //                     sh '''
-        //                         export VERSION=$(cat app.version)
-        //                         export current_env=${DEPLOY_ENV}
-        //                         . Scripts/export.sh
-        //                         . Scripts/docker-image-build.sh
-        //                     '''                    
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Build image') {
+            steps {
+                script {
+                    if( env.DEPLOY_ENV ){
+                        if( env.DEPLOY_ENV == 'dev' ) {
+                            sh '''
+                                export VERSION=$(cat $WORKSPACE/app.version)
+                                cd spring-backend/
+                                . Scripts/docker-image-build.sh
+                            '''
+                        }else if( env.DEPLOY_ENV == 'test' || env.DEPLOY_ENV == 'prodlike' ) {
+                            sh '''
+                                export VERSION=$(cat app.version)
+                                cd spring-backend/
+                                . Scripts/docker-image-build.sh
+                            '''
+                        }else if( env.DEPLOY_ENV == 'prod' ){
+                            sh '''
+                                export VERSION=$(cat app.version)
+                                cd spring-backend/
+                                . Scripts/docker-image-build.sh
+                            '''                    
+                        }
+                    }
+                }
+            }
+        }
 
-        // stage('Deploy App') {
-        //     steps {
-        //         wrap([$class: 'BuildUser']) {
-        //             script {
-        //                 if( env.DEPLOY_ENV ){
-        //                     if( env.DEPLOY_ENV == 'dev') {
-        //                         sh '''#!/bin/bash
-        //                         if [[ "$IMAGE_TAG" == "" ]]
-        //                         then
-        //                             export VERSION=$(cat app.version)
-        //                         else
-        //                             export VERSION=$IMAGE_TAG
-        //                         fi
-        //                         export current_env=$DEPLOY_ENV
-        //                         . Scripts/export.sh
-        //                  # Debugging pentru variabila CLUSTER
-        //                         echo "Valoarea lui CLUSTER: '$CLUSTER'"
-        //                         echo "$CLUSTER" | od -c
+        stage('Deploy App') {
+            steps {
+                    script {
+                        if( env.DEPLOY_ENV ){
+                            if( env.DEPLOY_ENV == 'dev') {
+                                sh '''#!/bin/bash
+                                cd sprint-backend/
+                                export VERSION=$(cat $WORKSPACE/app.version)
+                                . Scripts/container-deployment.sh 
+                                '''
+                            }else if( env.DEPLOY_ENV == 'test' || env.DEPLOY_ENV == 'prodlike' ) {
+                                sh '''#!/bin/bash
+                                if [[ "$IMAGE_TAG" == "" ]]
+                                then
+                                    export VERSION=$(cat app.version)
+                                else
+                                    export VERSION=$IMAGE_TAG
+                                fi
+                                export current_env=$DEPLOY_ENV
+                                . Scripts/export.sh
+                         # Debugging pentru variabila CLUSTER
+                                echo "Valoarea lui CLUSTER: '$CLUSTER'"
+                                echo "$CLUSTER" | od -c
 
-        //                 # Eliminare spații suplimentare
-        //                         CLUSTER=$(echo "$CLUSTER" | tr -d '\n' | xargs)
-        //                         if [[ -n "$CLUSTER" ]]
-        //                         then
-        //                             export SMARTPAY_CLUSTER=$CLUSTER
-        //                         fi   
-        //                         . Scripts/container-deployment.sh 
-        //                         '''
-        //                     }else if( env.DEPLOY_ENV == 'test' || env.DEPLOY_ENV == 'prodlike' ) {
-        //                         sh '''#!/bin/bash
-        //                         if [[ "$IMAGE_TAG" == "" ]]
-        //                         then
-        //                             export VERSION=$(cat app.version)
-        //                         else
-        //                             export VERSION=$IMAGE_TAG
-        //                         fi
-        //                         export current_env=$DEPLOY_ENV
-        //                         . Scripts/export.sh
-        //                  # Debugging pentru variabila CLUSTER
-        //                         echo "Valoarea lui CLUSTER: '$CLUSTER'"
-        //                         echo "$CLUSTER" | od -c
+                        # Eliminare spații suplimentare
+                                CLUSTER=$(echo "$CLUSTER" | tr -d '\n' | xargs)
+                                if [[ -n "$CLUSTER" ]]
+                                then
+                                    export SMARTPAY_CLUSTER=$CLUSTER
+                                fi   
+                                . Scripts/container-deployment.sh 
+                                '''
+                            }else if( env.DEPLOY_ENV == 'prod'){
+                                sh '''#!/bin/bash
+                                if [[ "$IMAGE_TAG" == "" ]]
+                                then
+                                    export VERSION=$(cat app.version)
+                                else
+                                    export VERSION=$IMAGE_TAG
+                                fi
+                                export current_env=$DEPLOY_ENV
+                                . Scripts/export.sh
+                         # Debugging pentru variabila CLUSTER
+                                echo "Valoarea lui CLUSTER: '$CLUSTER'"
+                                echo "$CLUSTER" | od -c
 
-        //                 # Eliminare spații suplimentare
-        //                         CLUSTER=$(echo "$CLUSTER" | tr -d '\n' | xargs)
-        //                         if [[ -n "$CLUSTER" ]]
-        //                         then
-        //                             export SMARTPAY_CLUSTER=$CLUSTER
-        //                         fi   
-        //                         . Scripts/container-deployment.sh 
-        //                         '''
-        //                     }else if( env.DEPLOY_ENV == 'prod'){
-        //                         sh '''#!/bin/bash
-        //                         if [[ "$IMAGE_TAG" == "" ]]
-        //                         then
-        //                             export VERSION=$(cat app.version)
-        //                         else
-        //                             export VERSION=$IMAGE_TAG
-        //                         fi
-        //                         export current_env=$DEPLOY_ENV
-        //                         . Scripts/export.sh
-        //                  # Debugging pentru variabila CLUSTER
-        //                         echo "Valoarea lui CLUSTER: '$CLUSTER'"
-        //                         echo "$CLUSTER" | od -c
-
-        //                 # Eliminare spații suplimentare
-        //                         CLUSTER=$(echo "$CLUSTER" | tr -d '\n' | xargs)
-        //                         if [[ -n "$CLUSTER" ]]
-        //                         then
-        //                             export SMARTPAY_CLUSTER=$CLUSTER
-        //                         fi   
-        //                         . Scripts/container-deployment.sh 
-        //                         '''                    
-        //                     } else {
-        //                         echo "You do not have permissions to deploy"
-        //                         currentBuild.result = 'ABORTED'
-        //                         error("Aborting the job.")
-        //                     }
-        //                 }
-        //             }
-        //         }    
-        //     }
-        // }
+                        # Eliminare spații suplimentare
+                                CLUSTER=$(echo "$CLUSTER" | tr -d '\n' | xargs)
+                                if [[ -n "$CLUSTER" ]]
+                                then
+                                    export SMARTPAY_CLUSTER=$CLUSTER
+                                fi   
+                                . Scripts/container-deployment.sh 
+                                '''                    
+                            } else {
+                                echo "You do not have permissions to deploy"
+                                currentBuild.result = 'ABORTED'
+                                error("Aborting the job.")
+                            }
+                        }
+                    }   
+            }
+        }
     }
 }
