@@ -81,14 +81,14 @@ databaseChangeLog:
                     primaryKeyName: USER_MATCHES_ID_PKEY
               - column:
                   name: user_id
-                  type: INT
+                  type: BIGINT
                   constraints:
                     nullable: false
                     foreignKeyName: BASE_USER_ID_FKEY
                     references: users(id)
               - column:
                   name: user_matched_id
-                  type: INT
+                  type: BIGINT
                   constraints:
                     nullable: false
                     foreignKeyName: USER_MATCHED_ID_FKEY
